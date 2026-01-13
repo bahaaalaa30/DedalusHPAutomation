@@ -26,7 +26,7 @@ public class LoginTest extends BaseTest {
         loginPage.enterPassword(ConfigReader.getProperty("password"));
         loginPage.clickLogin();
         System.out.println("⏳ Verifying redirection to Clinical Diary...");
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
         boolean success = wait.until(ExpectedConditions.urlContains("clinicaldiary"));
         Assert.assertTrue(success, "❌ Login Failed! System did not redirect to Clinical Diary.");
         System.out.println("✅ Finished: Login successful.");
