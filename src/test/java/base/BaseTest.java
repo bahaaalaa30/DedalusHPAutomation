@@ -17,40 +17,40 @@ public class BaseTest {
         return driver.get();
     }
 
-    @BeforeMethod
-    public void setup() {
-        ConfigReader.loadConfig();
-        String browser = ConfigReader.getProperty("browser");
-        String url = ConfigReader.getProperty("url");
+   @BeforeMethod
+public void setup() {
+    ConfigReader.loadConfig();
+    String browser = ConfigReader.getProperty("browser");
+    String url = ConfigReader.getProperty("url");
+
+    if (browser.equalsIgnoreCase("chrome")) {
+        WebDriverManager.chromedriver().setup();
+        
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless=new"); // تشغيل بدون واجهة
+        options.addArguments("--headless=new"); // التعديل الأهم
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--remote-allow-origins=*");
-        if (browser.equalsIgnoreCase("chrome")) {
-            WebDriverManager.chromedriver().setup();
-            driver.set(new ChromeDriver());
-        } else if (browser.equalsIgnoreCase("firefox")) {
-            WebDriverManager.firefoxdriver().setup();
-            driver.set(new FirefoxDriver());
-        }
-        getDriver().manage().window().maximize();
+        options.addArguments("--disable-gpu"); // زيادة تأكيد لجينكينز
 
-        if (url != null) {
-            getDriver().get(url);
-        } else {
-            System.out.println("⚠️ URL is missing in config.properties!");
-        }
+        // هنا التعديل السحري: تمرير الـ options للمتصفح
+        driver.set(new ChromeDriver(options)); 
+        
+    } else if (browser.equalsIgnoreCase("firefox")) {
+        WebDriverManager.firefoxdriver().setup();
+        driver.set(new FirefoxDriver());
     }
-    @AfterMethod
-    public void teardown() {
-        if (getDriver() != null) {
-            getDriver().quit();
-            driver.remove();
-            System.out.println("✅ Browser closed and ThreadLocal reference removed.");
-        }
+
+    // ملاحظة: الـ maximize مش ضرورية في الـ headless بس سيبها مش هتضر
+    getDriver().manage().window().maximize();
+
+    if (url != null) {
+        getDriver().get(url);
+    } else {
+        System.out.println("⚠️ URL is missing in config.properties!");
     }
+}
     @AfterSuite
     public void tearDownSuite() {
         String summary = "The automation run has finished. Please check the attached link for detailed results.";
