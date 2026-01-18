@@ -3,6 +3,7 @@ package base;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
@@ -21,7 +22,12 @@ public class BaseTest {
         ConfigReader.loadConfig();
         String browser = ConfigReader.getProperty("browser");
         String url = ConfigReader.getProperty("url");
-
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=new"); // تشغيل بدون واجهة
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--window-size=1920,1080");
+        options.addArguments("--remote-allow-origins=*");
         if (browser.equalsIgnoreCase("chrome")) {
             WebDriverManager.chromedriver().setup();
             driver.set(new ChromeDriver());
