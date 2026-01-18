@@ -17,7 +17,6 @@ public class LoginPage {
     private final By loginButton = By.xpath("//div[@id='common-login']//button");
     private final By inlineErrorMessage = By.xpath("//*[contains(text(), 'Unauthorized use of this system')]");
 
-
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(5));

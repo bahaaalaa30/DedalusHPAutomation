@@ -15,7 +15,7 @@ public class VisitBookingPage {
     private final WebDriverWait wait;
     private final JavascriptExecutor js;
     private final By ClinicNameSearchButton = By.cssSelector("#clinic-btn");
-    private final By ClinicNameSelectioncancel = By.cssSelector("#clinic-list > div.clinic-list > div:nth-child(26)");
+    //private final By ClinicNameSelectioncancel = By.cssSelector("#clinic-list > div.clinic-list > div:nth-child(26)");
     private final By ClinicNameSelection = By.cssSelector("#clinic-list > div.clinic-list > div:nth-child(25)");
     private final By PractitionerSelection = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-container > div.quick-filters > app-crm-quick-filters > div > div > div.quick-filter-list.ng-star-inserted > div:nth-child(2) > div.filter-name.has-count.no-icon");
     private final By PIDsearch = By.cssSelector("input[placeholder*='Search Patient'], .appt-component input");
@@ -23,7 +23,7 @@ public class VisitBookingPage {
     private final By VisitType2 = By.cssSelector("#visit_HO");
     private final By SearchResult = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div.find-patient.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div:nth-child(1) > div > div.col-3.primary-text > p");
     private final By ConfirmApptAndCreateVisitBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button:nth-child(2)");
-    private final By ConfirmationTxt = By.cssSelector(".flow-content p.title-text");
+    //private final By ConfirmationTxt = By.cssSelector(".flow-content p.title-text");
     private final By ContinueToVisitBtn = By.xpath("//button[contains(text(),'Continue')]");
     private final By PaymentBtn = By.xpath("//button[contains(text(),'Payment')]");
     private final By CashTxtField = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-payment-details > div > div.payment-container > div.flex_container > div > div > input");
@@ -37,19 +37,19 @@ public class VisitBookingPage {
     private final By WrongEntryRadioBtn = By.xpath("//label[normalize-space()='Wrong Entry']");
     private final By ContinueAppointmentCancellationBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-cancel-appointment > div > div.ex-cancel-appointment > div > div.cancel-appt-footer.border-top > button");
     private final By ContinueVisitCancellationBtn = By.xpath("//button[contains(@class, 'primary-button') and normalize-space()='Continue']");
-    private final By DatePicker = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-header.border-bottom > div.diary-header-content > div > div.date-picker.cursor-pointer");
-    private final By DatePickerUpdateBtn = By.cssSelector("#owl-dt-picker-0 > div.owl-dt-container-inner.ng-trigger.ng-trigger-fadeInPicker > div > button:nth-child(2) > span");
-    private final By PreviewFutureAppointment = By.xpath("//span[@class='patient-id ng-star-inserted' and text()='B600007150']");
+    //private final By DatePicker = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-header.border-bottom > div.diary-header-content > div > div.date-picker.cursor-pointer");
+    //private final By DatePickerUpdateBtn = By.cssSelector("#owl-dt-picker-0 > div.owl-dt-container-inner.ng-trigger.ng-trigger-fadeInPicker > div > button:nth-child(2) > span");
+    //private final By PreviewFutureAppointment = By.xpath("//span[@class='patient-id ng-star-inserted' and text()='B600007150']");
     private final By languageMenu = By.id("language-menu");
     private final By arabicLanguageOption = By.xpath("//div[normalize-space()='عربى']");
     private final By noResultsFound = By.xpath("//div[contains(@class, 'title') and normalize-space()='لم يتم العثور على نتائج']");
     private final By SearchPatient = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-crm-header > div > div > div.col-5.custom-head-col > input");
-    private final By SearchPatientID = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c29-4.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.quick-filters > app-crm-quick-filters > div > div > div.quick-filter-item.border-bottom > div:nth-child(4) > input");
-    private final By FindBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c29-4.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.quick-filters > app-crm-quick-filters > div > div > div.button-bar > button");
+    private final By SearchPatientID = By.cssSelector("input[placeholder='Enter Patient ID']");
+    private final By FindBTN = By.xpath("//button[text()='Find']");
     private final By searchPatientName = By.cssSelector("#first_name");
-    private final By SearchNationlaID = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c29-4.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.quick-filters > app-crm-quick-filters > div > div > div.quick-filter-item.border-bottom > div:nth-child(2) > input");
-    private final By GenderMale = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c29-4.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.quick-filters > app-crm-quick-filters > div > div > div:nth-child(3) > div.radio-val > span:nth-child(2) > label > input[type=radio]");
-    private final By GenderFemale = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c29-4.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.quick-filters > app-crm-quick-filters > div > div > div:nth-child(3) > div.radio-val > span:nth-child(3) > label > input[type=radio]");
+    private final By SearchNationlaID = By.cssSelector("input[placeholder*='National ID']");
+    private final By GenderMale = By.xpath("//label[contains(., 'Male')]");
+    private final By GenderFemale = By.xpath("//label[contains(.,'Female')]");
     private final By PatientList = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c29-4.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div");
     public VisitBookingPage(WebDriver driver) {
         this.driver = driver;
