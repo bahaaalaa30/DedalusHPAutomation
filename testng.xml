@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="HP Automation Test">
+    <test name="NormalCases Test" preserve-order="true">
+        <classes>
+            <class name="Normalcases.LoginTest"/>
+            <class name="Normalcases.VisitBooking"/>
+            <class name="Normalcases.Cancelvisit"/>
+            <class name="Normalcases.Cancelappointment"/>
+            <class name="Normalcases.ChangeLanguage"/>
+            <class name="Normalcases.SearchPatient"/>
+        </classes>
+    </test>
+</suite>
