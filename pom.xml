@@ -19,7 +19,8 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.16.1</version> </dependency>
+    <version>4.39.0</version>
+        </dependency>
 
         <dependency>
             <groupId>com.sun.mail</groupId>
