@@ -231,66 +231,201 @@ public class VisitBookingPage {
 
 
     public void SearchPatientID(String PatientID) {
+        // 1. تعريف الـ WebDriverWait في بداية الميثود لضمان استخدامه صح
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         System.out.println("🔍 Searching for Patient ID: " + PatientID);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatient)).click();
-        WebElement patientid = wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatientID));
-        patientid.clear();
-        patientid.sendKeys(PatientID);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
-        System.out.println("✅ Search completed for Patient ID: " + PatientID);
+
+        try {
+            // 2. أهم خطوة لجينكينز: انتظر اختفاء أي رسائل Toast (نجاح اللوجن مثلاً) قبل أي ضغطة
+            // بنستخدم invisibilityOfElementLocated عشان نضمن إن مفيش حاجة مغطية الزراير
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("toast")));
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.tagName("app-toast")));
+
+            // 3. الضغط على أيقونة البحث
+            wait.until(ExpectedConditions.elementToBeClickable(SearchPatient)).click();
+
+            // 4. التعامل مع حقل الـ ID
+            WebElement patientidField = wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatientID));
+            patientidField.clear();
+            patientidField.sendKeys(PatientID);
+
+            // 5. الضغط على زرار Find (مع محاولة تانية بـ JavaScript لو الـ Click العادي اتحجب)
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
+            } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+                System.out.println("⚠️ Click intercepted by an overlay, retrying with JavaScript...");
+                ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(FindBTN));
+            }
+
+            // 6. التأكد من ظهور النتائج
+            wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
+            System.out.println("✅ Search completed for Patient ID: " + PatientID);
+
+        } catch (Exception e) {
+            System.err.println("❌ Failed to search for Patient ID: " + PatientID + " due to: " + e.getMessage());
+            throw e; // بنعمل throw عشان التست يفشل ويبان السبب في Allure
+        }
     }
 
 
     public void SearchPatientName(String patientName) {
-        System.out.println("🔍 Searching for Patient ID: " + patientName);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatient)).click();
-        WebElement patient = wait.until(ExpectedConditions.visibilityOfElementLocated(searchPatientName));
-        patient.clear();
-        patient.sendKeys(patientName);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
-        System.out.println("✅ Search completed for Patient ID: " + patientName);
+        // 1. استخدام WebDriverWait بمدّة كافية للـ Headless mode
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        System.out.println("🔍 Searching for Patient Name: " + patientName);
+
+        try {
+            // 2. أهم خطوة: التأكد إن الـ Toast اختفت عشان منواجهش ElementClickIntercepted
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("toast")));
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.tagName("app-toast")));
+
+            // 3. الضغط على أيقونة فتح قائمة البحث
+            wait.until(ExpectedConditions.elementToBeClickable(SearchPatient)).click();
+
+            // 4. إدخال اسم المريض في الحقل المخصص
+            WebElement patientField = wait.until(ExpectedConditions.visibilityOfElementLocated(searchPatientName));
+            patientField.clear();
+            patientField.sendKeys(patientName);
+
+            // 5. الضغط على زر Find مع Fallback للـ JavaScript لضمان التنفيذ في جينكينز
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
+            } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+                System.out.println("⚠️ Standard click blocked by toast, using JavaScript click as fallback...");
+                ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(FindBTN));
+            }
+
+            // 6. الانتظار حتى تظهر قائمة النتائج (Patient List)
+            wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
+            System.out.println("✅ Search completed for Patient Name: " + patientName);
+
+        } catch (Exception e) {
+            System.err.println("❌ Failed to search for Patient Name: " + patientName + " | Error: " + e.getMessage());
+            throw e;
+        }
     }
 
     public void SearchNationalID(String NationalID) {
+        // 1. استخدام WebDriverWait بمدة 15 ثانية لضمان الاستقرار في بيئة السيرفر
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         System.out.println("🔍 Searching for National ID: " + NationalID);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatient)).click();
-        WebElement nationalid = wait.until(ExpectedConditions.visibilityOfElementLocated(SearchNationlaID));
-        nationalid.clear();
-        nationalid.sendKeys(NationalID);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
-        System.out.println("✅ Search completed for National ID: " + NationalID);
+
+        try {
+            // 2. الوقاية من الـ ElementClickIntercepted: انتظر اختفاء أي رسائل Toast
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("toast")));
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.tagName("app-toast")));
+
+            // 3. الضغط على أيقونة البحث (SearchPatient)
+            wait.until(ExpectedConditions.elementToBeClickable(SearchPatient)).click();
+
+            // 4. إدخال الـ National ID
+            WebElement nationalIdField = wait.until(ExpectedConditions.visibilityOfElementLocated(SearchNationlaID));
+            nationalIdField.clear();
+            nationalIdField.sendKeys(NationalID);
+
+            // 5. الضغط على زر Find مع استخدام الـ JavaScript Fallback
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
+            } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+                System.out.println("⚠️ Overlay detected, forcing click using JavaScript for National ID search...");
+                ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(FindBTN));
+            }
+
+            // 6. التحقق من ظهور قائمة المرضى
+            wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
+            System.out.println("✅ Search completed for National ID: " + NationalID);
+
+        } catch (Exception e) {
+            System.err.println("❌ Error during National ID search: " + e.getMessage());
+            throw e;
+        }
     }
 
     public void SearchPatientGenderMale(String patientName) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatient)).click();
-        WebElement patient = wait.until(ExpectedConditions.visibilityOfElementLocated(searchPatientName));
-        patient.clear();
-        patient.sendKeys(patientName);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(GenderMale)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
-        System.out.println("✅ Search completed for Gender: Male");
+        // 1. استخدام WebDriverWait بمدة كافية لبيئة السيرفر
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        System.out.println("🔍 Searching for Patient Name: " + patientName + " with Gender: Male");
 
+        try {
+            // 2. الوقاية: انتظر اختفاء أي رسائل Toast تظهر بعد اللوجن أو التنقل
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("toast")));
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.tagName("app-toast")));
+
+            // 3. الضغط على أيقونة البحث
+            wait.until(ExpectedConditions.elementToBeClickable(SearchPatient)).click();
+
+            // 4. إدخال الاسم
+            WebElement patientField = wait.until(ExpectedConditions.visibilityOfElementLocated(searchPatientName));
+            patientField.clear();
+            patientField.sendKeys(patientName);
+
+            // 5. اختيار Gender: Male (مع معالجة الـ Intercepted Click)
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(GenderMale)).click();
+            } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+                System.out.println("⚠️ Gender selection blocked, forcing click via JavaScript...");
+                ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(GenderMale));
+            }
+
+            // 6. الضغط على زر Find (بإضافة Fallback للـ JavaScript)
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
+            } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+                System.out.println("⚠️ Find button blocked, forcing click via JavaScript...");
+                ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(FindBTN));
+            }
+
+            // 7. التأكد من ظهور النتائج
+            wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
+            System.out.println("✅ Search completed for Gender: Male");
+
+        } catch (Exception e) {
+            System.err.println("❌ Error in Male Gender search: " + e.getMessage());
+            throw e;
+        }
     }
 
 
     public void SearchPatientGenderFemale(String patientName) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatient)).click();
-        WebElement patient = wait.until(ExpectedConditions.visibilityOfElementLocated(searchPatientName));
-        patient.clear();
-        patient.sendKeys(patientName);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(GenderFemale)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
-        System.out.println("✅ Search completed for Gender: Male");
+        // 1. استخدام WebDriverWait بمدة 15 ثانية لمواجهة بطء السيرفرات أحياناً
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        System.out.println("🔍 Searching for Patient Name: " + patientName + " with Gender: Female");
 
+        try {
+            // 2. الحل الجذري: انتظر اختفاء أي رسالة نجاح (Toast) مغطية على العناصر
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("toast")));
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.tagName("app-toast")));
+
+            // 3. الضغط على أيقونة البحث
+            wait.until(ExpectedConditions.elementToBeClickable(SearchPatient)).click();
+
+            // 4. إدخال اسم المريض
+            WebElement patientField = wait.until(ExpectedConditions.visibilityOfElementLocated(searchPatientName));
+            patientField.clear();
+            patientField.sendKeys(patientName);
+
+            // 5. اختيار النوع: Female مع حماية الـ JavaScript في حال وجود تداخل (Overlay)
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(GenderFemale)).click();
+            } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+                System.out.println("⚠️ Female selection intercepted, forcing click via JS...");
+                ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(GenderFemale));
+            }
+
+            // 6. الضغط على زر Find
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
+            } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+                System.out.println("⚠️ Find button intercepted, forcing click via JS...");
+                ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(FindBTN));
+            }
+
+            // 7. التأكد من ظهور قائمة النتائج
+            wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
+            System.out.println("✅ Search completed for Gender: Female");
+
+        } catch (Exception e) {
+            System.err.println("❌ Failed in Female Gender search: " + e.getMessage());
+            throw e;
+        }
     }
 }
