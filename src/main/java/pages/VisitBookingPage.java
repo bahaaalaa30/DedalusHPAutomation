@@ -231,12 +231,12 @@ public class VisitBookingPage {
 
 
     public void SearchPatientID(String PatientID) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         System.out.println("🔍 Searching for Patient ID: " + PatientID);
         wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatient)).click();
         WebElement patientid = wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatientID));
         patientid.clear();
         patientid.sendKeys(PatientID);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
         System.out.println("✅ Search completed for Patient ID: " + PatientID);
@@ -244,35 +244,35 @@ public class VisitBookingPage {
 
 
     public void SearchPatientName(String patientName) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         System.out.println("🔍 Searching for Patient ID: " + patientName);
         wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatient)).click();
         WebElement patient = wait.until(ExpectedConditions.visibilityOfElementLocated(searchPatientName));
         patient.clear();
         patient.sendKeys(patientName);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
         System.out.println("✅ Search completed for Patient ID: " + patientName);
     }
 
     public void SearchNationalID(String NationalID) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         System.out.println("🔍 Searching for National ID: " + NationalID);
         wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatient)).click();
         WebElement nationalid = wait.until(ExpectedConditions.visibilityOfElementLocated(SearchNationlaID));
         nationalid.clear();
         nationalid.sendKeys(NationalID);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
         System.out.println("✅ Search completed for National ID: " + NationalID);
     }
 
     public void SearchPatientGenderMale(String patientName) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatient)).click();
         WebElement patient = wait.until(ExpectedConditions.visibilityOfElementLocated(searchPatientName));
         patient.clear();
         patient.sendKeys(patientName);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(GenderMale)).click();
         wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
@@ -282,11 +282,11 @@ public class VisitBookingPage {
 
 
     public void SearchPatientGenderFemale(String patientName) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatient)).click();
         WebElement patient = wait.until(ExpectedConditions.visibilityOfElementLocated(searchPatientName));
         patient.clear();
         patient.sendKeys(patientName);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(GenderFemale)).click();
         wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(PatientList));
