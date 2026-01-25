@@ -15,6 +15,7 @@ public class VisitBookingPage {
     private final WebDriverWait wait;
     private final JavascriptExecutor js;
     private final By ClinicNameSearchButton = By.cssSelector("#clinic-btn");
+    private final By closeBTN = By.xpath("//img[@src='./assets/icon/close_grey.svg']");
     //private final By ClinicNameSelectioncancel = By.cssSelector("#clinic-list > div.clinic-list > div:nth-child(26)");
     private final By ClinicNameSelection = By.cssSelector("#clinic-list > div.clinic-list > div:nth-child(25)");
     private final By PractitionerSelection = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-container > div.quick-filters > app-crm-quick-filters > div > div > div.quick-filter-list.ng-star-inserted > div:nth-child(2) > div.filter-name.has-count.no-icon");
@@ -28,6 +29,7 @@ public class VisitBookingPage {
     private final By PaymentBtn = By.xpath("//button[contains(text(),'Payment')]");
     private final By CashTxtField = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-payment-details > div > div.payment-container > div.flex_container > div > div > input");
     private final By CreateVisitBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button");
+    private final By PatientBTN = By.xpath("//span[text()='B600007148']");
     private final By DoneBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button.primary-button.ng-star-inserted");
     private final By OHCVisitRadio = By.cssSelector("#visit_OH");
     private final By PreviewAppointment = By.xpath("//span[@class='patient-name' and contains(text(),'Visit Cancellation For automation')]");
@@ -36,15 +38,20 @@ public class VisitBookingPage {
     private final By CancelAppointment = By.xpath("//div[normalize-space()='Cancel Appointment']");
     private final By WrongEntryRadioBtn = By.xpath("//label[normalize-space()='Wrong Entry']");
     private final By ContinueAppointmentCancellationBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-cancel-appointment > div > div.ex-cancel-appointment > div > div.cancel-appt-footer.border-top > button");
+    private final By newSlotLocator = By.xpath("//p[contains(text(),'06:00 pm')]/parent::div");
+    private final By confirmAppointmentBTN = By.xpath("//button[contains(text(), 'Confirm Appointment')]");
+    private final By slotLocator = By.xpath("//p[contains(text(), '09:00 pm')]");
     private final By ContinueVisitCancellationBtn = By.xpath("//button[contains(@class, 'primary-button') and normalize-space()='Continue']");
     //private final By DatePicker = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-header.border-bottom > div.diary-header-content > div > div.date-picker.cursor-pointer");
     //private final By DatePickerUpdateBtn = By.cssSelector("#owl-dt-picker-0 > div.owl-dt-container-inner.ng-trigger.ng-trigger-fadeInPicker > div > button:nth-child(2) > span");
+    private final By ConfirmBTN = By.xpath("//button[normalize-space()='Close']");
     //private final By PreviewFutureAppointment = By.xpath("//span[@class='patient-id ng-star-inserted' and text()='B600007150']");
     private final By languageMenu = By.id("language-menu");
     private final By arabicLanguageOption = By.xpath("//div[normalize-space()='عربى']");
     private final By noResultsFound = By.xpath("//div[contains(@class, 'title') and normalize-space()='لم يتم العثور على نتائج']");
     private final By SearchPatient = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-crm-header > div > div > div.col-5.custom-head-col > input");
     private final By SearchPatientID = By.cssSelector("input[placeholder='Enter Patient ID']");
+    private final By RescaduleAppointmentBTN = By.xpath("//div[normalize-space()='Reschedule Appointment']");
     private final By FindBTN = By.xpath("//button[text()='Find']");
     private final By searchPatientName = By.cssSelector("#first_name");
     private final By SearchNationlaID = By.cssSelector("input[placeholder*='National ID']");
@@ -137,6 +144,29 @@ public class VisitBookingPage {
         System.out.println("✅ Step 9: Clicking Done to finalize process.");
         wait.until(ExpectedConditions.elementToBeClickable(DoneBtn)).click();
 
+        return this;
+    }
+
+
+    @Step("🚀 Executing Full Appointment Creation Workflow ")
+    public VisitBookingPage createAppointmentWorkflow(String PatientName) {
+        System.out.println("🔄 Starting Visit Creation Workflow...");
+
+        System.out.println("📋 Step 1: Selecting Visit Type (OHC)...");
+        wait.until(ExpectedConditions.elementToBeClickable(OHCVisitRadio)).click();
+
+        System.out.println("🔍 Step 2: Searching for Patient: " + PatientName);
+        WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(PIDsearch));
+        input.clear();
+        input.sendKeys(PatientName);
+        wait.until(ExpectedConditions.elementToBeClickable(SearchBTN)).click();
+
+        System.out.println("🖱️ Step 3: Selecting patient from results...");
+        wait.until(ExpectedConditions.elementToBeClickable(SearchResult)).click();
+        System.out.println("📦 Step 4: Confirming Appointment...");
+        wait.until(ExpectedConditions.elementToBeClickable(confirmAppointmentBTN)).click();
+        System.out.println("✅ Appointment has been created successfully.");
+        wait.until(ExpectedConditions.elementToBeClickable(ConfirmBTN)).click();
         return this;
     }
 
@@ -338,6 +368,15 @@ public class VisitBookingPage {
             System.err.println("❌ Error during National ID search: " + e.getMessage());
             throw e;
         }
+    }
+
+    public void rescheduleAppointment(String s){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        System.out.println("🏥 Step 1: Selecting the Appointment to Reschedule...");
+        wait.until(ExpectedConditions.elementToBeClickable(PatientBTN)).click();
+ wait.until(ExpectedConditions.presenceOfElementLocated(RescaduleAppointmentBTN)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(closeBTN)).click();
+        System.out.println("✅ Success: Appointment has been rescheduled.");
     }
 
     public void SearchPatientGenderMale(String patientName) {
