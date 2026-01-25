@@ -33,7 +33,5 @@ public class RescheduleAppointment extends BaseTest {
         currDriver.get(ConfigReader.getProperty("visitbookingurl"));
         bookingPage.rescheduleAppointment("06:00 pm");
         System.out.println("✅ Cleanup Process Finished: Appointment Rescheduled.");
-        Cancelappointment cancelappointment = new Cancelappointment();
-        cancelappointment.cancelAppoientment();
     }
 }
