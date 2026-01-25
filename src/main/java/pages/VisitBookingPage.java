@@ -40,7 +40,7 @@ public class VisitBookingPage {
     private final By ContinueAppointmentCancellationBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-cancel-appointment > div > div.ex-cancel-appointment > div > div.cancel-appt-footer.border-top > button");
     private final By newSlotLocator = By.xpath("//p[contains(text(),'06:00 pm')]/parent::div");
     private final By confirmAppointmentBTN = By.xpath("//button[contains(text(), 'Confirm Appointment')]");
-    private final By slotLocator = By.xpath("//p[contains(text(), '09:00 pm')]");
+    private final By slotLocator = By.xpath("//p[contains(text(), '09:06 pm')]");
     private final By ContinueVisitCancellationBtn = By.xpath("//button[contains(@class, 'primary-button') and normalize-space()='Continue']");
     //private final By DatePicker = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-header.border-bottom > div.diary-header-content > div > div.date-picker.cursor-pointer");
     //private final By DatePickerUpdateBtn = By.cssSelector("#owl-dt-picker-0 > div.owl-dt-container-inner.ng-trigger.ng-trigger-fadeInPicker > div > button:nth-child(2) > span");
@@ -92,11 +92,33 @@ public class VisitBookingPage {
     }
     @Step("⏰ Booking Time Slot: {0}")
     public VisitBookingPage bookTimeSlot(String timeText) {
+        System.out.println("⏰ Target Time Slot: " + timeText);
+
+        // XPath احترافي يجلب الـ Div الحامل للموعد بناءً على النص
+        String xpathExpression = String.format("//p[contains(text(), '%s')]/ancestor::div[contains(@class, 'free-slots')]", timeText);
+        By slotLocator = By.xpath(xpathExpression);
+
+        try {
+            WebElement slotElement = wait.until(ExpectedConditions.presenceOfElementLocated(slotLocator));
+            js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", slotElement);
+            System.out.println("📜 Scrolled to element...");
+            Thread.sleep(800);
+            js.executeScript("arguments[0].click();", slotElement);
+            System.out.println("✅ Successfully clicked slot: " + timeText);
+
+        } catch (Exception e) {
+            System.err.println("❌ Failed to book slot: " + timeText + " | Error: " + e.getMessage());
+            throw new RuntimeException("تعذر الضغط على الموعد، تأكد من ظهوره في الصفحة: " + e.getMessage());
+        }
+
+        return this;
+    }
+    @Step("⏰ Booking Time Slot: {0}")
+    public VisitBookingPage bookAppointmentslot(String timeText) {
         System.out.println("⏰ Selecting time slot: " + timeText);
-        By slotLocator = By.xpath("//p[contains(text(),'" + timeText + "')]/parent::div");
-        WebElement slot = wait.until(ExpectedConditions.presenceOfElementLocated(slotLocator));
-        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", slot);
-        js.executeScript("arguments[0].click();", slot);
+        WebElement slotbook = wait.until(ExpectedConditions.presenceOfElementLocated(slotLocator));
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", slotbook);
+        js.executeScript("arguments[0].click();", slotbook);
         return this;
     }
 

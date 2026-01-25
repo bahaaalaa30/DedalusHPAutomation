@@ -27,7 +27,7 @@ public class RescheduleAppointment extends BaseTest {
         VisitBookingPage bookingPage = new VisitBookingPage(currentDriver);
         bookingPage.selectClinic()
                 .selectPractitioner()
-                .bookTimeSlot("09:00 pm")
+                .bookAppointmentslot("09:06 pm")
                 .createAppointmentWorkflow("B600007148");
         WebDriver currDriver = getDriver();
         currDriver.get(ConfigReader.getProperty("visitbookingurl"));
