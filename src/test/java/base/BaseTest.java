@@ -47,14 +47,14 @@ public class BaseTest {
             System.out.println("⚠️ URL is missing in config.properties!");
         }
     }
-/*    @AfterMethod
+    @AfterMethod
     public void teardown() {
         if (getDriver() != null) {
             getDriver().quit();
             driver.remove();
             System.out.println("✅ Browser closed and ThreadLocal reference removed.");
         }
-    }*/
+    }
 /*    @AfterSuite
     public void tearDownSuite() {
         String summary = "The automation run has finished. Please check the attached link for detailed results.";

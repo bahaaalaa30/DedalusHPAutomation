@@ -14,9 +14,6 @@ import java.time.Duration;
 @Epic("Hospital Management System - Dedalus HealthPlug")
 @Feature("Authentication Module")
 public class LoginTest extends BaseTest {
-    public LoginTest(WebDriver currentDriver) {
-
-    }
 
     @Test(priority = 0, description = "Verify Login with Valid Credentials")
     @Severity(SeverityLevel.BLOCKER)
