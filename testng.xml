@@ -9,7 +9,7 @@
             <class name="Normalcases.Cancelappointment"/>
             <class name="Normalcases.ChangeLanguage"/>
             <class name="Normalcases.SearchPatient"/>
-            <class name="Normalcases.RescheduleAppointment"/>
+            <class name="Normalcases.RescheduleAppointment"></class>
         </classes>
     </test>
 </suite>
