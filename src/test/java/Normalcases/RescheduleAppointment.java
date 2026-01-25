@@ -12,7 +12,7 @@ import utils.ConfigReader;
 @Epic("Appointment Management System")
 @Feature("Appointment Rescheduling")
 public class RescheduleAppointment extends BaseTest {
-    @Test(priority = 12, description = "Reschedule Patient Appointment")
+    @Test(priority = 11, description = "Reschedule Patient Appointment")
     @Severity(SeverityLevel.NORMAL)
     @Story("Outpatient Department (OPD) Appointment Reschedule")
     public void rescheduleAppointment() throws InterruptedException {
