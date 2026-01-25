@@ -2,6 +2,7 @@ package Normalcases;
 
 import base.BaseTest;
 import io.qameta.allure.*;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -13,6 +14,10 @@ import java.time.Duration;
 @Epic("Hospital Management System - Dedalus HealthPlug")
 @Feature("Authentication Module")
 public class LoginTest extends BaseTest {
+    public LoginTest(WebDriver currentDriver) {
+
+    }
+
     @Test(priority = 0, description = "Verify Login with Valid Credentials")
     @Severity(SeverityLevel.BLOCKER)
     @Story("Successful Authentication for Medical Staff")
