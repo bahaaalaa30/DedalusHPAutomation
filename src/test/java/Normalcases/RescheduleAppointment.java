@@ -19,8 +19,11 @@ public class RescheduleAppointment extends BaseTest {
         WebDriver currentDriver = getDriver();
         String url = ConfigReader.getProperty("url");
         currentDriver.get(url);
-        LoginTest loginPage = new LoginTest(currentDriver);
-        loginPage.loginWithValidCredentials();
+        LoginPage loginPage = new LoginPage(currentDriver);
+        loginPage.enterUsername(ConfigReader.getProperty("username"));
+        loginPage.enterPassword(ConfigReader.getProperty("password"));
+        loginPage.clickLogin();
+
         VisitBookingPage bookingPage = new VisitBookingPage(currentDriver);
         bookingPage.selectClinic()
                 .selectPractitioner()
@@ -33,6 +36,4 @@ public class RescheduleAppointment extends BaseTest {
         Cancelappointment cancelappointment = new Cancelappointment();
         cancelappointment.cancelAppoientment();
     }
-
-
 }
