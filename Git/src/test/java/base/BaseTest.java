@@ -47,7 +47,7 @@ public class BaseTest {
             System.out.println("⚠️ URL is missing in config.properties!");
         }
     }
-    /*@AfterMethod
+/*    @AfterMethod
     public void teardown() {
         if (getDriver() != null) {
             getDriver().quit();
