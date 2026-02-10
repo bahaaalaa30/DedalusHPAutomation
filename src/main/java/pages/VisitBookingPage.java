@@ -51,7 +51,14 @@ public class VisitBookingPage {
     private final By GenderMale = By.xpath("//label[contains(., 'Male')]");
     private final By GenderFemale = By.xpath("//label[contains(.,'Female')]");
     private final By PatientList = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c29-4.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div");
-
+    private final By ManageBillBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-crm-forms-list > div > div.component > div.container.content.ng-star-inserted > div:nth-child(1) > div:nth-child(2)");
+    private final By SearchBillPatient = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > input");
+    private final By FindSearchBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > span");
+    private final By SearchPatientList = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div.find-patient.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div:nth-child(1)");
+    private final By ChooseVisitForBill = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.view-unsettled-bills.ng-star-inserted > div.list-content > table > tbody > tr:nth-child(6) > td:nth-child(2)");
+    private final By PrintBillBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-charges > div.visit-charges > div.charge-content > div.unsettled-bills-list.ng-star-inserted > table > tbody > tr:nth-child(2) > td:nth-child(7) > div > img:nth-child(2)");
+    private final By Printbtn = By.cssSelector("cr-button.action-button");
+    private final By ActionsBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-header.border-bottom > div.diary-header-content > div > div.btn-actn.cursor-pointer");
     public VisitBookingPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
@@ -230,6 +237,63 @@ public class VisitBookingPage {
         WebElement arabicOption = wait.until(ExpectedConditions.visibilityOfElementLocated(arabicLanguageOption));
         jsClick(arabicOption);
     }
+
+    public void BillPage(String patientName) throws InterruptedException {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // 1. خطوات الوصول للفاتورة
+        wait.until(ExpectedConditions.elementToBeClickable(ActionsBTN)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(ManageBillBTN)).click();
+
+        WebElement searchpatientField = wait.until(ExpectedConditions.elementToBeClickable(SearchBillPatient));
+        searchpatientField.clear();
+        searchpatientField.sendKeys(patientName);
+        searchpatientField.click();
+        wait.until(ExpectedConditions.elementToBeClickable(FindSearchBTN)).click();
+
+        // استراحة 5 ثواني عشان لستة المرضى تحمل
+        Thread.sleep(5000);
+
+        wait.until(ExpectedConditions.elementToBeClickable(SearchPatientList)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(ChooseVisitForBill)).click();
+
+        System.out.println("✅ Successfully navigated to the bill details for patient: " + patientName);
+        System.out.println("Navigating to the bill details page...");
+
+        // 2. الضغط على زرار Print الأساسي
+        wait.until(ExpectedConditions.elementToBeClickable(PrintBillBTN)).click();
+
+        // استراحة 5 ثواني عشان شاشة الـ Preview تفتح وتحمل الـ Shadow DOM
+        Thread.sleep(5000);
+
+        // 3. السحر هنا: الانتقال للـ Window الجديدة (شاشة الطباعة)
+        // لازم الخطوة دي عشان السيلينيوم يقدر يشوف الـ Shadow Host
+        for (String handle : driver.getWindowHandles()) {
+            driver.switchTo().window(handle);
+        }
+
+        // 4. اختراق الـ Shadow Root والضغط على الزرار النهائي
+        try {
+            // الوصول للطبقات المتداخلة في شاشة طباعة كروم
+            SearchContext root1 = driver.findElement(By.cssSelector("print-preview-app")).getShadowRoot();
+            SearchContext root2 = root1.findElement(By.cssSelector("print-preview-sidebar")).getShadowRoot();
+            SearchContext root3 = root2.findElement(By.cssSelector("print-preview-button-strip")).getShadowRoot();
+
+            // مسك الزرار اللي إنت بعت الـ HTML بتاعه (cr-button)
+            WebElement actualPrintBtn = root3.findElement(By.cssSelector("cr-button.action-button"));
+
+            actualPrintBtn.click();
+            System.out.println("✅ Final Print Button clicked via Shadow DOM.");
+
+        } catch (Exception e) {
+            System.out.println("❌ Could not find or click the print button inside Shadow DOM: " + e.getMessage());
+        }
+
+        // الميثود هتقف هنا والـ Save popup هتظهر
+    }
+
+
+
 
 
     public void SearchPatientID(String PatientID) {
