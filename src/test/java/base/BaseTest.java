@@ -5,10 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import utils.ConfigReader;
-import utils.EmailUtils;
 
 public class BaseTest {
     protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
@@ -56,10 +54,10 @@ public class BaseTest {
             System.out.println("✅ Browser closed and ThreadLocal reference removed.");
         }
     }*/
-    @AfterSuite
+/*    @AfterSuite
     public void tearDownSuite() {
         String summary = "The automation run has finished. Please check the attached link for detailed results.";
         System.out.println("Sending Email Report...");
         EmailUtils.sendEmailReport(summary);
-    }
+    }*/
 }
