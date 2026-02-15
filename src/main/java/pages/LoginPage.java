@@ -56,6 +56,4 @@ public class LoginPage {
         return msg;
     }
 
-    public void login(String cmob6, String egy123) {
-    }
 }
