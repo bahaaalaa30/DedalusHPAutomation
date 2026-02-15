@@ -10,6 +10,7 @@
             <class name="Normalcases.ChangeLanguage"/>
             <class name="Normalcases.SearchPatient"/>
             <class name="Normalcases.BillPage"/>
+            <class name="Normalcases.PractitionerLogin"/>
         </classes>
     </test>
 </suite>
