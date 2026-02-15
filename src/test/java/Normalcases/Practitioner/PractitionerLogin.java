@@ -1,4 +1,4 @@
-package Normalcases;
+package Normalcases.Practitioner;
 
 
 import base.BaseTest;

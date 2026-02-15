@@ -1,4 +1,4 @@
-package Normalcases;
+package Normalcases.CMO;
 
 import base.BaseTest;
 import io.qameta.allure.*;
