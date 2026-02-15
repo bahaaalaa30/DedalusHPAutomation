@@ -58,6 +58,9 @@ public class VisitBookingPage {
     private final By ChooseVisitForBill = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.view-unsettled-bills.ng-star-inserted > div.list-content > table > tbody > tr:nth-child(6) > td:nth-child(2)");
     private final By PrintBillBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-charges > div.visit-charges > div.charge-content > div.unsettled-bills-list.ng-star-inserted > table > tbody > tr:nth-child(2) > td:nth-child(7) > div > img:nth-child(2)");
     private final By Printbtn = By.cssSelector("cr-button.action-button");
+    private final By Close = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-header > div");
+    private final By Payment = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button");
+    private final By PayBillBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-charges > div.visit-charges > div.charge-content > div.unsettled-bills-list.ng-star-inserted > table > tbody > tr:nth-child(1) > td:nth-child(7) > div > img:nth-child(1)");
     private final By ActionsBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-header.border-bottom > div.diary-header-content > div > div.btn-actn.cursor-pointer");
     public VisitBookingPage(WebDriver driver) {
         this.driver = driver;
@@ -462,5 +465,32 @@ public class VisitBookingPage {
             System.err.println("❌ Failed in Female Gender search: " + e.getMessage());
             throw e;
         }
+    }
+
+    public void PayBill(String patientName) throws InterruptedException {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // 1. خطوات الوصول للفاتورة
+        wait.until(ExpectedConditions.elementToBeClickable(ActionsBTN)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(ManageBillBTN)).click();
+
+        WebElement searchpatientField = wait.until(ExpectedConditions.elementToBeClickable(SearchBillPatient));
+        searchpatientField.clear();
+        searchpatientField.sendKeys(patientName);
+        searchpatientField.click();
+        wait.until(ExpectedConditions.elementToBeClickable(FindSearchBTN)).click();
+
+        // استراحة 5 ثواني عشان لستة المرضى تحمل
+        Thread.sleep(5000);
+
+        wait.until(ExpectedConditions.elementToBeClickable(SearchPatientList)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(ChooseVisitForBill)).click();
+
+        System.out.println("✅ Successfully navigated to the bill details for patient: " + patientName);
+        System.out.println("Navigating to the bill details page...");
+        wait.until(ExpectedConditions.elementToBeClickable(PayBillBtn)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(Payment)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(Close)).click();
+
     }
 }
