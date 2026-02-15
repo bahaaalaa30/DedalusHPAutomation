@@ -40,10 +40,10 @@ public class BillPage extends BaseTest {
 
     }
 
-    @Test(priority = 12, description = "Verify Printing the Bill")
+    @Test(priority = 13, description = "Verify Paying the Bill")
     @Severity(SeverityLevel.NORMAL)
-    @Story("Successful Printing for Patient Billing")
-    @Description("This test validates that a CMO can Print the Bill for a patient and the system generates the correct bill details.")
+    @Story("Successful Paying for Patient Billing")
+    @Description("This test validates that a CMO can Pay the Bill for a patient and the system generates the correct Payment details.")
     public void PayPatientBill() throws InterruptedException {
         String url = ConfigReader.getProperty("url");
         String VisitbookingURL = ConfigReader.getProperty("visitbookingurl");
