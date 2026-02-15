@@ -3,14 +3,14 @@
 <suite name="HP Automation Test">
     <test name="NormalCases Test" preserve-order="true">
         <classes>
-            <class name="Normalcases.LoginTest"/>
-            <class name="Normalcases.VisitBooking"/>
-            <class name="Normalcases.Cancelvisit"/>
-            <class name="Normalcases.Cancelappointment"/>
-            <class name="Normalcases.ChangeLanguage"/>
-            <class name="Normalcases.SearchPatient"/>
-            <class name="Normalcases.BillPage"/>
-            <class name="Normalcases.PractitionerLogin"/>
+            <class name="Normalcases.CMO.LoginTest"/>
+            <class name="Normalcases.CMO.VisitBooking"/>
+            <class name="Normalcases.CMO.Cancelvisit"/>
+            <class name="Normalcases.CMO.Cancelappointment"/>
+            <class name="Normalcases.CMO.ChangeLanguage"/>
+            <class name="Normalcases.CMO.SearchPatient"/>
+            <class name="Normalcases.CMO.BillPage"/>
+            <class name="Normalcases.Practitioner.PractitionerLogin"/>
         </classes>
     </test>
 </suite>
