@@ -25,7 +25,7 @@ public class BaseTest {
         if (browser.equalsIgnoreCase("chrome")) {
             WebDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless=new");
+            //options.addArguments("--headless=new");
             options.addArguments("--kiosk-printing");
             options.addArguments("--no-sandbox"); // أساسي لجينكينز
             options.addArguments("--disable-dev-shm-usage"); // بيحل مشكلة الـ Memory في Docker/Jenkins
