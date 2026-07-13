@@ -30,6 +30,7 @@ public class VisitBookingPage {
     private final By CreateVisitBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button");
     private final By DoneBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button.primary-button.ng-star-inserted");
     private final By OHCVisitRadio = By.cssSelector("#visit_OH");
+    private final By PayerVisitType = By.id("visit_N");
     private final By PreviewAppointment = By.xpath("//span[@class='patient-name' and contains(text(),'Visit Cancellation For automation')]");
     private final By CancelVisitPatient = By.xpath("//div[normalize-space()='Visit Cancellation']");
     private final By AppointmentCancelReason = By.xpath("//label[contains(text(), 'Mistake in entry')]");
@@ -41,6 +42,8 @@ public class VisitBookingPage {
     //private final By DatePickerUpdateBtn = By.cssSelector("#owl-dt-picker-0 > div.owl-dt-container-inner.ng-trigger.ng-trigger-fadeInPicker > div > button:nth-child(2) > span");
     //private final By PreviewFutureAppointment = By.xpath("//span[@class='patient-id ng-star-inserted' and text()='B600007150']");
     private final By languageMenu = By.id("language-menu");
+    private final By PayerVisitType2 = By.id("visit_SC");
+    private final By OnlineEligibiltyBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button:nth-child(2)");
     private final By arabicLanguageOption = By.xpath("//div[normalize-space()='عربى']");
     private final By noResultsFound = By.xpath("//div[contains(@class, 'title') and normalize-space()='لم يتم العثور على نتائج']");
     private final By SearchPatient = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-crm-header > div > div > div.col-5.custom-head-col > input");
@@ -50,6 +53,8 @@ public class VisitBookingPage {
     private final By SearchNationlaID = By.cssSelector("input[placeholder*='National ID']");
     private final By GenderMale = By.xpath("//label[contains(., 'Male')]");
     private final By GenderFemale = By.xpath("//label[contains(.,'Female')]");
+    private final By eligibilitySuccessMessage = By.xpath("//div[normalize-space()='Member is eligible for the selected coverage.']");
+    private final By proceedRegistrationBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button");
     private final By PatientList = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c29-4.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div");
     private final By ManageBillBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-crm-forms-list > div > div.component > div.container.content.ng-star-inserted > div:nth-child(1) > div:nth-child(2)");
     private final By SearchBillPatient = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > input");
@@ -491,6 +496,91 @@ public class VisitBookingPage {
         wait.until(ExpectedConditions.elementToBeClickable(PayBillBtn)).click();
         wait.until(ExpectedConditions.elementToBeClickable(Payment)).click();
         wait.until(ExpectedConditions.elementToBeClickable(Close)).click();
+
+    }
+
+
+    public void selectPayerFacility() {
+        System.out.println("🏥 Selecting Payer Facility...");
+        By payerFacilityLocator = By.id("facility-menu");
+        wait.until(ExpectedConditions.elementToBeClickable(payerFacilityLocator)).click();
+        By elArabCenterFacility = By.xpath("//div[contains(@class, 'facility-region-menu')]//div[normalize-space()='El Arab Center - UAT']");
+        wait.until(ExpectedConditions.elementToBeClickable(elArabCenterFacility)).click();
+    }
+
+    public void selectPayerClinic() {
+        System.out.println("🏥 Selecting Payer Clinic...");
+        By payerClinicLocator = By.id("clinic-btn");
+        wait.until(ExpectedConditions.elementToBeClickable(payerClinicLocator)).click();
+        By FamilyMedicine = By.xpath("//*[@id=\"clinic-list\"]/div[2]/div[6]");
+        wait.until(ExpectedConditions.elementToBeClickable(FamilyMedicine)).click();
+    }
+
+    public void selectPayerDoctor() {
+        System.out.println("👨‍⚕️ Selecting Payer Doctor...");
+        By payerDoctorLocator = By.xpath("/html/body/app-root/app-crm/div/div/app-clinical-diary/div/div[2]/div[1]/app-crm-quick-filters/div/div/div[2]/div[13]/div[1]");
+        wait.until(ExpectedConditions.elementToBeClickable(payerDoctorLocator)).click();
+    }
+
+    @Step("🚀 Executing Full Visit Creation Workflow for eligible patient: {0}")
+    public VisitBookingPage EligibilityCheck(String PatientPID) {
+        System.out.println("🔄 Starting Visit Creation Workflow...");
+
+        System.out.println("📋 Step 1: Selecting Visit Type (New)...");
+        wait.until(ExpectedConditions.elementToBeClickable(PayerVisitType)).click();
+
+        System.out.println("🔍 Step 2: Searching for Patient: " + PatientPID);
+        WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(PIDsearch));
+        input.clear();
+        input.sendKeys(PatientPID);
+        wait.until(ExpectedConditions.elementToBeClickable(SearchBTN)).click();
+
+        System.out.println("🖱️ Step 3: Selecting patient from results...");
+        wait.until(ExpectedConditions.elementToBeClickable(SearchResult)).click();
+
+        System.out.println("📦 Step 4: Confirming Appointment and Initiating Visit...");
+        wait.until(ExpectedConditions.elementToBeClickable(ConfirmApptAndCreateVisitBtn)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(PayerVisitType2)).click();
+
+
+
+       /* System.out.println("✅ Step 9: Clicking Done to finalize process.");
+        wait.until(ExpectedConditions.elementToBeClickable(DoneBtn)).click();*/
+
+        return this;
+    }
+
+    public void sendRequestAndWaitForResponse() {
+        System.out.println("⏳ Clicking 'Send Request' button...");
+
+        System.out.println("➡️ Step 5: Eligibility Checking...");
+        wait.until(ExpectedConditions.elementToBeClickable(OnlineEligibiltyBTN)).click();
+
+
+        System.out.println("🚀 Request sent. Initiating long dynamic wait (3 to 5 minutes)...");
+
+        // الخطوة الثانية: إعداد الـ Custom Long Wait لـ 5 دقائق
+        // نرفع الـ Polling Interval لـ 10 ثوانٍ لتقليل الضغط على الـ DOM
+        WebDriverWait longWait = new WebDriverWait(driver, Duration.ofMinutes(5));
+        longWait.pollingEvery(Duration.ofSeconds(10))
+                .ignoring(org.openqa.selenium.NoSuchElementException.class)
+                .ignoring(org.openqa.selenium.StaleElementReferenceException.class);
+
+        // الانتظار الديناميكي حتى يصبح زر الـ Proceed قابل للضغط
+        // السيلينيوم سيتحقق كل 10 ثوانٍ، وإذا ظهر الزر في دقيقة أو دقيقتين سيكمل فوراً ولن يكمل الـ 5 دقائق كاملة
+
+        longWait.until(ExpectedConditions.visibilityOfElementLocated(eligibilitySuccessMessage));
+        WebElement proceedBtn = longWait.until(
+                ExpectedConditions.elementToBeClickable(proceedRegistrationBtn)
+        );
+        proceedBtn.click();
+        System.out.println("✅ Response received and 'Proceed' button clicked successfully!");
+        System.out.println("🚀 Step 8: Creating Visit...");
+        wait.until(ExpectedConditions.elementToBeClickable(CreateVisitBtn)).click();
+
+        System.out.println("✅ Step 9: Clicking Done to finalize process.");
+        wait.until(ExpectedConditions.elementToBeClickable(DoneBtn)).click();
+
 
     }
 }

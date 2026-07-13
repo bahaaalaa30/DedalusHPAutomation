@@ -54,4 +54,19 @@ public class LoginTest extends BaseTest {
         Assert.assertEquals(actualError, expectedError, "❌ Error message mismatch!");
         System.out.println("✅ Finished: Error message verification successful.");
     }
+
+    public void checkEligibilityWithValidPID() {
+        LoginPage loginPage = new LoginPage(getDriver());
+        String url = ConfigReader.getProperty("PayerURL");
+        System.out.println("🚀 Started: Valid Credentials Login Test");
+        getDriver().get(url);
+        loginPage.enterUsername(ConfigReader.getProperty("CMOB6"));
+        loginPage.enterPassword(ConfigReader.getProperty("cmoPassword"));
+        loginPage.clickLogin();
+        System.out.println("⏳ Verifying redirection to Clinical Diary...");
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        boolean success = wait.until(ExpectedConditions.urlContains("clinicaldiary"));
+        Assert.assertTrue(success, "❌ Login Failed! System did not redirect to Clinical Diary.");
+        System.out.println("✅ Finished: Login successful.");
+    }
 }
