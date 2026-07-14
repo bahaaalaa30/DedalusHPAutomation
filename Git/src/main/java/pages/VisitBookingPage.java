@@ -504,4 +504,39 @@ public class VisitBookingPage {
             throw e;
         }
     }
-}
+
+    public void PayBill(String patientName) throws InterruptedException {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // 1. خطوات الوصول للفاتورة
+        wait.until(ExpectedConditions.elementToBeClickable(ActionsBTN)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(ManageBillBTN)).click();
+
+        WebElement searchpatientField = wait.until(ExpectedConditions.elementToBeClickable(SearchBillPatient));
+        searchpatientField.clear();
+        searchpatientField.sendKeys(patientName);
+        searchpatientField.click();
+        wait.until(ExpectedConditions.elementToBeClickable(FindSearchBTN)).click();
+
+        // استراحة 5 ثواني عشان لستة المرضى تحمل
+        Thread.sleep(5000);
+
+        wait.until(ExpectedConditions.elementToBeClickable(SearchPatientList)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(ChooseVisitForBill)).click();
+
+        System.out.println("✅ Successfully navigated to the bill details for patient: " + patientName);
+        System.out.println("Navigating to the bill details page...");
+        wait.until(ExpectedConditions.elementToBeClickable(PayBillBtn)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(Payment)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(Close)).click();
+
+    }
+
+
+    public void selectPayerFacility() {
+        System.out.println("🏥 Selecting Payer Facility...");
+        By payerFacilityLocator = By.id("facility-menu");
+        wait.until(ExpectedConditions.elementToBeClickable(payerFacilityLocator)).click();
+        By elArabCenterFacility = By.xpath("//div[contains(@class, 'facility-region-menu')]//div[normalize-space()='El Arab Center - UAT']");
+        wait.until(ExpectedConditions.elementToBeClickable(elArabCenterFacility)).click();
+    }
