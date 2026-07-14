@@ -15,7 +15,7 @@ import java.time.Duration;
 @Epic("Hospital Management System - Dedalus HealthPlug")
 @Feature("Eligibility Module")
 public class Eligibility extends BaseTest {
-    @Test(priority = 0, description = "Verify Check Eligibility with Eligible Patient")
+    @Test(priority = 20, description = "Verify Check Eligibility with Eligible Patient")
     @Severity(SeverityLevel.BLOCKER)
     @Story("Successful Eligibility Check for Eligible Patient")
     @Description("This test validates that a user can check the eligibility of a patient with valid credentials.")
