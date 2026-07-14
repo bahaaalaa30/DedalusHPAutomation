@@ -350,7 +350,7 @@ public class VisitBookingPage {
         System.out.println("🔍 Searching for Patient Name: " + patientName);
 
         try {
-            // 2. أهم خطوة: التأكد إن الـ Toast اختفت عشان منواجهش ElementClickIntercepted
+
             wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("toast")));
             wait.until(ExpectedConditions.invisibilityOfElementLocated(By.tagName("app-toast")));
 
