@@ -82,6 +82,7 @@ public class VisitBookingPage {
         return this;
     }
 
+
     @Step("👨‍⚕️ Selecting Practitioner (GENB6)")
     public VisitBookingPage selectPractitioner() {
         System.out.println("👨‍⚕️ Selecting Practitioner...");
