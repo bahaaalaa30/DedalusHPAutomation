@@ -20,7 +20,6 @@ public class Eligibility extends BaseTest {
     @Story("Successful Eligibility Check for Eligible Patient")
     @Description("This test validates that a user can check the eligibility of a patient with valid credentials.")
     public void checkEligibilityWithValidPID() {
-        LoginPage loginPage = new LoginPage(getDriver());
         String url = ConfigReader.getProperty("PayerURL");
         System.out.println("🚀 Started: Valid Credentials Login Test");
         getDriver().get(url);
