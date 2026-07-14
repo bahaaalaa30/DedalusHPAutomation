@@ -41,6 +41,8 @@ public class VisitBookingPage {
     //private final By DatePickerUpdateBtn = By.cssSelector("#owl-dt-picker-0 > div.owl-dt-container-inner.ng-trigger.ng-trigger-fadeInPicker > div > button:nth-child(2) > span");
     //private final By PreviewFutureAppointment = By.xpath("//span[@class='patient-id ng-star-inserted' and text()='B600007150']");
     private final By languageMenu = By.id("language-menu");
+    private final By PayerVisitType2 = By.id("visit_N");
+    private final By OnlineEligibiltyBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button:nth-child(2)");
     private final By arabicLanguageOption = By.xpath("//div[normalize-space()='عربى']");
     private final By noResultsFound = By.xpath("//div[contains(@class, 'title') and normalize-space()='لم يتم العثور على نتائج']");
     private final By SearchPatient = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-crm-header > div > div > div.col-5.custom-head-col > input");
