@@ -41,7 +41,7 @@ public class LoginPage {
     public void clickLogin() {
         System.out.println("🖱️ Clicking Login button...");
         WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(loginButton));
-        try    {
+        try {
             btn.click();
         } catch (Exception e) {
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
