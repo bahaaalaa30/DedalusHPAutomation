@@ -13,7 +13,7 @@ import java.time.Duration;
 
 @Epic("Hospital Management System - Dedalus HealthPlug")
 @Feature("Validation Module")
-public class PractitionerPatientsCount extends BaseTest {
+public class practitionerPatientsCount extends BaseTest {
     @Test(priority = 15, description = "Verify General Practitioner can Login with Valid Credentials")
     @Severity(SeverityLevel.NORMAL)
     @Story("Get Data From The Page")
