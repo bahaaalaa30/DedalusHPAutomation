@@ -22,7 +22,6 @@ public class Eligibility extends BaseTest {
     public void checkEligibilityWithValidPID() {
         LoginPage loginPage = new LoginPage(getDriver());
         String url = ConfigReader.getProperty("PayerURL");
-        String PayerURLVisitPage = ConfigReader.getProperty("payervisitbookingurl");
         System.out.println("🚀 Started: Valid Credentials Login Test");
         getDriver().get(url);
         LoginPage loginPage = new LoginPage(getDriver());
