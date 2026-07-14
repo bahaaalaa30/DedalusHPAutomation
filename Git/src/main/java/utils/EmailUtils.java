@@ -35,7 +35,7 @@ public class EmailUtils {
             // محتوى الإيميل
             String htmlContent = "<h1>Automation Execution Summary</h1>" +
                     "<p>" + summaryText + "</p>" +
-                    "<p>Check full Allure Report here: <a href='http://localhost:8080/job/Dedalus_HP_Automation/allure'>View Report</a></p>";
+                    "<p>Check full Allure Report here: <a href='http://localhost:8080/job/DedalusHPAutomation/allure/'>View Report</a></p>";
 
             message.setContent(htmlContent, "text/html; charset=utf-8");
 
