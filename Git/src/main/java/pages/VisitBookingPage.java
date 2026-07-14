@@ -339,7 +339,7 @@ public class VisitBookingPage {
 
         } catch (Exception e) {
             System.err.println("❌ Failed to search for Patient ID: " + PatientID + " due to: " + e.getMessage());
-            throw e; // بنعمل throw عشان التست يفشل ويبان السبب في Allure
+            throw e;
         }
     }
 
