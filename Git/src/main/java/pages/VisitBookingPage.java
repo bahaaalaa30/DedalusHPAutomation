@@ -101,6 +101,7 @@ public class VisitBookingPage {
             return false;
         }
     }
+
     @Step("⏰ Booking Time Slot: {0}")
     public VisitBookingPage bookTimeSlot(String timeText) {
         System.out.println("⏰ Selecting time slot: " + timeText);
