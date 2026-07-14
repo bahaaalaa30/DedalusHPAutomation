@@ -160,7 +160,7 @@ public class VisitBookingPage {
     }
 
     @Step("🧹 Cleanup: Canceling the Appointment")
-    public void CancelAppointment(){
+    public void CancelAppointment() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         System.out.println("🏥 Step 1: Opening Clinic list...");
         wait.until(ExpectedConditions.elementToBeClickable(ClinicNameSearchButton)).click();
