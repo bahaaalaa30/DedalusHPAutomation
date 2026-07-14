@@ -249,6 +249,63 @@ public class VisitBookingPage {
         jsClick(arabicOption);
     }
 
+    public void BillPage(String patientName) throws InterruptedException {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // 1. خطوات الوصول للفاتورة
+        wait.until(ExpectedConditions.elementToBeClickable(ActionsBTN)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(ManageBillBTN)).click();
+
+        WebElement searchpatientField = wait.until(ExpectedConditions.elementToBeClickable(SearchBillPatient));
+        searchpatientField.clear();
+        searchpatientField.sendKeys(patientName);
+        searchpatientField.click();
+        wait.until(ExpectedConditions.elementToBeClickable(FindSearchBTN)).click();
+
+        // استراحة 5 ثواني عشان لستة المرضى تحمل
+        Thread.sleep(5000);
+
+        wait.until(ExpectedConditions.elementToBeClickable(SearchPatientList)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(ChooseVisitForBill)).click();
+
+        System.out.println("✅ Successfully navigated to the bill details for patient: " + patientName);
+        System.out.println("Navigating to the bill details page...");
+
+        // 2. الضغط على زرار Print الأساسي
+        wait.until(ExpectedConditions.elementToBeClickable(PrintBillBTN)).click();
+
+        // استراحة 5 ثواني عشان شاشة الـ Preview تفتح وتحمل الـ Shadow DOM
+        Thread.sleep(5000);
+
+        // 3. السحر هنا: الانتقال للـ Window الجديدة (شاشة الطباعة)
+        // لازم الخطوة دي عشان السيلينيوم يقدر يشوف الـ Shadow Host
+        for (String handle : driver.getWindowHandles()) {
+            driver.switchTo().window(handle);
+        }
+
+        // 4. اختراق الـ Shadow Root والضغط على الزرار النهائي
+        try {
+            // الوصول للطبقات المتداخلة في شاشة طباعة كروم
+            SearchContext root1 = driver.findElement(By.cssSelector("print-preview-app")).getShadowRoot();
+            SearchContext root2 = root1.findElement(By.cssSelector("print-preview-sidebar")).getShadowRoot();
+            SearchContext root3 = root2.findElement(By.cssSelector("print-preview-button-strip")).getShadowRoot();
+
+            // مسك الزرار اللي إنت بعت الـ HTML بتاعه (cr-button)
+            WebElement actualPrintBtn = root3.findElement(By.cssSelector("cr-button.action-button"));
+
+            actualPrintBtn.click();
+            System.out.println("✅ Final Print Button clicked via Shadow DOM.");
+
+        } catch (Exception e) {
+            System.out.println("❌ Could not find or click the print button inside Shadow DOM: " + e.getMessage());
+        }
+
+        // الميثود هتقف هنا والـ Save popup هتظهر
+    }
+
+
+
+
 
     public void SearchPatientID(String PatientID) {
         // 1. تعريف الـ WebDriverWait في بداية الميثود لضمان استخدامه صح
