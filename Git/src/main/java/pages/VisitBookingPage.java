@@ -53,6 +53,8 @@ public class VisitBookingPage {
     private final By SearchNationlaID = By.cssSelector("input[placeholder*='National ID']");
     private final By GenderMale = By.xpath("//label[contains(., 'Male')]");
     private final By GenderFemale = By.xpath("//label[contains(.,'Female')]");
+    private final By eligibilitySuccessMessage = By.xpath("//div[normalize-space()='Member is eligible for the selected coverage.']");
+    private final By proceedRegistrationBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button");
     private final By PatientList = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c29-4.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div");
     private final By ManageBillBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-crm-forms-list > div > div.component > div.container.content.ng-star-inserted > div:nth-child(1) > div:nth-child(2)");
     private final By SearchBillPatient = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > input");
