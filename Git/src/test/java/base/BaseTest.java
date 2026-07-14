@@ -13,6 +13,7 @@ import utils.EmailUtils;
 
 public class BaseTest {
     protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+
     public WebDriver getDriver() {
         return driver.get();
     }
