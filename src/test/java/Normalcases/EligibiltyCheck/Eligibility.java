@@ -25,6 +25,7 @@ public class Eligibility extends BaseTest {
         String PayerURLVisitPage = ConfigReader.getProperty("payervisitbookingurl");
         System.out.println("🚀 Started: Valid Credentials Login Test");
         getDriver().get(url);
+        LoginPage loginPage = new LoginPage(getDriver());
         loginPage.enterUsername(ConfigReader.getProperty("CMOB6"));
         loginPage.enterPassword(ConfigReader.getProperty("cmoPassword"));
         loginPage.clickLogin();
