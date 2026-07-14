@@ -55,7 +55,4 @@ public class LoginPage {
         System.out.println("🔍 Error message found: [" + msg + "]");
         return msg;
     }
-
-    public void login(String cmob6, String egy123) {
-    }
 }
