@@ -10,7 +10,7 @@ public class ConfigReader {
     public static void loadConfig() {
         try {
             properties = new Properties();
-            FileInputStream fis = new FileInputStream("C:\\Users\\wesam.ahmed\\OneDrive - Adeahub\\Desktop\\DedalusHPAutomation\\src\\test\\java\\resources\\config.properties");
+            FileInputStream fis = new FileInputStream("C:\\Users\\BahaaMohammed\\Downloads\\New folder\\OneDrive - Adeahub\\Desktop\\DedalusHPAutomation\\src\\test\\java\\resources\\config.properties");
             properties.load(fis);
         } catch (IOException e) {
             e.printStackTrace();
