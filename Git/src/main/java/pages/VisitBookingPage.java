@@ -233,6 +233,7 @@ public class VisitBookingPage {
             }
         }
     }
+
     // --- Helper Methods ---
     private void jsClick(WebElement element) {
         js.executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
