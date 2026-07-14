@@ -91,6 +91,7 @@ public class VisitBookingPage {
         js.executeScript("arguments[0].click();", element);
         return this;
     }
+
     @Step("🔍 التحقق من ظهور رسالة: لم يتم العثور على نتائج")
     public boolean isNoResultsMessageDisplayed() {
         try {
