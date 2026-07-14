@@ -540,3 +540,80 @@ public class VisitBookingPage {
         By elArabCenterFacility = By.xpath("//div[contains(@class, 'facility-region-menu')]//div[normalize-space()='El Arab Center - UAT']");
         wait.until(ExpectedConditions.elementToBeClickable(elArabCenterFacility)).click();
     }
+
+    public void selectPayerClinic() {
+        System.out.println("🏥 Selecting Payer Clinic...");
+        By payerClinicLocator = By.id("clinic-btn");
+        wait.until(ExpectedConditions.elementToBeClickable(payerClinicLocator)).click();
+        By FamilyMedicine = By.xpath("//*[@id=\"clinic-list\"]/div[2]/div[6]");
+        wait.until(ExpectedConditions.elementToBeClickable(FamilyMedicine)).click();
+    }
+
+    public void selectPayerDoctor() {
+        System.out.println("👨‍⚕️ Selecting Payer Doctor...");
+        By payerDoctorLocator = By.xpath("/html/body/app-root/app-crm/div/div/app-clinical-diary/div/div[2]/div[1]/app-crm-quick-filters/div/div/div[2]/div[13]/div[1]");
+        wait.until(ExpectedConditions.elementToBeClickable(payerDoctorLocator)).click();
+    }
+
+    @Step("🚀 Executing Full Visit Creation Workflow for eligible patient: {0}")
+    public VisitBookingPage EligibilityCheck(String PatientPID) {
+        System.out.println("🔄 Starting Visit Creation Workflow...");
+
+        System.out.println("📋 Step 1: Selecting Visit Type (New)...");
+        wait.until(ExpectedConditions.elementToBeClickable(PayerVisitType)).click();
+
+        System.out.println("🔍 Step 2: Searching for Patient: " + PatientPID);
+        WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(PIDsearch));
+        input.clear();
+        input.sendKeys(PatientPID);
+        wait.until(ExpectedConditions.elementToBeClickable(SearchBTN)).click();
+
+        System.out.println("🖱️ Step 3: Selecting patient from results...");
+        wait.until(ExpectedConditions.elementToBeClickable(SearchResult)).click();
+
+        System.out.println("📦 Step 4: Confirming Appointment and Initiating Visit...");
+        wait.until(ExpectedConditions.elementToBeClickable(ConfirmApptAndCreateVisitBtn)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(PayerVisitType2)).click();
+
+
+
+       /* System.out.println("✅ Step 9: Clicking Done to finalize process.");
+        wait.until(ExpectedConditions.elementToBeClickable(DoneBtn)).click();*/
+
+        return this;
+    }
+
+    public void sendRequestAndWaitForResponse() {
+        System.out.println("⏳ Clicking 'Send Request' button...");
+
+        System.out.println("➡️ Step 5: Eligibility Checking...");
+        wait.until(ExpectedConditions.elementToBeClickable(OnlineEligibiltyBTN)).click();
+
+
+        System.out.println("🚀 Request sent. Initiating long dynamic wait (3 to 5 minutes)...");
+
+        // الخطوة الثانية: إعداد الـ Custom Long Wait لـ 5 دقائق
+        // نرفع الـ Polling Interval لـ 10 ثوانٍ لتقليل الضغط على الـ DOM
+        WebDriverWait longWait = new WebDriverWait(driver, Duration.ofMinutes(5));
+        longWait.pollingEvery(Duration.ofSeconds(10))
+                .ignoring(org.openqa.selenium.NoSuchElementException.class)
+                .ignoring(org.openqa.selenium.StaleElementReferenceException.class);
+
+        // الانتظار الديناميكي حتى يصبح زر الـ Proceed قابل للضغط
+        // السيلينيوم سيتحقق كل 10 ثوانٍ، وإذا ظهر الزر في دقيقة أو دقيقتين سيكمل فوراً ولن يكمل الـ 5 دقائق كاملة
+
+        longWait.until(ExpectedConditions.visibilityOfElementLocated(eligibilitySuccessMessage));
+        WebElement proceedBtn = longWait.until(
+                ExpectedConditions.elementToBeClickable(proceedRegistrationBtn)
+        );
+        proceedBtn.click();
+        System.out.println("✅ Response received and 'Proceed' button clicked successfully!");
+        System.out.println("🚀 Step 8: Creating Visit...");
+        wait.until(ExpectedConditions.elementToBeClickable(CreateVisitBtn)).click();
+
+        System.out.println("✅ Step 9: Clicking Done to finalize process.");
+        wait.until(ExpectedConditions.elementToBeClickable(DoneBtn)).click();
+
+
+    }
+}
