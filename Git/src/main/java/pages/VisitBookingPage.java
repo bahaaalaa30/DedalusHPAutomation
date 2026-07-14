@@ -313,8 +313,7 @@ public class VisitBookingPage {
         System.out.println("🔍 Searching for Patient ID: " + PatientID);
 
         try {
-            // 2. أهم خطوة لجينكينز: انتظر اختفاء أي رسائل Toast (نجاح اللوجن مثلاً) قبل أي ضغطة
-            // بنستخدم invisibilityOfElementLocated عشان نضمن إن مفيش حاجة مغطية الزراير
+
             wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("toast")));
             wait.until(ExpectedConditions.invisibilityOfElementLocated(By.tagName("app-toast")));
 
