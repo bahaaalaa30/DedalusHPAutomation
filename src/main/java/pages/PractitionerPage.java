@@ -41,7 +41,12 @@ public class PractitionerPage {
 
         System.out.println("Validation Passed: Leads count is " + actualCount);
     }
-
+public void  SelectClinic(){
+        WebElement clinicElement = wait.until(ExpectedConditions.elementToBeClickable(By.id("facility-menu")));
+        clinicElement.click();
+        WebElement FacilityName = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#facility-menu-actions > div > div > div > div > div:nth-child(3)")));
+        FacilityName.click();
+}
 
 
 }
