@@ -14,7 +14,7 @@ public class PractitionerPage {
     private final WebDriver driver;
     private final WebDriverWait wait; // تغييرها لـ final لضمان تعريفها مرة واحدة
     private final JavascriptExecutor js;
-    private final By PatientsCount = By.cssSelector("body > app-root > app-crm > div > div > app-crm-leads > div.crm-content-list.content-height > div > div.col-2 > app-crm-quick-filters > div > div > div:nth-child(2) > div:nth-child(3) > div.filter-count.ng-star-inserted > div");
+    private final By PatientsCount = By.xpath("/html/body/app-root/app-crm/div/div/app-crm-leads/div[2]/div/div[1]/app-crm-quick-filters/div/div/div[2]/div[2]/div[3]/div");
 
     public PractitionerPage(WebDriver driver) {
         this.driver = driver;
