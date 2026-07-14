@@ -56,7 +56,7 @@ public class BaseTest {
             System.out.println("✅ Browser closed and ThreadLocal reference removed.");
         }
     }
-/*    @AfterSuite
+    @AfterSuite
     public void tearDownSuite() {
         String summary = "The automation run has finished. Please check the attached link for detailed results.";
         System.out.println("Sending Email Report...");
