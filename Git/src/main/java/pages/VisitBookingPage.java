@@ -30,6 +30,7 @@ public class VisitBookingPage {
     private final By CreateVisitBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button");
     private final By DoneBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button.primary-button.ng-star-inserted");
     private final By OHCVisitRadio = By.cssSelector("#visit_OH");
+    private final By PayerVisitType = By.id("visit_N");
     private final By PreviewAppointment = By.xpath("//span[@class='patient-name' and contains(text(),'Visit Cancellation For automation')]");
     private final By CancelVisitPatient = By.xpath("//div[normalize-space()='Visit Cancellation']");
     private final By AppointmentCancelReason = By.xpath("//label[contains(text(), 'Mistake in entry')]");
