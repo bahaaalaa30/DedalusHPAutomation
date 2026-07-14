@@ -35,6 +35,7 @@ public class Eligibility extends BaseTest {
         Assert.assertTrue(success, "❌ Login Failed! System did not redirect to Clinical Diary.");
         System.out.println("✅ Finished: Login successful.");
         System.out.println("📍 Navigating to the Visit Booking page...");
+        String PayerURLVisitPage = ConfigReader.getProperty("payervisitbookingurl");
         getDriver().get(PayerURLVisitPage);
         VisitBookingPage bookingPage = new VisitBookingPage(getDriver());
         bookingPage.selectPayerFacility();
