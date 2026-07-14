@@ -32,6 +32,7 @@ public class PractitionerPatientsCount extends BaseTest {
         System.out.println("✅ Finished: Login successful.");
         getDriver().get(GenUsr);
         PractitionerPage PractitionerPage = new PractitionerPage(getDriver());
+        PractitionerPage.SelectClinic();
         PractitionerPage.verifyLeadsCountIsGreaterThanOne();
 
     }
