@@ -61,5 +61,5 @@ public class BaseTest {
         String summary = "The automation run has finished. Please check the attached link for detailed results.";
         System.out.println("Sending Email Report...");
         EmailUtils.sendEmailReport(summary);
-    }*/
+    }
 }
