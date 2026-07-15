@@ -44,5 +44,34 @@ public class Eligibility extends BaseTest {
         bookingPage.sendRequestAndWaitForResponse();
         System.out.println("✅ Appointment booked and visit created successfully!");
     }
+    @Test(priority = 21, description = "Verify Check Eligibility with Eligible Patient")
+    @Severity(SeverityLevel.BLOCKER)
+    @Story("Successful Eligibility Check for non Eligible Patient")
+    @Description("This test validates that a user can check the eligibility of a patient with Invalid credentials.")
+    public void checkEligibilityWithinValidPID() {
+        String url = ConfigReader.getProperty("PayerURL");
+        System.out.println("🚀 Started: Valid Credentials Login Test");
+        getDriver().get(url);
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.enterUsername(ConfigReader.getProperty("CMOB6"));
+        loginPage.enterPassword(ConfigReader.getProperty("cmoPassword"));
+        loginPage.clickLogin();
+        System.out.println("⏳ Verifying redirection to Clinical Diary...");
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        boolean success = wait.until(ExpectedConditions.urlContains("clinicaldiary"));
+        Assert.assertTrue(success, "❌ Login Failed! System did not redirect to Clinical Diary.");
+        System.out.println("✅ Finished: Login successful.");
+        System.out.println("📍 Navigating to the Visit Booking page...");
+        String PayerURLVisitPage = ConfigReader.getProperty("payervisitbookingurl");
+        getDriver().get(PayerURLVisitPage);
+        VisitBookingPage bookingPage = new VisitBookingPage(getDriver());
+        bookingPage.selectPayerFacility();
+        bookingPage.selectPayerClinic();
+        bookingPage.selectPayerDoctor();
+        bookingPage.bookTimeSlot("10:00 pm");
+        bookingPage.nonEligibilityCheck("B600007148");
+        bookingPage.sendRequestAndWaitForResponseNoneligible();
+        System.out.println("✅ Appointment booked and visit created successfully!");
+    }
 }
 
