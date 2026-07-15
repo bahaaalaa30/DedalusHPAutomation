@@ -11,7 +11,7 @@
             <class name="Normalcases.CMO.SearchPatient"/>
             <class name="Normalcases.CMO.BillPage"/>
             <class name="Normalcases.Practitioner.PractitionerLogin"/>
-            <class name="Normalcases.Practitioner.PractitionerPatientsCount"/>
+            <class name="Normalcases.Practitioner.practitionerPatientsCount"/>
             <class name="Normalcases.EligibiltyCheck.Eligibility"/>
         </classes>
     </test>
