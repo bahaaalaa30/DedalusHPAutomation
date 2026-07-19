@@ -541,7 +541,8 @@ public class VisitBookingPage {
 
         System.out.println("📦 Step 4: Confirming Appointment and Initiating Visit...");
         wait.until(ExpectedConditions.elementToBeClickable(ConfirmApptAndCreateVisitBtn)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(PayerVisitType2)).click();
+
+        //wait.until(ExpectedConditions.elementToBeClickable(PayerVisitType2)).click();
 ///wait.until(ExpectedConditions.elementToBeClickable(studentVisitType)).click();
 
 
@@ -549,6 +550,22 @@ public class VisitBookingPage {
         wait.until(ExpectedConditions.elementToBeClickable(DoneBtn)).click();*/
 
         return this;
+    }
+
+    public void selectVisitType2() {
+        // Reduce explicit wait time for the initial check to optimize performance
+        WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(3));
+
+        try {
+            System.out.println("🔍 Attempting to locate PayerVisitType2...");
+            shortWait.until(ExpectedConditions.elementToBeClickable(PayerVisitType2)).click();
+            System.out.println("✅ Successfully interacted with PayerVisitType2");
+        } catch (org.openqa.selenium.TimeoutException e) {
+            System.out.println("⚠️ PayerVisitType2 not found within timeout. Switching to StudentVisitType...");
+            // Fallback to the second element using standard project wait
+            wait.until(ExpectedConditions.elementToBeClickable(studentVisitType)).click();
+            System.out.println("✅ Successfully interacted with StudentVisitType");
+        }
     }
 
     public void sendRequestAndWaitForResponse() {

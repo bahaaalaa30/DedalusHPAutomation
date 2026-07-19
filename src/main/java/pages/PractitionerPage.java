@@ -17,7 +17,8 @@ public class PractitionerPage {
     private final JavascriptExecutor js;
    private final By patientElement = By.cssSelector("div.col-patient div.patient-name p.secondary-text");
     private final By PatientsCount = By.xpath("/html/body/app-root/app-crm/div/div/app-crm-leads/div[2]/div/div[1]/app-crm-quick-filters/div/div/div[2]/div[2]/div[3]/div");
-private final By StartConsultation = By.cssSelector("div.start-consult-dialog button.primary-button");
+private final By NewDocument = By.cssSelector("div.new-actions.pointer");
+    private final By StartConsultation = By.cssSelector("div.start-consult-dialog button.primary-button");
     public PractitionerPage(WebDriver driver) {
         this.driver = driver;
         // 1. حل مشكلة الـ Null: يجب إنشاء كائن الـ WebDriverWait هنا
@@ -57,6 +58,9 @@ public void SelectPatient(){
 public void StartConsultation(){
 
         wait.until(ExpectedConditions.elementToBeClickable(StartConsultation)).click();
+}
+public void CreateOrder(){
+        wait.until(ExpectedConditions.elementToBeClickable(NewDocument)).click();
 }
 
 }

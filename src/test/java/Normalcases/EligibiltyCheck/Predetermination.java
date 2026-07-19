@@ -34,6 +34,8 @@ public class Predetermination extends BaseTest {
         System.out.println("📍 Navigating to the Patient Start Consultation page...");
         practitionerPage.StartConsultation();
         System.out.println("📍 Navigating to the Patient Visit page...");
+        practitionerPage.CreateOrder();
+        System.out.println("The Order has been created.");
 
 
 
