@@ -1,5 +1,6 @@
 package pages;
 
+import net.bytebuddy.asm.MemberSubstitution;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -14,8 +15,9 @@ public class PractitionerPage {
     private final WebDriver driver;
     private final WebDriverWait wait; // تغييرها لـ final لضمان تعريفها مرة واحدة
     private final JavascriptExecutor js;
+   private final By patientElement = By.cssSelector("div.col-patient div.patient-name p.secondary-text");
     private final By PatientsCount = By.xpath("/html/body/app-root/app-crm/div/div/app-crm-leads/div[2]/div/div[1]/app-crm-quick-filters/div/div/div[2]/div[2]/div[3]/div");
-
+private final By StartConsultation = By.cssSelector("div.start-consult-dialog button.primary-button");
     public PractitionerPage(WebDriver driver) {
         this.driver = driver;
         // 1. حل مشكلة الـ Null: يجب إنشاء كائن الـ WebDriverWait هنا
@@ -47,6 +49,14 @@ public void  SelectClinic(){
         WebElement FacilityName = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#facility-menu-actions > div > div > div > div > div:nth-child(3)")));
         FacilityName.click();
 }
+public void SelectPatient(){
 
+    wait.until(ExpectedConditions.elementToBeClickable(patientElement)).click();
+
+}
+public void StartConsultation(){
+
+        wait.until(ExpectedConditions.elementToBeClickable(StartConsultation)).click();
+}
 
 }

@@ -542,7 +542,7 @@ public class VisitBookingPage {
         System.out.println("📦 Step 4: Confirming Appointment and Initiating Visit...");
         wait.until(ExpectedConditions.elementToBeClickable(ConfirmApptAndCreateVisitBtn)).click();
         wait.until(ExpectedConditions.elementToBeClickable(PayerVisitType2)).click();
-wait.until(ExpectedConditions.elementToBeClickable(studentVisitType)).click();
+///wait.until(ExpectedConditions.elementToBeClickable(studentVisitType)).click();
 
 
        /* System.out.println("✅ Step 9: Clicking Done to finalize process.");
@@ -586,7 +586,7 @@ wait.until(ExpectedConditions.elementToBeClickable(studentVisitType)).click();
     }
 
 
-    public VisitBookingPage nonEligibilityCheck(String PatientPID) {
+    public void nonEligibilityCheck(String PatientPID) {
         System.out.println("🔄 Starting Visit Creation Workflow...");
 
         System.out.println("📋 Step 1: Selecting Visit Type (New)...");
@@ -603,13 +603,12 @@ wait.until(ExpectedConditions.elementToBeClickable(studentVisitType)).click();
 
         System.out.println("📦 Step 4: Confirming Appointment and Initiating Visit...");
         wait.until(ExpectedConditions.elementToBeClickable(ConfirmApptAndCreateVisitBtn)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(studentVisitType)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(PayerVisitType2)).click();
 
 
-       /* System.out.println("✅ Step 9: Clicking Done to finalize process.");
+     /*   System.out.println("✅ Step 9: Clicking Done to finalize process.");
         wait.until(ExpectedConditions.elementToBeClickable(DoneBtn)).click();*/
 
-        return this;
     }
 
 

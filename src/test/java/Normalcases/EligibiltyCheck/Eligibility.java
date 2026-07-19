@@ -39,8 +39,8 @@ public class Eligibility extends BaseTest {
         bookingPage.selectPayerFacility();
         bookingPage.selectPayerClinic();
         bookingPage.selectPayerDoctor();
-        bookingPage.bookTimeSlot("09:00 pm");
-        bookingPage.EligibilityCheck("A100057372");
+        bookingPage.bookTimeSlot("09:15 pm");
+        bookingPage.EligibilityCheck("1731776073");
         bookingPage.sendRequestAndWaitForResponse();
         System.out.println("✅ Appointment booked and visit created successfully!");
     }
@@ -69,7 +69,7 @@ public class Eligibility extends BaseTest {
         bookingPage.selectPayerClinic();
         bookingPage.selectPayerDoctor();
         bookingPage.bookTimeSlot("10:00 pm");
-        bookingPage.nonEligibilityCheck("B600007148");
+        bookingPage.nonEligibilityCheck("A200000277");
         bookingPage.sendRequestAndWaitForResponseNoneligible();
         System.out.println("✅ Appointment booked and visit created successfully!");
     }
