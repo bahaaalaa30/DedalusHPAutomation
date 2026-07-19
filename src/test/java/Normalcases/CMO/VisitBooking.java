@@ -29,7 +29,8 @@ public class VisitBooking extends BaseTest {
         VisitBookingPage bookingPage = new VisitBookingPage(getDriver());
         bookingPage.selectClinic()
                 .selectPractitioner()
-                .bookTimeSlot("09:00 pm")
+                .bookNextAvailableTimeSlot()
+                //.bookTimeSlot("09:00 pm")
                 .createVisitWorkflow("B600007148", "100");
         System.out.println("✅ Appointment booked and visit created successfully!");
     }
