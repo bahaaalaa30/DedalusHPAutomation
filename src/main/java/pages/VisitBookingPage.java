@@ -8,6 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class VisitBookingPage {
 
@@ -72,6 +79,7 @@ public class VisitBookingPage {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         this.js = (JavascriptExecutor) driver;
+
     }
 
 
@@ -110,6 +118,71 @@ public class VisitBookingPage {
         WebElement slot = wait.until(ExpectedConditions.presenceOfElementLocated(slotLocator));
         js.executeScript("arguments[0].scrollIntoView({block: 'center'});", slot);
         js.executeScript("arguments[0].click();", slot);
+        return this;
+    }
+
+    private final By freeSlotsLocator = By.cssSelector("div.free-slots p.no-margin");
+    public VisitBookingPage bookNextAvailableTimeSlot() {System.out.println("🔄 [Smart Logic] Starting Robust Chronological Slot Selection with JS Fallback...");
+
+        LocalTime currentTime = LocalTime.now();
+        System.out.println("⏰ Current Machine Time: " + currentTime);
+
+        // الانتظار حتى التأكد من وجود العناصر في الـ DOM على الأقل
+        WebDriverWait presenceWait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        presenceWait.until(ExpectedConditions.presenceOfElementLocated(freeSlotsLocator));
+
+        List<WebElement> slotTextElements = driver.findElements(freeSlotsLocator);
+
+        DateTimeFormatter flexibleFormatter = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern("[" + "hh:mm a" + "][" + "h:mm a" + "]")
+                .toFormatter(Locale.ENGLISH);
+
+        Pattern timePattern = Pattern.compile("(\\d{1,2}:\\d{2}\\s*(?i)(am|pm))");
+        boolean slotSelected = false;
+
+        for (WebElement slotElement : slotTextElements) {
+            try {
+                // جلب النص بأمان حتى لو كان العنصر مخفياً حالياً في الـ Slider
+                String fullText = slotElement.getAttribute("textContent").trim();
+
+                Matcher matcher = timePattern.matcher(fullText);
+                if (matcher.find()) {
+                    String cleanTimeStr = matcher.group(1).toLowerCase();
+                    LocalTime slotTime = LocalTime.parse(cleanTimeStr, flexibleFormatter);
+
+                    // التحقق من الترتيب الزمني
+                    if (slotTime.isAfter(currentTime) || slotTime.equals(currentTime)) {
+                        System.out.println("🎯 Target Slot Identified: [" + cleanTimeStr + "]. Processing interaction...");
+
+                        // العثور على العنصر الأب (div.free-slots) لتنفيذ عملية الضغط عليه مباشرة
+                        WebElement parentSlotDiv = slotElement.findElement(By.xpath("./.."));
+
+                        // خطوة سحرية: عمل Scroll للعنصر إلى منتصف الشاشة وإجبار السلايدر على التحرك إن وجد
+                        js.executeScript("arguments[0].scrollIntoView({behavior: 'instant', block: 'center', inline: 'center'});", parentSlotDiv);
+
+                        // الانتظار لفترة قصيرة جداً للتأكد من استقرار الحركة
+                        Thread.sleep(300);
+
+                        // تنفيذ الضغط عبر جافا سكريبت لتفادي تماماً استثناءات (ElementNotVisibleException)
+                        js.executeScript("arguments[0].click();", parentSlotDiv);
+
+                        System.out.println("✅ Successfully forced click on slot: " + cleanTimeStr + " via JS Executor.");
+                        slotSelected = true;
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("⚠️ Skipping element evaluation block due to: " + e.getMessage());
+            }
+        }
+
+        if (!slotSelected) {
+            throw new org.openqa.selenium.NoSuchElementException(
+                    "❌ Automation Error: No valid future 'free-slots' could be interacted with in the current view."
+            );
+        }
+
         return this;
     }
 

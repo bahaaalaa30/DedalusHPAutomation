@@ -39,7 +39,8 @@ public class Eligibility extends BaseTest {
         bookingPage.selectPayerFacility();
         bookingPage.selectPayerClinic();
         bookingPage.selectPayerDoctor();
-        bookingPage.bookTimeSlot("11:00 pm");
+        bookingPage.bookNextAvailableTimeSlot();
+        //bookingPage.bookTimeSlot("11:00 pm");
         String csvPath = "src\\test\\java\\resources/BMS.csv";
         String randomPatientPID = CsvDataReader.getRandomPatientId(csvPath);
         bookingPage.EligibilityCheck(randomPatientPID);
