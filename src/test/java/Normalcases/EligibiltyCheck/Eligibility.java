@@ -10,7 +10,6 @@ import pages.LoginPage;
 import pages.VisitBookingPage;
 import utils.ConfigReader;
 import utils.CsvDataReader;
-
 import java.time.Duration;
 
 @Epic("Hospital Management System - Dedalus HealthPlug")
