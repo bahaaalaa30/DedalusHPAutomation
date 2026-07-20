@@ -42,6 +42,7 @@ public class VisitBookingPage {
     private final By CancelVisitPatient = By.xpath("//div[normalize-space()='Visit Cancellation']");
     private final By AppointmentCancelReason = By.xpath("//label[contains(text(), 'Mistake in entry')]");
     private final By CancelAppointment = By.xpath("//div[normalize-space()='Cancel Appointment']");
+    private final By eligibilityFailedMessage = By.xpath("/html/body/app-root/app-crm/div/div/app-clinical-diary/app-ex-create-visit/app-alert-modal/div/div[2]/div[1]/div[2]");
     private final By WrongEntryRadioBtn = By.xpath("//label[normalize-space()='Wrong Entry']");
     private final By ContinueAppointmentCancellationBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-cancel-appointment > div > div.ex-cancel-appointment > div > div.cancel-appt-footer.border-top > button");
     private final By ContinueVisitCancellationBtn = By.xpath("//button[contains(@class, 'primary-button') and normalize-space()='Continue']");
@@ -49,6 +50,7 @@ public class VisitBookingPage {
     //private final By DatePickerUpdateBtn = By.cssSelector("#owl-dt-picker-0 > div.owl-dt-container-inner.ng-trigger.ng-trigger-fadeInPicker > div > button:nth-child(2) > span");
     //private final By PreviewFutureAppointment = By.xpath("//span[@class='patient-id ng-star-inserted' and text()='B600007150']");
     private final By languageMenu = By.id("language-menu");
+    private final By ProccedwithcashBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button");
     private final By PayerVisitType2 = By.id("visit_N");
     private final By studentVisitType = By.id("visit_SC");
     private final By OnlineEligibiltyBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button:nth-child(2)");
@@ -624,6 +626,34 @@ public class VisitBookingPage {
 
         return this;
     }
+    public VisitBookingPage NonEligibilityCheck(String PatientPID) {
+        System.out.println("🔄 Starting Visit Creation Workflow...");
+
+        System.out.println("📋 Step 1: Selecting Visit Type (New)...");
+        wait.until(ExpectedConditions.elementToBeClickable(PayerVisitType)).click();
+
+        System.out.println("🔍 Step 2: Searching for Patient: " + PatientPID);
+        WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(PIDsearch));
+        input.clear();
+        input.sendKeys(PatientPID);
+        wait.until(ExpectedConditions.elementToBeClickable(SearchBTN)).click();
+
+        System.out.println("🖱️ Step 3: Selecting patient from results...");
+        wait.until(ExpectedConditions.elementToBeClickable(SearchResult)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div.find-patient.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div > div.patientWarning.ng-star-inserted > div.cursor-pointer.continue-button.ng-star-inserted"))).click();
+
+        System.out.println("📦 Step 4: Confirming Appointment and Initiating Visit...");
+        wait.until(ExpectedConditions.elementToBeClickable(ConfirmApptAndCreateVisitBtn)).click();
+
+        //wait.until(ExpectedConditions.elementToBeClickable(PayerVisitType2)).click();
+///wait.until(ExpectedConditions.elementToBeClickable(studentVisitType)).click();
+
+
+       /* System.out.println("✅ Step 9: Clicking Done to finalize process.");
+        wait.until(ExpectedConditions.elementToBeClickable(DoneBtn)).click();*/
+
+        return this;
+    }
 
     public void selectVisitType2() {
         // Reduce explicit wait time for the initial check to optimize performance
@@ -675,7 +705,6 @@ public class VisitBookingPage {
 
     }
 
-
     public void nonEligibilityCheck(String PatientPID) {
         System.out.println("🔄 Starting Visit Creation Workflow...");
 
@@ -721,17 +750,16 @@ public class VisitBookingPage {
         // الانتظار الديناميكي حتى يصبح زر الـ Proceed قابل للضغط
         // السيلينيوم سيتحقق كل 10 ثوانٍ، وإذا ظهر الزر في دقيقة أو دقيقتين سيكمل فوراً ولن يكمل الـ 5 دقائق كاملة
 
-    /*    longWait.until(ExpectedConditions.visibilityOfElementLocated(eligibilitySuccessMessage));
-        WebElement proceedBtn = longWait.until(
-                ExpectedConditions.elementToBeClickable(proceedRegistrationBtn)
-        );
-        proceedBtn.click();
+       longWait.until(ExpectedConditions.visibilityOfElementLocated(eligibilityFailedMessage));
+       wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > app-alert-modal > div > div.alert-content.ng-star-inserted > div.footer.border-top > div > button"))).click();
         System.out.println("✅ Response received and 'Proceed' button clicked successfully!");
         System.out.println("🚀 Step 8: Creating Visit...");
-        wait.until(ExpectedConditions.elementToBeClickable(CreateVisitBtn)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(ProccedwithcashBTN)).click();
 
         System.out.println("✅ Step 9: Clicking Done to finalize process.");
-        wait.until(ExpectedConditions.elementToBeClickable(DoneBtn)).click();*/
+        wait.until(ExpectedConditions.elementToBeClickable(CreateVisitBtn)).click();
+        System.out.println("✅ Step 10: Clicking Done to finalize process.");
+        wait.until(ExpectedConditions.elementToBeClickable(DoneBtn)).click();
 
 
     }
