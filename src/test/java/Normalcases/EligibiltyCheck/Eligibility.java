@@ -72,8 +72,12 @@ public class Eligibility extends BaseTest {
         bookingPage.selectPayerFacility();
         bookingPage.selectPayerClinic();
         bookingPage.selectPayerDoctor();
-        bookingPage.bookTimeSlot("10:00 pm");
-        bookingPage.nonEligibilityCheck("A200000277");
+        bookingPage.bookNextAvailableTimeSlot();
+        //bookingPage.nonEligibilityCheck("A200000277");
+        String csvPath = "src\\test\\java\\resources/NonValidBMS.csv";
+        String randomPatientPID = CsvDataReader.getRandomPatientId(csvPath);
+        bookingPage.EligibilityCheck(randomPatientPID);
+        bookingPage.selectVisitType2();
         bookingPage.sendRequestAndWaitForResponseNoneligible();
         System.out.println("✅ Appointment booked and visit created successfully!");
     }
