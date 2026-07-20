@@ -13,6 +13,7 @@
             <class name="Normalcases.Practitioner.PractitionerLogin"/>
             <class name="Normalcases.Practitioner.practitionerPatientsCount"/>
             <class name="Normalcases.EligibiltyCheck.Eligibility"/>
+            <class name="Normalcases.EligibiltyCheck.Predetermination"/>
         </classes>
     </test>
 </suite>
