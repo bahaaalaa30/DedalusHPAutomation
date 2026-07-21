@@ -1,0 +1,1 @@
+{"uuid":"d9e3dd43-3491-4c88-a0fd-8d58bbfce1c8","name":"PerformanceTest.LoginTest","children":["ca5e5820-7162-4e5f-9161-e195ffc471e3"],"befores":[{"name":"setupApiConfig","status":"passed","stage":"finished","description":"","steps":[],"attachments":[],"parameters":[],"start":1784629214731,"stop":1784629215400}],"afters":[],"start":1784629214688,"stop":1784629216970}
