@@ -136,7 +136,7 @@ public class LoginTest  {
                         measuredLatencyMs, MAX_ALLOWED_RESPONSE_TIME_MS)
         );
 
-        System.out.println("✅ Finished: Login API SLA test passed successfully.");
+        System.out.println("✅ Finished: Practitioner Login API SLA test passed successfully.");
     }
 
 
