@@ -50,6 +50,7 @@ public class VisitBookingPage {
     //private final By DatePickerUpdateBtn = By.cssSelector("#owl-dt-picker-0 > div.owl-dt-container-inner.ng-trigger.ng-trigger-fadeInPicker > div > button:nth-child(2) > span");
     //private final By PreviewFutureAppointment = By.xpath("//span[@class='patient-id ng-star-inserted' and text()='B600007150']");
     private final By languageMenu = By.id("language-menu");
+    private final By annualCheckVisitType = By.id("visit_GC");
     private final By ProccedwithcashBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button");
     private final By PayerVisitType2 = By.id("visit_N");
     private final By studentVisitType = By.id("visit_SC");
@@ -656,21 +657,29 @@ public class VisitBookingPage {
     }
 
     public void selectVisitType2() {
-        // Reduce explicit wait time for the initial check to optimize performance
         WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(3));
 
         try {
-            System.out.println("🔍 Attempting to locate PayerVisitType2...");
+            System.out.println("🔍 Attempting PayerVisitType2...");
             shortWait.until(ExpectedConditions.elementToBeClickable(PayerVisitType2)).click();
-            System.out.println("✅ Successfully interacted with PayerVisitType2");
-        } catch (org.openqa.selenium.TimeoutException e) {
-            System.out.println("⚠️ PayerVisitType2 not found within timeout. Switching to StudentVisitType...");
-            // Fallback to the second element using standard project wait
-            wait.until(ExpectedConditions.elementToBeClickable(studentVisitType)).click();
-            System.out.println("✅ Successfully interacted with StudentVisitType");
+            System.out.println("✅ Selected PayerVisitType2");
+        } catch (TimeoutException e1) {
+            System.out.println("⚠️ PayerVisitType2 not found. Trying StudentVisitType...");
+            try {
+                shortWait.until(ExpectedConditions.elementToBeClickable(studentVisitType)).click();
+                System.out.println("✅ Selected StudentVisitType");
+            } catch (TimeoutException e2) {
+                System.out.println("⚠️ StudentVisitType not found. Trying Annual Check...");
+                try {
+                    // استخدام الـ Standard Wait الخاص بالـ Framework هنا لو ده آخر خيار متوقع
+                    shortWait.until(ExpectedConditions.elementToBeClickable(annualCheckVisitType)).click();
+                    System.out.println("✅ Selected AnnualCheckVisitType");
+                } catch (TimeoutException e3) {
+                    throw new org.openqa.selenium.NoSuchElementException("❌ Failure: Neither Payer, Student, nor Annual Check visit types were found.");
+                }
+            }
         }
     }
-
     public void sendRequestAndWaitForResponse() {
         System.out.println("⏳ Clicking 'Send Request' button...");
 
