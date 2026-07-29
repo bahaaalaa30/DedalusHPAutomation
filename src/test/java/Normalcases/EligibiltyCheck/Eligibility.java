@@ -1,6 +1,7 @@
 package Normalcases.EligibiltyCheck;
 
 import base.BaseTest;
+import base.PatientBMS;
 import io.qameta.allure.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -40,9 +41,9 @@ public class Eligibility extends BaseTest {
         bookingPage.selectPayerClinic();
         bookingPage.selectPayerDoctor();
         bookingPage.bookNextAvailableTimeSlot();
-        //bookingPage.bookTimeSlot("11:00 pm");
         String csvPath = "src\\test\\java\\resources/BMS.csv";
         String randomPatientPID = CsvDataReader.getRandomPatientId(csvPath);
+        PatientBMS.setPatientId(randomPatientPID);
         bookingPage.EligibilityCheck(randomPatientPID);
         bookingPage.selectVisitType2();
         bookingPage.sendRequestAndWaitForResponse();
@@ -76,6 +77,7 @@ public class Eligibility extends BaseTest {
         //bookingPage.nonEligibilityCheck("A200000277");
         String csvPath = "src\\test\\java\\resources/NonValidBMS.csv";
         String randomPatientPID = CsvDataReader.getRandomPatientId(csvPath);
+        PatientBMS.setPatientId(randomPatientPID);
         bookingPage.NonEligibilityCheck(randomPatientPID);
         bookingPage.selectVisitType2();
         bookingPage.sendRequestAndWaitForResponseNoneligible();

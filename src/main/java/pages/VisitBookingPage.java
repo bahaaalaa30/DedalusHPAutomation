@@ -6,6 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -13,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.Locale;
+import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,6 +40,7 @@ public class VisitBookingPage {
     private final By DoneBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button.primary-button.ng-star-inserted");
     private final By OHCVisitRadio = By.cssSelector("#visit_OH");
     private final By PayerVisitType = By.id("visit_N");
+    private final By PatientID = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c6-1.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div > div > div:nth-child(5)");
     private final By PreviewAppointment = By.xpath("//span[@class='patient-name' and contains(text(),'Visit Cancellation For automation')]");
     private final By CancelVisitPatient = By.xpath("//div[normalize-space()='Visit Cancellation']");
     private final By AppointmentCancelReason = By.xpath("//label[contains(text(), 'Mistake in entry')]");
@@ -51,9 +54,13 @@ public class VisitBookingPage {
     //private final By PreviewFutureAppointment = By.xpath("//span[@class='patient-id ng-star-inserted' and text()='B600007150']");
     private final By languageMenu = By.id("language-menu");
     private final By annualCheckVisitType = By.id("visit_GC");
+    private final By QueueButton = By.cssSelector("#patient-notifications-btn > span > img");
+    private final By patientIdByBMS = By.xpath("/html/body/app-root/app-crm/div/div/app-clinical-diary/div[2]/app-find-patient-detail/div/div/app-flash-card/div/div/div[1]/div/div/div[2]/div[2]/div[2]/div/div/div[5]");
     private final By ProccedwithcashBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button");
     private final By PayerVisitType2 = By.id("visit_N");
     private final By studentVisitType = By.id("visit_SC");
+    private final By QueueSearchBtn = By.cssSelector("#approvals-queue-modal > div.approvals-queue-content > div.approvals-queue-filters > div:nth-child(4) > div");
+    private final By SearchPatientIDBTN = By.cssSelector("#approvals-queue-modal > div.approvals-queue-content > div.approvals-queue-filters > div.approvals-queue-search-stack > div > div > input");
     private final By OnlineEligibiltyBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button:nth-child(2)");
     private final By arabicLanguageOption = By.xpath("//div[normalize-space()='عربى']");
     private final By noResultsFound = By.xpath("//div[contains(@class, 'title') and normalize-space()='لم يتم العثور على نتائج']");
@@ -74,10 +81,12 @@ public class VisitBookingPage {
     private final By ChooseVisitForBill = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.view-unsettled-bills.ng-star-inserted > div.list-content > table > tbody > tr:nth-child(6) > td:nth-child(2)");
     private final By PrintBillBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-charges > div.visit-charges > div.charge-content > div.unsettled-bills-list.ng-star-inserted > table > tbody > tr:nth-child(2) > td:nth-child(7) > div > img:nth-child(2)");
     private final By Printbtn = By.cssSelector("cr-button.action-button");
+    private final By Exit = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c6-1.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-header > img");
     private final By Close = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-header > div");
     private final By Payment = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button");
     private final By PayBillBtn = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-charges > div.visit-charges > div.charge-content > div.unsettled-bills-list.ng-star-inserted > table > tbody > tr:nth-child(1) > td:nth-child(7) > div > img:nth-child(1)");
     private final By ActionsBTN = By.cssSelector("body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-header.border-bottom > div.diary-header-content > div > div.btn-actn.cursor-pointer");
+    private final By ApprovedStatusBtn = By.xpath("//span[contains(@class,'approvals-queue-status') and normalize-space()='Approved']");
     public VisitBookingPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
@@ -314,6 +323,32 @@ public class VisitBookingPage {
         js.executeScript("arguments[0].click();", element);
     }
 
+
+public void ValidateEligiblePatient(String patientIdByBMS) {
+        wait.until(ExpectedConditions.elementToBeClickable(QueueButton)).click();
+    WebElement PatientIDbybms =  wait.until(ExpectedConditions.visibilityOfElementLocated(SearchPatientIDBTN));
+    PatientIDbybms.clear();
+    PatientIDbybms.sendKeys(patientIdByBMS);
+    wait.until(ExpectedConditions.elementToBeClickable(QueueSearchBtn)).click();
+}
+
+    public void verifyStatusIsApproved() {
+
+        WebElement status = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(ApprovedStatusBtn));
+
+        String actualStatus = status.getText().trim();
+
+        System.out.println("Current Status = " + actualStatus);
+
+        Assert.assertEquals(
+                actualStatus,
+                "Approved",
+                "❌ Expected status to be 'Approved' but found '" + actualStatus + "'");
+    }
+
+
+
     public void switchToArabicLanguage() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         System.out.println("🌐 Switching application language to Arabic...");
@@ -473,7 +508,36 @@ public class VisitBookingPage {
             throw e;
         }
     }
+    public void SearchBMS(String BMS) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        System.out.println("🔍 Searching for BMSID: " + BMS);
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("toast")));
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.tagName("app-toast")));
+            wait.until(ExpectedConditions.elementToBeClickable(SearchPatient)).click();
+            WebElement nationalIdField = wait.until(ExpectedConditions.visibilityOfElementLocated(SearchNationlaID));
+            nationalIdField.clear();
+            nationalIdField.sendKeys(BMS);
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(FindBTN)).click();
+        } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+            System.out.println("⚠️ Overlay detected, forcing click using JavaScript for BMSID search...");
+            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(FindBTN));
+        }
 
+    }
+    public String selectPatientIDByBMS() throws InterruptedException {
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(patientIdByBMS));
+
+        String patientIdbyBMS = driver.findElement(patientIdByBMS)
+                .getText()
+                .trim();
+        return patientIdbyBMS;
+    }
+
+    public void exitPage() {
+        wait.until(ExpectedConditions.elementToBeClickable(Exit)).click();
+    }
     public void SearchPatientGenderMale(String patientName) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         System.out.println("🔍 Searching for Patient Name: " + patientName + " with Gender: Male");
