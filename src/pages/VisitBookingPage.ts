@@ -83,9 +83,9 @@ export class VisitBookingPage {
     this.confirmAppointmentAndCreateVisit = page
       .locator('app-ex-book-appointment .book-appt-footer button')
       .last();
-    this.continueToVisit = page.locator(
-      "//button[contains(text(),'Continue')]"
-    );
+    this.continueToVisit = page.getByText('Continue', {
+      exact: true
+    }).last();
     this.paymentButton = page.locator(
       "//button[contains(text(),'Payment')]"
     );
