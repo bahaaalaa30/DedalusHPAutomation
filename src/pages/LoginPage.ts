@@ -15,18 +15,21 @@ export class LoginPage {
 
   async enterUsername(user: string) {
     await this.username.waitFor({ state: 'visible', timeout: 5000 });
-    await this.username.fill(user);
+    await this.username.fill('');
+    await this.username.pressSequentially(user, { delay: 20 });
     return this;
   }
 
   async enterPassword(pass: string) {
     await this.password.waitFor({ state: 'visible', timeout: 5000 });
-    await this.password.fill(pass);
+    await this.password.fill('');
+    await this.password.pressSequentially(pass, { delay: 20 });
     return this;
   }
 
   async clickLogin() {
-    await this.loginButton.waitFor({ state: 'visible', timeout: 5000 });
+    await this.loginButton.waitFor({ state: 'visible', timeout: 15000 });
+    await expect(this.loginButton).toBeEnabled({ timeout: 15000 });
     await this.loginButton.click();
   }
 
