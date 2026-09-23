@@ -1,0 +1,1 @@
+{"name":"dedalus-hp-playwright","private":true,"scripts":{"test":"playwright test"},"devDependencies":{"@playwright/test":"^1.55.0","typescript":"^5.9.2"}}

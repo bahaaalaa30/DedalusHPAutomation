@@ -1,0 +1,2 @@
+import fs from 'node:fs';
+export function getRandomPatientId(filePath:string){const rows=fs.readFileSync(filePath,'utf8').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);if(!rows.length)throw new Error('No patient IDs found');return rows[Math.floor(Math.random()*rows.length)].split(',')[0].trim().replace(/^"|"$/g,'');}
