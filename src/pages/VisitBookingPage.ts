@@ -51,102 +51,50 @@ export class VisitBookingPage {
   constructor(private readonly page: Page) {
     this.clinicButton = page.locator('#clinic-btn');
     this.clinicSelection = page.locator('#clinic-list > div.clinic-list > div:nth-child(25)');
-    this.practitionerSelection = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-container > div.quick-filters > app-crm-quick-filters > div > div > div.quick-filter-list.ng-star-inserted > div:nth-child(2) > div.filter-name.has-count.no-icon'
-    );
+    this.practitionerSelection = page.getByText('El Nasr Doctor', { exact: true });
     this.patientSearchInput = page.locator("input[placeholder*='Search Patient'], .appt-component input").first();
-    this.searchButton = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > span > img'
-    );
+    this.searchButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > span > img');
     this.visitTypeOHC = page.locator('#visit_OH');
     this.visitTypeHO = page.locator('#visit_HO');
-    this.searchResult = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div.find-patient.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div:nth-child(1) > div > div.col-3.primary-text > p'
-    );
-    this.confirmAppointmentAndCreateVisit = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button:nth-child(2)'
-    );
+    this.searchResult = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div.find-patient.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div:nth-child(1) > div > div.col-3.primary-text > p');
+    this.confirmAppointmentAndCreateVisit = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button:nth-child(2)');
     this.continueToVisit = page.locator("//button[contains(text(),'Continue')]");
     this.paymentButton = page.locator("//button[contains(text(),'Payment')]");
-    this.cashField = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-payment-details > div > div.payment-container > div.flex_container > div > div > input'
-    );
-    this.createVisitButton = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button'
-    );
-    this.doneButton = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button.primary-button.ng-star-inserted'
-    );
-    this.previewAppointment = page.locator(
-      "//span[@class='patient-name' and contains(text(),'Visit Cancellation For automation')]"
-    );
+    this.cashField = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-payment-details > div > div.payment-container > div.flex_container > div > div > input');
+    this.createVisitButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button');
+    this.doneButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button.primary-button.ng-star-inserted');
+    this.previewAppointment = page.locator("//span[@class='patient-name' and contains(text(),'Visit Cancellation For automation')]");
     this.cancelVisitPatient = page.locator("//div[normalize-space()='Visit Cancellation']");
     this.appointmentCancelReason = page.locator("//label[contains(text(), 'Mistake in entry')]");
     this.cancelAppointment = page.locator("//div[normalize-space()='Cancel Appointment']");
     this.wrongEntryRadio = page.locator("//label[normalize-space()='Wrong Entry']");
-    this.continueAppointmentCancellation = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-cancel-appointment > div > div.ex-cancel-appointment > div > div.cancel-appt-footer.border-top > button'
-    );
-    this.continueVisitCancellation = page.locator(
-      "//button[contains(@class, 'primary-button') and normalize-space()='Continue']"
-    );
+    this.continueAppointmentCancellation = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-cancel-appointment > div > div.ex-cancel-appointment > div > div.cancel-appt-footer.border-top > button');
+    this.continueVisitCancellation = page.locator("//button[contains(@class, 'primary-button') and normalize-space()='Continue']");
     this.languageMenu = page.locator('#language-menu');
     this.arabicLanguage = page.locator("//div[normalize-space()='عربى']");
-    this.onlineEligibilityButton = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button:nth-child(2)'
-    );
-    this.noResults = page.locator(
-      "//div[contains(@class, 'title') and normalize-space()='لم يتم العثور على نتائج']"
-    );
-    this.globalSearch = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-crm-header > div > div > div.col-5.custom-head-col > input'
-    );
+    this.onlineEligibilityButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button:nth-child(2)');
+    this.noResults = page.locator("//div[contains(@class, 'title') and normalize-space()='لم يتم العثور على نتائج']");
+    this.globalSearch = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-crm-header > div > div > div.col-5.custom-head-col > input');
     this.patientIdInput = page.locator("input[placeholder='Enter Patient ID']");
     this.findButton = page.locator("//button[text()='Find']");
     this.firstName = page.locator('#first_name');
     this.nationalId = page.locator("input[placeholder*='National ID']");
     this.male = page.locator("//label[contains(., 'Male')]");
     this.female = page.locator("//label[contains(.,'Female')]");
-    this.eligibilitySuccessMessage = page.locator(
-      "//div[normalize-space()='Member is eligible for the selected coverage.']"
-    );
-    this.proceedRegistrationButton = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button'
-    );
-    this.patientList = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c29-4.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div'
-    );
-    this.actionsButton = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-header.border-bottom > div.diary-header-content > div > div.btn-actn.cursor-pointer'
-    );
-    this.manageBillButton = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-crm-forms-list > div > div.component > div.container.content.ng-star-inserted > div:nth-child(1) > div:nth-child(2)'
-    );
-    this.searchBillPatient = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > input'
-    );
-    this.findBillButton = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > span'
-    );
-    this.searchPatientList = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div.find-patient.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div:nth-child(1)'
-    );
-    this.chooseVisitForBill = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.view-unsettled-bills.ng-star-inserted > div.list-content > table > tbody > tr:nth-child(6) > td:nth-child(2)'
-    );
-    this.printBillButton = page.locator(
-      'body > app-root > app-crm > div > div > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-charges > div.visit-charges > div.charge-content > div.unsettled-bills-list.ng-star-inserted > table > tbody > tr:nth-child(2) > td:nth-child(7) > div > img:nth-child(2)'
-    );
+    this.eligibilitySuccessMessage = page.locator("//div[normalize-space()='Member is eligible for the selected coverage.']");
+    this.proceedRegistrationButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button');
+    this.patientList = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c29-4.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div');
+    this.actionsButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-header.border-bottom > div.diary-header-content > div > div.btn-actn.cursor-pointer');
+    this.manageBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-crm-forms-list > div > div.component > div.container.content.ng-star-inserted > div:nth-child(1) > div:nth-child(2)');
+    this.searchBillPatient = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > input');
+    this.findBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > span');
+    this.searchPatientList = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div.find-patient.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div:nth-child(1)');
+    this.chooseVisitForBill = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.view-unsettled-bills.ng-star-inserted > div.list-content > table > tbody > tr:nth-child(6) > td:nth-child(2)');
+    this.printBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-charges > div.visit-charges > div.charge-content > div.unsettled-bills-list.ng-star-inserted > table > tbody > tr:nth-child(2) > td:nth-child(7) > div > img:nth-child(2)');
     this.printButton = page.locator('cr-button.action-button');
-    this.closeButton = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-header > div'
-    );
-    this.paymentBillButton = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button'
-    );
-    this.payBillButton = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-charges > div.visit-charges > div.charge-content > div.unsettled-bills-list.ng-star-inserted > table > tbody > tr:nth-child(1) > td:nth-child(7) > div > img:nth-child(1)'
-    );
+    this.closeButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-header > div');
+    this.paymentBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button');
+    this.payBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-charges > div.visit-charges > div.charge-content > div.unsettled-bills-list.ng-star-inserted > table > tbody > tr:nth-child(1) > td:nth-child(7) > div > img:nth-child(1)');
   }
 
   private async click(locator: Locator, timeout = 20000) {
@@ -160,225 +108,36 @@ export class VisitBookingPage {
     await locator.fill(value);
   }
 
-  async selectClinic() {
-    await this.click(this.clinicButton);
-    await this.click(this.clinicSelection);
-    return this;
-  }
-
-  async selectPractitioner() {
-    await this.practitionerSelection.waitFor({ state: 'attached', timeout: 20000 });
-    await this.practitionerSelection.scrollIntoViewIfNeeded();
-    await this.practitionerSelection.click();
-    return this;
-  }
-
-  async isNoResultsMessageDisplayed() {
-    try {
-      await this.noResults.waitFor({ state: 'visible', timeout: 10000 });
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  async bookTimeSlot(timeText: string) {
-    const slot = this.page.locator("//p[contains(text(),'" + timeText + "')]/parent::div");
-    await this.click(slot);
-    return this;
-  }
-
-  async bookNextAvailableTimeSlot() {
-    const slots = this.page.locator('p').filter({ hasText: /^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/i });
-    await slots.first().waitFor({ state: 'visible', timeout: 20000 });
-    await slots.first().scrollIntoViewIfNeeded();
-    await slots.first().click();
-    return this;
-  }
-
-  async selectVisitType() {
-    await this.click(this.visitTypeOHC);
-    return this;
-  }
-
-  async selectVisitType2() {
-    await this.click(this.visitTypeHO);
-    return this;
-  }
-
-  async createVisitWorkflow(patientName: string, fees: string) {
-    await this.click(this.visitTypeOHC);
-    await this.fill(this.patientSearchInput, patientName);
-    await this.click(this.searchButton);
-    await this.click(this.searchResult);
-    await this.click(this.confirmAppointmentAndCreateVisit);
-    await this.click(this.visitTypeHO);
-    await this.click(this.continueToVisit);
-    await this.click(this.paymentButton);
-    await this.fill(this.cashField, fees);
-    await this.click(this.createVisitButton);
-    await this.click(this.doneButton);
-    return this;
-  }
-
-  async cancelAppointment() {
-    await this.click(this.clinicButton, 10000);
-    await this.click(this.clinicSelection, 10000);
-    await this.click(this.practitionerSelection, 10000);
-    await this.click(this.previewAppointment, 10000);
-    await this.click(this.cancelAppointment, 10000);
-    await this.click(this.appointmentCancelReason, 10000);
-    await this.click(this.continueAppointmentCancellation, 10000);
-  }
-
-  async cancelBookedVisit() {
-    await this.click(this.clinicButton, 10000);
-    await this.click(this.clinicSelection, 10000);
-    await this.click(this.practitionerSelection, 10000);
-    await this.click(this.previewAppointment, 10000);
-    await this.click(this.cancelVisitPatient, 10000);
-    await this.click(this.wrongEntryRadio, 10000);
-    await this.click(this.continueVisitCancellation, 10000);
-  }
-
-  async switchToArabicLanguage() {
-    await this.click(this.languageMenu, 10000);
-    await this.click(this.arabicLanguage, 10000);
-  }
-
-  async searchPatientID(id: string) {
-    await this.fill(this.globalSearch, id);
-    await this.fill(this.patientIdInput, id);
-    await this.click(this.findButton);
-    await this.patientList.waitFor({ state: 'visible', timeout: 20000 });
-  }
-
-  async searchPatientName(name: string) {
-    await this.fill(this.globalSearch, name);
-    await this.fill(this.firstName, name);
-    await this.click(this.findButton);
-    await this.patientList.waitFor({ state: 'visible', timeout: 20000 });
-  }
-
-  async searchNationalID(id: string) {
-    await this.fill(this.globalSearch, id);
-    await this.fill(this.nationalId, id);
-    await this.click(this.findButton);
-    await this.patientList.waitFor({ state: 'visible', timeout: 20000 });
-  }
-
-  async searchPatientGenderMale(name: string) {
-    await this.fill(this.globalSearch, name);
-    await this.fill(this.firstName, name);
-    await this.click(this.male);
-    await this.click(this.findButton);
-    await this.patientList.waitFor({ state: 'visible', timeout: 20000 });
-  }
-
-  async searchPatientGenderFemale(name: string) {
-    await this.fill(this.globalSearch, name);
-    await this.fill(this.firstName, name);
-    await this.click(this.female);
-    await this.click(this.findButton);
-    await this.patientList.waitFor({ state: 'visible', timeout: 20000 });
-  }
-
-  async searchBMS(id: string) {
-    await this.fill(this.globalSearch, id);
-    await this.click(this.findButton);
-    await this.patientList.waitFor({ state: 'visible', timeout: 20000 });
-  }
-
-  async selectPatientIDByBMS() {
-    await this.patientList.first().waitFor({ state: 'visible', timeout: 20000 });
-    return (await this.patientList.first().innerText()).trim();
-  }
-
-  async exitPage() {
-    await this.page.goBack();
-  }
-
-  async selectPayerFacility() {
-    await this.page.locator('#facility-menu').click();
-    await this.page.locator(
-      "//div[contains(@class, 'facility-region-menu')]//div[normalize-space()='El Arab Center - UAT']"
-    ).click();
-    return this;
-  }
-
-  async selectPayerClinic() {
-    await this.click(this.clinicButton);
-    await this.click(this.page.locator("//*[@id='clinic-list']/div[2]/div[6]"));
-    return this;
-  }
-
-  async selectPayerDoctor() {
-    await this.click(this.page.locator(
-      '/html/body/app-root/app-crm/div/div/app-clinical-diary/div/div[2]/div[1]/app-crm-quick-filters/div/div/div[2]/div[13]/div[1]'
-    ));
-    return this;
-  }
-
-  async eligibilityCheck(patientPid: string) {
-    await this.click(this.visitTypeHO);
-    await this.fill(this.patientSearchInput, patientPid);
-    await this.click(this.searchButton);
-    await this.click(this.searchResult);
-    await this.click(this.confirmAppointmentAndCreateVisit);
-    await this.click(this.visitTypeHO);
-    return this;
-  }
-
-  async nonEligibilityCheck(patientPid: string) {
-    return this.eligibilityCheck(patientPid);
-  }
-
-  async sendRequestAndWaitForResponse() {
-    await this.click(this.onlineEligibilityButton, 30000);
-    await expect(this.eligibilitySuccessMessage).toBeVisible({ timeout: 300000 });
-    await this.click(this.proceedRegistrationButton, 300000);
-    await this.click(this.createVisitButton, 30000);
-    await this.click(this.doneButton, 30000);
-  }
-
-  async sendRequestAndWaitForResponseNoneligible() {
-    await this.click(this.onlineEligibilityButton, 30000);
-  }
-
-  async validateEligiblePatient(id: string) {
-    await this.searchBMS(id);
-    return this.selectPatientIDByBMS();
-  }
-
-  async verifyStatusIsApproved() {
-    await expect(this.page.locator('.approvals-queue-status').filter({ hasText: 'Approved' })).toBeVisible({ timeout: 30000 });
-  }
-
-  async billPage(patientName: string) {
-    await this.click(this.actionsButton, 10000);
-    await this.click(this.manageBillButton, 10000);
-    await this.fill(this.searchBillPatient, patientName, 10000);
-    await this.click(this.findBillButton, 10000);
-    await this.click(this.searchPatientList, 10000);
-    await this.click(this.chooseVisitForBill, 10000);
-    await this.click(this.printBillButton, 10000);
-    await this.click(this.printButton, 10000);
-    await this.click(this.closeButton, 10000);
-  }
-
-  async payBill(patientName: string) {
-    await this.click(this.actionsButton, 10000);
-    await this.click(this.manageBillButton, 10000);
-    await this.fill(this.searchBillPatient, patientName, 10000);
-    await this.click(this.findBillButton, 10000);
-    await this.click(this.searchPatientList, 10000);
-    await this.click(this.chooseVisitForBill, 10000);
-    await this.click(this.payBillButton, 10000);
-    await this.click(this.paymentBillButton, 10000);
-    await this.click(this.closeButton, 10000);
-  }
-
-  // Backward-compatible aliases for existing specs.
+  async selectClinic() { await this.click(this.clinicButton); await this.click(this.clinicSelection); return this; }
+  async selectPractitioner() { await this.click(this.practitionerSelection); return this; }
+  async isNoResultsMessageDisplayed() { try { await this.noResults.waitFor({ state: 'visible', timeout: 10000 }); return true; } catch { return false; } }
+  async bookTimeSlot(timeText: string) { const slot = this.page.locator("//p[contains(text(),'" + timeText + "')]/parent::div"); await this.click(slot); return this; }
+  async bookNextAvailableTimeSlot() { const slots = this.page.locator('p').filter({ hasText: /^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/i }); await slots.first().waitFor({ state: 'visible', timeout: 20000 }); await slots.first().scrollIntoViewIfNeeded(); await slots.first().click(); return this; }
+  async selectVisitType() { await this.click(this.visitTypeOHC); return this; }
+  async selectVisitType2() { await this.click(this.visitTypeHO); return this; }
+  async createVisitWorkflow(patientName: string, fees: string) { await this.click(this.visitTypeOHC); await this.fill(this.patientSearchInput, patientName); await this.click(this.searchButton); await this.click(this.searchResult); await this.click(this.confirmAppointmentAndCreateVisit); await this.click(this.visitTypeHO); await this.click(this.continueToVisit); await this.click(this.paymentButton); await this.fill(this.cashField, fees); await this.click(this.createVisitButton); await this.click(this.doneButton); return this; }
+  async cancelAppointment() { await this.click(this.clinicButton, 10000); await this.click(this.clinicSelection, 10000); await this.click(this.practitionerSelection, 10000); await this.click(this.previewAppointment, 10000); await this.click(this.cancelAppointment, 10000); await this.click(this.appointmentCancelReason, 10000); await this.click(this.continueAppointmentCancellation, 10000); }
+  async cancelBookedVisit() { await this.click(this.clinicButton, 10000); await this.click(this.clinicSelection, 10000); await this.click(this.practitionerSelection, 10000); await this.click(this.previewAppointment, 10000); await this.click(this.cancelVisitPatient, 10000); await this.click(this.wrongEntryRadio, 10000); await this.click(this.continueVisitCancellation, 10000); }
+  async switchToArabicLanguage() { await this.click(this.languageMenu, 10000); await this.click(this.arabicLanguage, 10000); }
+  async searchPatientID(id: string) { await this.fill(this.globalSearch, id); await this.fill(this.patientIdInput, id); await this.click(this.findButton); await this.patientList.waitFor({ state: 'visible', timeout: 20000 }); }
+  async searchPatientName(name: string) { await this.fill(this.globalSearch, name); await this.fill(this.firstName, name); await this.click(this.findButton); await this.patientList.waitFor({ state: 'visible', timeout: 20000 }); }
+  async searchNationalID(id: string) { await this.fill(this.globalSearch, id); await this.fill(this.nationalId, id); await this.click(this.findButton); await this.patientList.waitFor({ state: 'visible', timeout: 20000 }); }
+  async searchPatientGenderMale(name: string) { await this.fill(this.globalSearch, name); await this.fill(this.firstName, name); await this.click(this.male); await this.click(this.findButton); await this.patientList.waitFor({ state: 'visible', timeout: 20000 }); }
+  async searchPatientGenderFemale(name: string) { await this.fill(this.globalSearch, name); await this.fill(this.firstName, name); await this.click(this.female); await this.click(this.findButton); await this.patientList.waitFor({ state: 'visible', timeout: 20000 }); }
+  async searchBMS(id: string) { await this.fill(this.globalSearch, id); await this.click(this.findButton); await this.patientList.waitFor({ state: 'visible', timeout: 20000 }); }
+  async selectPatientIDByBMS() { await this.patientList.first().waitFor({ state: 'visible', timeout: 20000 }); return (await this.patientList.first().innerText()).trim(); }
+  async exitPage() { await this.page.goBack(); }
+  async selectPayerFacility() { await this.page.locator('#facility-menu').click(); await this.page.locator("//div[contains(@class, 'facility-region-menu')]//div[normalize-space()='El Arab Center - UAT']").click(); return this; }
+  async selectPayerClinic() { await this.click(this.clinicButton); await this.click(this.page.locator("//*[@id='clinic-list']/div[2]/div[6]")); return this; }
+  async selectPayerDoctor() { await this.click(this.practitionerSelection); return this; }
+  async eligibilityCheck(patientPid: string) { await this.click(this.visitTypeHO); await this.fill(this.patientSearchInput, patientPid); await this.click(this.searchButton); await this.click(this.searchResult); await this.click(this.confirmAppointmentAndCreateVisit); await this.click(this.visitTypeHO); return this; }
+  async nonEligibilityCheck(patientPid: string) { return this.eligibilityCheck(patientPid); }
+  async sendRequestAndWaitForResponse() { await this.click(this.onlineEligibilityButton, 30000); await expect(this.eligibilitySuccessMessage).toBeVisible({ timeout: 300000 }); await this.click(this.proceedRegistrationButton, 300000); await this.click(this.createVisitButton, 30000); await this.click(this.doneButton, 30000); }
+  async sendRequestAndWaitForResponseNoneligible() { await this.click(this.onlineEligibilityButton, 30000); }
+  async validateEligiblePatient(id: string) { await this.searchBMS(id); return this.selectPatientIDByBMS(); }
+  async verifyStatusIsApproved() { await expect(this.page.locator('.approvals-queue-status').filter({ hasText: 'Approved' })).toBeVisible({ timeout: 30000 }); }
+  async billPage(patientName: string) { await this.click(this.actionsButton, 10000); await this.click(this.manageBillButton, 10000); await this.fill(this.searchBillPatient, patientName, 10000); await this.click(this.findBillButton, 10000); await this.click(this.searchPatientList, 10000); await this.click(this.chooseVisitForBill, 10000); await this.click(this.printBillButton, 10000); await this.click(this.printButton, 10000); await this.click(this.closeButton, 10000); }
+  async payBill(patientName: string) { await this.click(this.actionsButton, 10000); await this.click(this.manageBillButton, 10000); await this.fill(this.searchBillPatient, patientName, 10000); await this.click(this.findBillButton, 10000); await this.click(this.searchPatientList, 10000); await this.click(this.chooseVisitForBill, 10000); await this.click(this.payBillButton, 10000); await this.click(this.paymentBillButton, 10000); await this.click(this.closeButton, 10000); }
   async SelectClinic() { return this.selectClinic(); }
   async SelectPractitioner() { return this.selectPractitioner(); }
   async EligibilityCheck(patientPid: string) { return this.eligibilityCheck(patientPid); }
