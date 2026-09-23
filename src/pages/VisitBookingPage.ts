@@ -536,6 +536,8 @@ export class VisitBookingPage {
 
     await this.click(this.searchResult);
 
+    await this.click(this.continueToVisit);
+
     await this.confirmAppointmentAndCreateVisit.waitFor({
       state: 'visible',
       timeout: 20000
