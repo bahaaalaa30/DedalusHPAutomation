@@ -8,6 +8,9 @@ export class VisitBookingPage {
   private readonly searchButton: Locator;
   private readonly visitTypeOHC: Locator;
   private readonly visitTypeHO: Locator;
+  private readonly payerVisitType2: Locator;
+  private readonly studentVisitType: Locator;
+  private readonly annualCheckVisitType: Locator;
   private readonly searchResult: Locator;
   private readonly confirmAppointmentAndCreateVisit: Locator;
   private readonly continueToVisit: Locator;
@@ -56,6 +59,9 @@ export class VisitBookingPage {
     this.searchButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > span > img');
     this.visitTypeOHC = page.getByRole('radio', { name: 'Annual Check Up' });
     this.visitTypeHO = page.getByRole('radio', { name: 'New' });
+    this.payerVisitType2 = page.locator('#visit_N');
+    this.studentVisitType = page.locator('#visit_SC');
+    this.annualCheckVisitType = page.locator('#visit_GC');
     this.searchResult = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div.find-patient.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div:nth-child(1) > div > div.col-3.primary-text > p');
     this.confirmAppointmentAndCreateVisit = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button:nth-child(2)');
     this.continueToVisit = page.locator("//button[contains(text(),'Continue')]");
@@ -120,7 +126,6 @@ export class VisitBookingPage {
     const currentMinutes = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
     console.log('⏰ Current Machine Time:', now.toTimeString());
 
-    // Selenium: presenceOfElementLocated(By.cssSelector("div.free-slots p.no-margin"))
     const freeSlotTexts = this.page.locator('div.free-slots p.no-margin');
     await freeSlotTexts.first().waitFor({ state: 'attached', timeout: 15000 });
 
@@ -132,15 +137,12 @@ export class VisitBookingPage {
       const slotElement = freeSlotTexts.nth(i);
 
       try {
-        // Same as Selenium getAttribute("textContent").trim()
         const fullText = (await slotElement.textContent() ?? '').trim();
         const match = fullText.match(timePattern);
 
         if (!match) continue;
 
         const cleanTimeStr = match[1].toLowerCase().replace(/\s+/g, ' ');
-
-        // Same flexible 12-hour parsing as Java DateTimeFormatter.
         const parsed = cleanTimeStr.match(/^(\d{1,2}):(\d{2})\s*(am|pm)$/i);
         if (!parsed) continue;
 
@@ -156,10 +158,8 @@ export class VisitBookingPage {
         if (slotMinutes >= currentMinutes) {
           console.log(`🎯 Target Slot Identified: [${cleanTimeStr}]. Processing interaction...`);
 
-          // Same as Selenium findElement(By.xpath("./.."))
           const parentSlotDiv = slotElement.locator('xpath=..');
 
-          // Same scrollIntoView({ behavior: 'instant', block: 'center', inline: 'center' }).
           await parentSlotDiv.evaluate((el) => {
             el.scrollIntoView({
               behavior: 'instant',
@@ -168,11 +168,8 @@ export class VisitBookingPage {
             });
           });
 
-          // Same 300 ms stability wait.
           await this.page.waitForTimeout(300);
 
-          // Playwright-native click first; JS click is the fallback equivalent
-          // of Selenium's JS Executor.
           try {
             await parentSlotDiv.click({ timeout: 3000 });
           } catch {
@@ -198,7 +195,30 @@ export class VisitBookingPage {
   }
 
   async selectVisitType() { await this.visitTypeOHC.check(); return this; }
-  async selectVisitType2() { await this.visitTypeHO.check(); return this; }
+
+  async selectVisitType2() {
+    const visitTypes = [
+      { name: 'PayerVisitType2', locator: this.payerVisitType2 },
+      { name: 'StudentVisitType', locator: this.studentVisitType },
+      { name: 'AnnualCheckVisitType', locator: this.annualCheckVisitType }
+    ];
+
+    for (const visitType of visitTypes) {
+      console.log(`🔍 Attempting ${visitType.name}...`);
+
+      try {
+        await visitType.locator.waitFor({ state: 'visible', timeout: 3000 });
+        await visitType.locator.check();
+        console.log(`✅ Selected ${visitType.name}`);
+        return this;
+      } catch {
+        console.log(`⚠️ ${visitType.name} not found. Trying next...`);
+      }
+    }
+
+    throw new Error('❌ Failure: Neither Payer, Student, nor Annual Check visit types were found.');
+  }
+
   async createVisitWorkflow(patientName: string, fees: string) { await this.click(this.visitTypeOHC); await this.fill(this.patientSearchInput, patientName); await this.click(this.searchButton); await this.click(this.searchResult); await this.click(this.confirmAppointmentAndCreateVisit); await this.click(this.visitTypeHO); await this.click(this.continueToVisit); await this.click(this.paymentButton); await this.fill(this.cashField, fees); await this.click(this.createVisitButton); await this.click(this.doneButton); return this; }
   async cancelAppointment() { await this.click(this.clinicButton, 10000); await this.click(this.clinicSelection, 10000); await this.click(this.practitionerSelection, 10000); await this.click(this.previewAppointment, 10000); await this.click(this.cancelAppointment, 10000); await this.click(this.appointmentCancelReason, 10000); await this.click(this.continueAppointmentCancellation, 10000); }
   async cancelBookedVisit() { await this.click(this.clinicButton, 10000); await this.click(this.clinicSelection, 10000); await this.click(this.practitionerSelection, 10000); await this.click(this.previewAppointment, 10000); await this.click(this.cancelVisitPatient, 10000); await this.click(this.wrongEntryRadio, 10000); await this.click(this.continueVisitCancellation, 10000); }
