@@ -62,7 +62,7 @@ export class VisitBookingPage {
     this.paymentButton = page.locator("//button[contains(text(),'Payment')]");
     this.cashField = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-payment-details > div > div.payment-container > div.flex_container > div > div > input');
     this.createVisitButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button');
-    this.doneButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button.primary-button.ng-star-inserted');
+    this.doneButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.ex-book-appt-footer.border-top > div:nth-child(2) > button.primary-button.ng-star-inserted');
     this.previewAppointment = page.locator("//span[@class='patient-name' and contains(text(),'Visit Cancellation For automation')]");
     this.cancelVisitPatient = page.locator("//div[normalize-space()='Visit Cancellation']");
     this.appointmentCancelReason = page.locator("//label[contains(text(), 'Mistake in entry')]");
@@ -112,31 +112,91 @@ export class VisitBookingPage {
   async selectPractitioner() { await this.click(this.practitionerSelection); return this; }
   async isNoResultsMessageDisplayed() { try { await this.noResults.waitFor({ state: 'visible', timeout: 10000 }); return true; } catch { return false; } }
   async bookTimeSlot(timeText: string) { const slot = this.page.getByText(timeText, { exact: true }).first(); await this.click(slot); return this; }
-  async bookNextAvailableTimeSlot() {
-    const timeLabels = this.page.locator('p').filter({
-      hasText: /^(0?[1-9]|1[0-2])\s?(am|pm)$/i
-    });
 
-    const count = await timeLabels.count();
+  async bookNextAvailableTimeSlot() {
+    console.log('🔄 [Smart Logic] Starting Robust Chronological Slot Selection with JS Fallback...');
+
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
+    console.log('⏰ Current Machine Time:', now.toTimeString());
+
+    // Selenium: presenceOfElementLocated(By.cssSelector("div.free-slots p.no-margin"))
+    const freeSlotTexts = this.page.locator('div.free-slots p.no-margin');
+    await freeSlotTexts.first().waitFor({ state: 'attached', timeout: 15000 });
+
+    const count = await freeSlotTexts.count();
+    const timePattern = /(\d{1,2}:\d{2}\s*(am|pm))/i;
+    let slotSelected = false;
 
     for (let i = 0; i < count; i++) {
-      const timeLabel = timeLabels.nth(i);
-      if (!(await timeLabel.isVisible())) continue;
+      const slotElement = freeSlotTexts.nth(i);
 
-      const slotContainer = timeLabel.locator('xpath=..');
-      const clickable = slotContainer
-        .locator('[role="button"], button, [style*="cursor: pointer"]')
-        .first();
+      try {
+        // Same as Selenium getAttribute("textContent").trim()
+        const fullText = (await slotElement.textContent() ?? '').trim();
+        const match = fullText.match(timePattern);
 
-      if (await clickable.count() > 0 && await clickable.isVisible()) {
-        await clickable.scrollIntoViewIfNeeded();
-        await clickable.click();
-        return this;
+        if (!match) continue;
+
+        const cleanTimeStr = match[1].toLowerCase().replace(/\s+/g, ' ');
+
+        // Same flexible 12-hour parsing as Java DateTimeFormatter.
+        const parsed = cleanTimeStr.match(/^(\d{1,2}):(\d{2})\s*(am|pm)$/i);
+        if (!parsed) continue;
+
+        let hours = Number(parsed[1]);
+        const minutes = Number(parsed[2]);
+        const meridiem = parsed[3].toLowerCase();
+
+        if (hours === 12) hours = 0;
+        if (meridiem === 'pm') hours += 12;
+
+        const slotMinutes = hours * 60 + minutes;
+
+        if (slotMinutes >= currentMinutes) {
+          console.log(`🎯 Target Slot Identified: [${cleanTimeStr}]. Processing interaction...`);
+
+          // Same as Selenium findElement(By.xpath("./.."))
+          const parentSlotDiv = slotElement.locator('xpath=..');
+
+          // Same scrollIntoView({ behavior: 'instant', block: 'center', inline: 'center' }).
+          await parentSlotDiv.evaluate((el) => {
+            el.scrollIntoView({
+              behavior: 'instant',
+              block: 'center',
+              inline: 'center'
+            });
+          });
+
+          // Same 300 ms stability wait.
+          await this.page.waitForTimeout(300);
+
+          // Playwright-native click first; JS click is the fallback equivalent
+          // of Selenium's JS Executor.
+          try {
+            await parentSlotDiv.click({ timeout: 3000 });
+          } catch {
+            await parentSlotDiv.evaluate((el) => {
+              (el as HTMLElement).click();
+            });
+          }
+
+          console.log(`✅ Successfully selected slot: ${cleanTimeStr}`);
+          slotSelected = true;
+          break;
+        }
+      } catch (error) {
+        console.log('⚠️ Skipping element evaluation block due to:', error);
       }
     }
 
-    throw new Error('No clickable appointment time slot was found.');
+    if (!slotSelected) {
+      throw new Error("❌ Automation Error: No valid future 'free-slots' could be interacted with in the current view.");
+    }
+
+    return this;
   }
+
   async selectVisitType() { await this.click(this.visitTypeOHC); return this; }
   async selectVisitType2() { await this.click(this.visitTypeHO); return this; }
   async createVisitWorkflow(patientName: string, fees: string) { await this.click(this.visitTypeOHC); await this.fill(this.patientSearchInput, patientName); await this.click(this.searchButton); await this.click(this.searchResult); await this.click(this.confirmAppointmentAndCreateVisit); await this.click(this.visitTypeHO); await this.click(this.continueToVisit); await this.click(this.paymentButton); await this.fill(this.cashField, fees); await this.click(this.createVisitButton); await this.click(this.doneButton); return this; }
