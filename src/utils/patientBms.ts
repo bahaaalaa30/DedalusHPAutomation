@@ -1,1 +1,11 @@
-let patientId = ''; export const PatientBMS = { setPatientId(id: string) { patientId = id; }, getPatientId() { return patientId; } };
+let patientId = '';
+
+export const PatientBMS = {
+  setPatientId(id: string) {
+    patientId = id;
+  },
+
+  getPatientId() {
+    return patientId;
+  },
+};
