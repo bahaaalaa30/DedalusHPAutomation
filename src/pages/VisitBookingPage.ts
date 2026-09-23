@@ -62,7 +62,7 @@ export class VisitBookingPage {
     this.payerVisitType2 = page.locator('#visit_N');
     this.studentVisitType = page.locator('#visit_SC');
     this.annualCheckVisitType = page.locator('#visit_GC');
-    this.searchResult = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-booking-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div.find-patient.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div:nth-child(1) > div > div.col-3.primary-text > p');
+    this.searchResult = page.locator('.patients-list .list-content > div').first();
     this.confirmAppointmentAndCreateVisit = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appt-container > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button:nth-child(2)');
     this.continueToVisit = page.locator("//button[contains(text(),'Continue')]");
     this.paymentButton = page.locator("//button[contains(text(),'Payment')]");
