@@ -1,10 +1,10 @@
-import { expect, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 
 export class PractitionerPage {
-  private readonly patient;
-  private readonly patientsCount;
-  private readonly newDocument;
-  private readonly startConsultationButton;
+  private readonly patient: Locator;
+  private readonly patientsCount: Locator;
+  private readonly newDocument: Locator;
+  private readonly startConsultationButton: Locator;
 
   constructor(private readonly page: Page) {
     this.patient = page.locator('div.col-patient div.patient-name p.secondary-text');
