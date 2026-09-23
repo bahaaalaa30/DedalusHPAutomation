@@ -1,1 +1,16 @@
-{"name":"dedalus-hp-playwright","private":true,"scripts":{"test":"playwright test"},"devDependencies":{"@playwright/test":"^1.55.0","typescript":"^5.9.2"}}
+{
+  "name": "dedalus-hp-playwright",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:api": "playwright test src/tests/performance/login-api.spec.ts",
+    "typecheck": "tsc --noEmit",
+    "report": "allure generate allure-results --clean -o allure-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "allure-playwright": "^3.4.1",
+    "typescript": "^5.9.2"
+  }
+}
