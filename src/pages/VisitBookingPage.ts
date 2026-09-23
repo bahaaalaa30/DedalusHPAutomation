@@ -120,9 +120,9 @@ export class VisitBookingPage {
     this.arabicLanguage = page.locator(
       "//div[normalize-space()='عربى']"
     );
-    this.onlineEligibilityButton = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button:nth-child(2)'
-    );
+    this.onlineEligibilityButton = page
+      .locator('app-ex-create-visit .ex-book-appt-footer button.primary-button')
+      .last();
     this.noResults = page.locator(
       "//div[contains(@class, 'title') and normalize-space()='لم يتم العثور على نتائج']"
     );
