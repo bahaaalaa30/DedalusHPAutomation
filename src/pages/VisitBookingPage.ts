@@ -113,16 +113,29 @@ export class VisitBookingPage {
   async isNoResultsMessageDisplayed() { try { await this.noResults.waitFor({ state: 'visible', timeout: 10000 }); return true; } catch { return false; } }
   async bookTimeSlot(timeText: string) { const slot = this.page.getByText(timeText, { exact: true }).first(); await this.click(slot); return this; }
   async bookNextAvailableTimeSlot() {
-    const availableSlot = this.page
-      .locator('p')
-      .filter({ hasText: /^(0?[1-9]|1[0-2])\s?(am|pm)$/i })
-      .filter({ has: this.page.locator('xpath=..').locator('[style*="cursor: pointer"], [role="button"], button') })
-      .first();
+    const timeLabels = this.page.locator('p').filter({
+      hasText: /^(0?[1-9]|1[0-2])\s?(am|pm)$/i
+    });
 
-    await expect(availableSlot).toBeVisible({ timeout: 20000 });
-    await availableSlot.scrollIntoViewIfNeeded();
-    await availableSlot.click();
-    return this;
+    const count = await timeLabels.count();
+
+    for (let i = 0; i < count; i++) {
+      const timeLabel = timeLabels.nth(i);
+      if (!(await timeLabel.isVisible())) continue;
+
+      const slotContainer = timeLabel.locator('xpath=..');
+      const clickable = slotContainer
+        .locator('[role="button"], button, [style*="cursor: pointer"]')
+        .first();
+
+      if (await clickable.count() > 0 && await clickable.isVisible()) {
+        await clickable.scrollIntoViewIfNeeded();
+        await clickable.click();
+        return this;
+      }
+    }
+
+    throw new Error('No clickable appointment time slot was found.');
   }
   async selectVisitType() { await this.click(this.visitTypeOHC); return this; }
   async selectVisitType2() { await this.click(this.visitTypeHO); return this; }
