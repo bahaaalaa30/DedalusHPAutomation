@@ -1,10 +1,10 @@
-import { Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
 export class LoginPage {
-  private readonly username;
-  private readonly password;
-  private readonly loginButton;
-  private readonly inlineError;
+  private readonly username: Locator;
+  private readonly password: Locator;
+  private readonly loginButton: Locator;
+  private readonly inlineError: Locator;
 
   constructor(private readonly page: Page) {
     this.username = page.locator('#user-id');
