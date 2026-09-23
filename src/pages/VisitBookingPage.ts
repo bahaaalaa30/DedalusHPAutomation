@@ -114,10 +114,21 @@ export class VisitBookingPage {
     await locator.fill(value);
   }
 
-  async selectClinic() { await this.click(this.clinicButton); await this.click(this.clinicSelection); return this; }
-  async selectPractitioner() { await this.click(this.practitionerSelection); return this; }
+  async selectClinic() {
+    await this.click(this.clinicButton);
+    await this.click(this.clinicSelection);
+    return this;
+  }
+  async selectPractitioner() {
+    await this.click(this.practitionerSelection);
+    return this;
+  }
   async isNoResultsMessageDisplayed() { try { await this.noResults.waitFor({ state: 'visible', timeout: 10000 }); return true; } catch { return false; } }
-  async bookTimeSlot(timeText: string) { const slot = this.page.getByText(timeText, { exact: true }).first(); await this.click(slot); return this; }
+  async bookTimeSlot(timeText: string) {
+    const slot = this.page.getByText(timeText, { exact: true }).first();
+    await this.click(slot);
+    return this;
+  }
 
   async bookNextAvailableTimeSlot() {
     console.log('🔄 [Smart Logic] Starting Robust Chronological Slot Selection with JS Fallback...');
@@ -194,7 +205,10 @@ export class VisitBookingPage {
     return this;
   }
 
-  async selectVisitType() { await this.visitTypeOHC.check(); return this; }
+  async selectVisitType() {
+    await this.visitTypeOHC.check();
+    return this;
+  }
 
   async selectVisitType2() {
     const visitTypes = [
@@ -219,42 +233,194 @@ export class VisitBookingPage {
     throw new Error('❌ Failure: Neither Payer, Student, nor Annual Check visit types were found.');
   }
 
-  async createVisitWorkflow(patientName: string, fees: string) { await this.click(this.visitTypeOHC); await this.fill(this.patientSearchInput, patientName); await this.click(this.searchButton); await this.click(this.searchResult); await this.click(this.confirmAppointmentAndCreateVisit); await this.click(this.visitTypeHO); await this.click(this.continueToVisit); await this.click(this.paymentButton); await this.fill(this.cashField, fees); await this.click(this.createVisitButton); await this.click(this.doneButton); return this; }
-  async cancelAppointment() { await this.click(this.clinicButton, 10000); await this.click(this.clinicSelection, 10000); await this.click(this.practitionerSelection, 10000); await this.click(this.previewAppointment, 10000); await this.click(this.cancelAppointment, 10000); await this.click(this.appointmentCancelReason, 10000); await this.click(this.continueAppointmentCancellation, 10000); }
-  async cancelBookedVisit() { await this.click(this.clinicButton, 10000); await this.click(this.clinicSelection, 10000); await this.click(this.practitionerSelection, 10000); await this.click(this.previewAppointment, 10000); await this.click(this.cancelVisitPatient, 10000); await this.click(this.wrongEntryRadio, 10000); await this.click(this.continueVisitCancellation, 10000); }
-  async switchToArabicLanguage() { await this.click(this.languageMenu, 10000); await this.click(this.arabicLanguage, 10000); }
-  async searchPatientID(id: string) { await this.fill(this.globalSearch, id); await this.fill(this.patientIdInput, id); await this.click(this.findButton); await this.patientList.waitFor({ state: 'visible', timeout: 20000 }); }
-  async searchPatientName(name: string) { await this.fill(this.globalSearch, name); await this.fill(this.firstName, name); await this.click(this.findButton); await this.patientList.waitFor({ state: 'visible', timeout: 20000 }); }
-  async searchNationalID(id: string) { await this.fill(this.globalSearch, id); await this.fill(this.nationalId, id); await this.click(this.findButton); await this.patientList.waitFor({ state: 'visible', timeout: 20000 }); }
-  async searchPatientGenderMale(name: string) { await this.fill(this.globalSearch, name); await this.fill(this.firstName, name); await this.click(this.male); await this.click(this.findButton); await this.patientList.waitFor({ state: 'visible', timeout: 20000 }); }
-  async searchPatientGenderFemale(name: string) { await this.fill(this.globalSearch, name); await this.fill(this.firstName, name); await this.click(this.female); await this.click(this.findButton); await this.patientList.waitFor({ state: 'visible', timeout: 20000 }); }
-  async searchBMS(id: string) { await this.fill(this.globalSearch, id); await this.click(this.findButton); await this.patientList.waitFor({ state: 'visible', timeout: 20000 }); }
-  async selectPatientIDByBMS() { await this.patientList.first().waitFor({ state: 'visible', timeout: 20000 }); return (await this.patientList.first().innerText()).trim(); }
-  async exitPage() { await this.page.goBack(); }
-  async selectPayerFacility() { await this.page.locator('#facility-menu').click(); await this.page.locator("//div[contains(@class, 'facility-region-menu')]//div[normalize-space()='El Arab Center - UAT']").click(); return this; }
-  async selectPayerClinic() { await this.click(this.clinicButton); await this.click(this.page.locator("//*[@id='clinic-list']/div[2]/div[6]")); return this; }
-  async selectPayerDoctor() { await this.click(this.practitionerSelection); return this; }
-  async eligibilityCheck(patientPid: string) { await this.click(this.visitTypeHO); await this.fill(this.patientSearchInput, patientPid); await this.click(this.searchButton); await this.click(this.searchResult); await this.click(this.confirmAppointmentAndCreateVisit); await this.selectVisitType2(); return this; }
-  async nonEligibilityCheck(patientPid: string) { return this.eligibilityCheck(patientPid); }
-  async sendRequestAndWaitForResponse() { await this.click(this.onlineEligibilityButton, 30000); await expect(this.eligibilitySuccessMessage).toBeVisible({ timeout: 300000 }); await this.click(this.proceedRegistrationButton, 300000); await this.click(this.createVisitButton, 30000); await this.click(this.doneButton, 30000); }
-  async sendRequestAndWaitForResponseNoneligible() { await this.click(this.onlineEligibilityButton, 30000); }
-  async validateEligiblePatient(id: string) { await this.searchBMS(id); return this.selectPatientIDByBMS(); }
-  async verifyStatusIsApproved() { await expect(this.page.locator('.approvals-queue-status').filter({ hasText: 'Approved' })).toBeVisible({ timeout: 30000 }); }
-  async billPage(patientName: string) { await this.click(this.actionsButton, 10000); await this.click(this.manageBillButton, 10000); await this.fill(this.searchBillPatient, patientName, 10000); await this.click(this.findBillButton, 10000); await this.click(this.searchPatientList, 10000); await this.click(this.chooseVisitForBill, 10000); await this.click(this.printBillButton, 10000); await this.click(this.printButton, 10000); await this.click(this.closeButton, 10000); }
-  async payBill(patientName: string) { await this.click(this.actionsButton, 10000); await this.click(this.manageBillButton, 10000); await this.fill(this.searchBillPatient, patientName, 10000); await this.click(this.findBillButton, 10000); await this.click(this.searchPatientList, 10000); await this.click(this.chooseVisitForBill, 10000); await this.click(this.payBillButton, 10000); await this.click(this.paymentBillButton, 10000); await this.click(this.closeButton, 10000); }
-  async SelectClinic() { return this.selectClinic(); }
-  async SelectPractitioner() { return this.selectPractitioner(); }
-  async EligibilityCheck(patientPid: string) { return this.eligibilityCheck(patientPid); }
-  async NonEligibilityCheck(patientPid: string) { return this.nonEligibilityCheck(patientPid); }
-  async SearchPatientID(id: string) { return this.searchPatientID(id); }
-  async SearchPatientName(name: string) { return this.searchPatientName(name); }
-  async SearchNationalID(id: string) { return this.searchNationalID(id); }
-  async SearchPatientGenderMale(name: string) { return this.searchPatientGenderMale(name); }
-  async SearchPatientGenderFemale(name: string) { return this.searchPatientGenderFemale(name); }
-  async SearchBMS(id: string) { return this.searchBMS(id); }
-  async ValidateEligiblePatient(id: string) { return this.validateEligiblePatient(id); }
-  async CancelBookedVisit() { return this.cancelBookedVisit(); }
-  async CancelAppointment() { return this.cancelAppointment(); }
-  async BillPage(patientName: string) { return this.billPage(patientName); }
-  async PayBill(patientName: string) { return this.payBill(patientName); }
+  async createVisitWorkflow(patientName: string, fees: string) {
+    await this.click(this.visitTypeOHC);
+    await this.fill(this.patientSearchInput, patientName);
+    await this.click(this.searchButton);
+    await this.click(this.searchResult);
+    await this.click(this.confirmAppointmentAndCreateVisit);
+    await this.click(this.visitTypeHO);
+    await this.click(this.continueToVisit);
+    await this.click(this.paymentButton);
+    await this.fill(this.cashField, fees);
+    await this.click(this.createVisitButton);
+    await this.click(this.doneButton);
+    return this;
+  }
+  async cancelAppointment() {
+    await this.click(this.clinicButton, 10000);
+    await this.click(this.clinicSelection, 10000);
+    await this.click(this.practitionerSelection, 10000);
+    await this.click(this.previewAppointment, 10000);
+    await this.click(this.cancelAppointment, 10000);
+    await this.click(this.appointmentCancelReason, 10000);
+    await this.click(this.continueAppointmentCancellation, 10000);
+  }
+  async cancelBookedVisit() {
+    await this.click(this.clinicButton, 10000);
+    await this.click(this.clinicSelection, 10000);
+    await this.click(this.practitionerSelection, 10000);
+    await this.click(this.previewAppointment, 10000);
+    await this.click(this.cancelVisitPatient, 10000);
+    await this.click(this.wrongEntryRadio, 10000);
+    await this.click(this.continueVisitCancellation, 10000);
+  }
+  async switchToArabicLanguage() {
+    await this.click(this.languageMenu, 10000);
+    await this.click(this.arabicLanguage, 10000);
+  }
+  async searchPatientID(id: string) {
+    await this.fill(this.globalSearch, id);
+    await this.fill(this.patientIdInput, id);
+    await this.click(this.findButton);
+    await this.patientList.waitFor({ state: 'visible', timeout: 20000 });
+  }
+  async searchPatientName(name: string) {
+    await this.fill(this.globalSearch, name);
+    await this.fill(this.firstName, name);
+    await this.click(this.findButton);
+    await this.patientList.waitFor({ state: 'visible', timeout: 20000 });
+  }
+  async searchNationalID(id: string) {
+    await this.fill(this.globalSearch, id);
+    await this.fill(this.nationalId, id);
+    await this.click(this.findButton);
+    await this.patientList.waitFor({ state: 'visible', timeout: 20000 });
+  }
+  async searchPatientGenderMale(name: string) {
+    await this.fill(this.globalSearch, name);
+    await this.fill(this.firstName, name);
+    await this.click(this.male);
+    await this.click(this.findButton);
+    await this.patientList.waitFor({ state: 'visible', timeout: 20000 });
+  }
+  async searchPatientGenderFemale(name: string) {
+    await this.fill(this.globalSearch, name);
+    await this.fill(this.firstName, name);
+    await this.click(this.female);
+    await this.click(this.findButton);
+    await this.patientList.waitFor({ state: 'visible', timeout: 20000 });
+  }
+  async searchBMS(id: string) {
+    await this.fill(this.globalSearch, id);
+    await this.click(this.findButton);
+    await this.patientList.waitFor({ state: 'visible', timeout: 20000 });
+  }
+  async selectPatientIDByBMS() {
+    await this.patientList.first().waitFor({ state: 'visible', timeout: 20000 });
+    return (await this.patientList.first().innerText()).trim();
+  }
+  async exitPage() {
+    await this.page.goBack();
+  }
+  async selectPayerFacility() {
+    await this.page.locator('#facility-menu').click();
+    await this.page.locator("//div[contains(@class, 'facility-region-menu')]//div[normalize-space()='El Arab Center - UAT']").click();
+    return this;
+  }
+  async selectPayerClinic() {
+    await this.click(this.clinicButton);
+    await this.click(this.page.locator("//*[@id='clinic-list']/div[2]/div[6]"));
+    return this;
+  }
+  async selectPayerDoctor() {
+    await this.click(this.practitionerSelection);
+    return this;
+  }
+  async eligibilityCheck(patientPid: string) {
+    await this.click(this.visitTypeHO);
+    await this.fill(this.patientSearchInput, patientPid);
+    await this.click(this.searchButton);
+    await this.click(this.searchResult);
+    await this.click(this.confirmAppointmentAndCreateVisit);
+    await this.selectVisitType2();
+    return this;
+  }
+  async nonEligibilityCheck(patientPid: string) {
+    return this.eligibilityCheck(patientPid);
+  }
+  async sendRequestAndWaitForResponse() {
+    await this.click(this.onlineEligibilityButton, 30000);
+    await expect(this.eligibilitySuccessMessage).toBeVisible({ timeout: 300000 });
+    await this.click(this.proceedRegistrationButton, 300000);
+    await this.click(this.createVisitButton, 30000);
+    await this.click(this.doneButton, 30000);
+  }
+  async sendRequestAndWaitForResponseNoneligible() {
+    await this.click(this.onlineEligibilityButton, 30000);
+  }
+  async validateEligiblePatient(id: string) {
+    await this.searchBMS(id);
+    return this.selectPatientIDByBMS();
+  }
+  async verifyStatusIsApproved() {
+    await expect(this.page.locator('.approvals-queue-status').filter({ hasText: 'Approved' })).toBeVisible({ timeout: 30000 });
+  }
+  async billPage(patientName: string) {
+    await this.click(this.actionsButton, 10000);
+    await this.click(this.manageBillButton, 10000);
+    await this.fill(this.searchBillPatient, patientName, 10000);
+    await this.click(this.findBillButton, 10000);
+    await this.click(this.searchPatientList, 10000);
+    await this.click(this.chooseVisitForBill, 10000);
+    await this.click(this.printBillButton, 10000);
+    await this.click(this.printButton, 10000);
+    await this.click(this.closeButton, 10000);
+  }
+  async payBill(patientName: string) {
+    await this.click(this.actionsButton, 10000);
+    await this.click(this.manageBillButton, 10000);
+    await this.fill(this.searchBillPatient, patientName, 10000);
+    await this.click(this.findBillButton, 10000);
+    await this.click(this.searchPatientList, 10000);
+    await this.click(this.chooseVisitForBill, 10000);
+    await this.click(this.payBillButton, 10000);
+    await this.click(this.paymentBillButton, 10000);
+    await this.click(this.closeButton, 10000);
+  }
+  async SelectClinic() {
+    return this.selectClinic();
+  }
+  async SelectPractitioner() {
+    return this.selectPractitioner();
+  }
+  async EligibilityCheck(patientPid: string) {
+    return this.eligibilityCheck(patientPid);
+  }
+  async NonEligibilityCheck(patientPid: string) {
+    return this.nonEligibilityCheck(patientPid);
+  }
+  async SearchPatientID(id: string) {
+    return this.searchPatientID(id);
+  }
+  async SearchPatientName(name: string) {
+    return this.searchPatientName(name);
+  }
+  async SearchNationalID(id: string) {
+    return this.searchNationalID(id);
+  }
+  async SearchPatientGenderMale(name: string) {
+    return this.searchPatientGenderMale(name);
+  }
+  async SearchPatientGenderFemale(name: string) {
+    return this.searchPatientGenderFemale(name);
+  }
+  async SearchBMS(id: string) {
+    return this.searchBMS(id);
+  }
+  async ValidateEligiblePatient(id: string) {
+    return this.validateEligiblePatient(id);
+  }
+  async CancelBookedVisit() {
+    return this.cancelBookedVisit();
+  }
+  async CancelAppointment() {
+    return this.cancelAppointment();
+  }
+  async BillPage(patientName: string) {
+    return this.billPage(patientName);
+  }
+  async PayBill(patientName: string) {
+    return this.payBill(patientName);
+  }
 }
