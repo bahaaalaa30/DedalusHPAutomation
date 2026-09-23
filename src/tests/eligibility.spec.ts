@@ -9,7 +9,6 @@ test('eligible patient', async ({ page, loginPage }) => {
   await loginPage.login(config.cmoB6, config.cmoPassword);
   await expect(page).toHaveURL(/clinicaldiary/);
   await page.goto(config.payerVisitBookingUrl);
-
   const p = new VisitBookingPage(page);
   await p.selectPayerFacility();
   await p.selectPayerClinic();
@@ -20,9 +19,9 @@ test('eligible patient', async ({ page, loginPage }) => {
   );
 
   PatientBMS.setPatientId(id);
-    await p.selectVisitType2();
-  await p.EligibilityCheck(id);
 
+  await p.EligibilityCheck(id);
+  await p.selectVisitType2();
   await p.sendRequestAndWaitForResponse();
 });
 
