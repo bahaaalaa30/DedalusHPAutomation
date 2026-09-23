@@ -63,7 +63,7 @@ export class VisitBookingPage {
     this.studentVisitType = page.locator('#visit_SC');
     this.annualCheckVisitType = page.locator('#visit_GC');
     this.searchResult = page.locator('.patients-list .list-content > div').first();
-    this.confirmAppointmentAndCreateVisit = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appt-container > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button:nth-child(2)');
+    this.confirmAppointmentAndCreateVisit = page.locator('app-ex-book-appointment .book-appt-footer button').last();
     this.continueToVisit = page.locator("//button[contains(text(),'Continue')]");
     this.paymentButton = page.locator("//button[contains(text(),'Payment')]");
     this.cashField = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-payment-details > div > div.payment-container > div.flex_container > div > div > input');
