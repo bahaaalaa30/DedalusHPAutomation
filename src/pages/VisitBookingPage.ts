@@ -95,9 +95,10 @@ export class VisitBookingPage {
     this.createVisitButton = page
       .locator('app-ex-create-visit .book-appt-footer button')
       .last();
-    this.doneButton = page.locator(
-      'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appt-footer.border-top > div:nth-child(2) > button.primary-button.ng-star-inserted'
-    );
+    this.doneButton = page.getByRole('button', {
+      name: 'Done',
+      exact: true
+    });
     this.previewAppointment = page.locator(
       "//span[@class='patient-name' and contains(text(),'Visit Cancellation For automation')]"
     );
