@@ -28,6 +28,9 @@ export class VisitBookingPage {
   private readonly languageMenu: Locator;
   private readonly arabicLanguage: Locator;
   private readonly onlineEligibilityButton: Locator;
+  private readonly eligibilityFailureModal: Locator;
+  private readonly eligibilityFailureProceedButton: Locator;
+  private readonly proceedWithCashButton: Locator;
   private readonly noResults: Locator;
   private readonly globalSearch: Locator;
   private readonly patientIdInput: Locator;
@@ -122,6 +125,16 @@ export class VisitBookingPage {
     );
     this.onlineEligibilityButton = page.getByRole('button', {
       name: 'Online eligibility',
+      exact: true
+    });
+    this.eligibilityFailureModal = page.locator(
+      'app-alert-modal .alert-content'
+    );
+    this.eligibilityFailureProceedButton = page
+      .locator('app-alert-modal .footer button')
+      .last();
+    this.proceedWithCashButton = page.getByRole('button', {
+      name: 'Proceed with cash',
       exact: true
     });
     this.noResults = page.locator(
@@ -531,6 +544,15 @@ export class VisitBookingPage {
 
   async sendRequestAndWaitForResponseNoneligible() {
     await this.click(this.onlineEligibilityButton, 30000);
+
+    await expect(this.eligibilityFailureModal).toBeVisible({
+      timeout: 300000
+    });
+
+    await this.click(this.eligibilityFailureProceedButton, 30000);
+    await this.click(this.proceedWithCashButton, 30000);
+    await this.click(this.createVisitButton, 30000);
+    await this.click(this.doneButton, 30000);
   }
 
   async validateEligiblePatient(id: string) {
