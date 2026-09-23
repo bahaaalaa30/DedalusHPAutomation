@@ -67,7 +67,7 @@ export class VisitBookingPage {
     this.continueToVisit = page.locator("//button[contains(text(),'Continue')]");
     this.paymentButton = page.locator("//button[contains(text(),'Payment')]");
     this.cashField = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-payment-details > div > div.payment-container > div.flex_container > div > div > input');
-    this.createVisitButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button');
+    this.createVisitButton = page.locator('app-ex-create-visit .book-appt-footer button').last();
     this.doneButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appt-footer.border-top > div:nth-child(2) > button.primary-button.ng-star-inserted');
     this.previewAppointment = page.locator("//span[@class='patient-name' and contains(text(),'Visit Cancellation For automation')]");
     this.cancelVisitPatient = page.locator("//div[normalize-space()='Visit Cancellation']");
@@ -168,16 +168,6 @@ export class VisitBookingPage {
           console.log(`🎯 Target Slot Identified: [${cleanTimeStr}]. Processing interaction...`);
 
           const parentSlotDiv = slotElement.locator('xpath=..');
-
-          await parentSlotDiv.evaluate((el) => {
-            el.scrollIntoView({
-              behavior: 'instant',
-              block: 'center',
-              inline: 'center'
-            });
-          });
-
-          await this.page.waitForTimeout(300);
 
           try {
             await parentSlotDiv.click({ timeout: 3000 });
