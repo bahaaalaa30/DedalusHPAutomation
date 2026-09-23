@@ -521,11 +521,34 @@ export class VisitBookingPage {
 
   async eligibilityCheck(patientPid: string) {
     await this.click(this.visitTypeHO);
-    await this.fill(this.patientSearchInput, patientPid);
+
+    await this.fill(
+      this.patientSearchInput,
+      patientPid
+    );
+
     await this.click(this.searchButton);
+
+    await this.searchResult.waitFor({
+      state: 'visible',
+      timeout: 20000
+    });
+
     await this.click(this.searchResult);
-    await this.click(this.confirmAppointmentAndCreateVisit);
+
+    await this.confirmAppointmentAndCreateVisit.waitFor({
+      state: 'visible',
+      timeout: 20000
+    });
+
+    await expect(
+      this.confirmAppointmentAndCreateVisit
+    ).toBeEnabled();
+
+    await this.confirmAppointmentAndCreateVisit.click();
+
     await this.selectVisitType2();
+
     return this;
   }
 
