@@ -1,29 +1,29 @@
-import { expect, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 
 export class VisitBookingPage {
-  private readonly clinicButton;
-  private readonly clinicSelection;
-  private readonly practitionerSelection;
-  private readonly patientSearchInput;
-  private readonly searchButton;
-  private readonly searchResult;
-  private readonly continueButton;
-  private readonly paymentButton;
-  private readonly cashField;
-  private readonly createVisitButton;
-  private readonly doneButton;
-  private readonly patientId;
-  private readonly noResults;
-  private readonly languageMenu;
-  private readonly arabicLanguage;
-  private readonly globalSearch;
-  private readonly patientIdInput;
-  private readonly findButton;
-  private readonly firstName;
-  private readonly nationalId;
-  private readonly male;
-  private readonly female;
-  private readonly approvedStatus;
+  private readonly clinicButton: Locator;
+  private readonly clinicSelection: Locator;
+  private readonly practitionerSelection: Locator;
+  private readonly patientSearchInput: Locator;
+  private readonly searchButton: Locator;
+  private readonly searchResult: Locator;
+  private readonly continueButton: Locator;
+  private readonly paymentButton: Locator;
+  private readonly cashField: Locator;
+  private readonly createVisitButton: Locator;
+  private readonly doneButton: Locator;
+  private readonly patientId: Locator;
+  private readonly noResults: Locator;
+  private readonly languageMenu: Locator;
+  private readonly arabicLanguage: Locator;
+  private readonly globalSearch: Locator;
+  private readonly patientIdInput: Locator;
+  private readonly findButton: Locator;
+  private readonly firstName: Locator;
+  private readonly nationalId: Locator;
+  private readonly male: Locator;
+  private readonly female: Locator;
+  private readonly approvedStatus: Locator;
 
   constructor(private readonly page: Page) {
     this.clinicButton = page.locator('#clinic-btn');
