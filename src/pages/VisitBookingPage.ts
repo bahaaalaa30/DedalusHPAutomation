@@ -62,13 +62,13 @@ export class VisitBookingPage {
     this.payerVisitType2 = page.locator('#visit_N');
     this.studentVisitType = page.locator('#visit_SC');
     this.annualCheckVisitType = page.locator('#visit_GC');
-    this.searchResult = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div.find-patient.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div:nth-child(1) > div > div.col-3.primary-text > p');
-    this.confirmAppointmentAndCreateVisit = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button:nth-child(2)');
+    this.searchResult = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-booking-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div.find-patient.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div:nth-child(1) > div > div.col-3.primary-text > p');
+    this.confirmAppointmentAndCreateVisit = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appt-container > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button:nth-child(2)');
     this.continueToVisit = page.locator("//button[contains(text(),'Continue')]");
     this.paymentButton = page.locator("//button[contains(text(),'Payment')]");
     this.cashField = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-payment-details > div > div.payment-container > div.flex_container > div > div > input');
     this.createVisitButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button');
-    this.doneButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.ex-book-appt-footer.border-top > div:nth-child(2) > button.primary-button.ng-star-inserted');
+    this.doneButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appt-footer.border-top > div:nth-child(2) > button.primary-button.ng-star-inserted');
     this.previewAppointment = page.locator("//span[@class='patient-name' and contains(text(),'Visit Cancellation For automation')]");
     this.cancelVisitPatient = page.locator("//div[normalize-space()='Visit Cancellation']");
     this.appointmentCancelReason = page.locator("//label[contains(text(), 'Mistake in entry')]");
@@ -88,7 +88,7 @@ export class VisitBookingPage {
     this.male = page.locator("//label[contains(., 'Male')]");
     this.female = page.locator("//label[contains(.,'Female')]");
     this.eligibilitySuccessMessage = page.locator("//div[normalize-space()='Member is eligible for the selected coverage.']");
-    this.proceedRegistrationButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button');
+    this.proceedRegistrationButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button');
     this.patientList = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c29-4.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div');
     this.actionsButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-header.border-bottom > div.diary-header-content > div > div.btn-actn.cursor-pointer');
     this.manageBillButton = page.locator('body > app-root > app-crm > app-crm-forms-list').first();
@@ -234,7 +234,7 @@ export class VisitBookingPage {
   async selectPayerFacility() { await this.page.locator('#facility-menu').click(); await this.page.locator("//div[contains(@class, 'facility-region-menu')]//div[normalize-space()='El Arab Center - UAT']").click(); return this; }
   async selectPayerClinic() { await this.click(this.clinicButton); await this.click(this.page.locator("//*[@id='clinic-list']/div[2]/div[6]")); return this; }
   async selectPayerDoctor() { await this.click(this.practitionerSelection); return this; }
-  async eligibilityCheck(patientPid: string) { await this.click(this.visitTypeHO); await this.fill(this.patientSearchInput, patientPid); await this.click(this.searchButton); await this.click(this.searchResult); await this.click(this.confirmAppointmentAndCreateVisit); await this.click(this.visitTypeHO); return this; }
+  async eligibilityCheck(patientPid: string) { await this.click(this.visitTypeHO); await this.fill(this.patientSearchInput, patientPid); await this.click(this.searchButton); await this.click(this.searchResult); await this.click(this.confirmAppointmentAndCreateVisit); await this.selectVisitType2(); return this; }
   async nonEligibilityCheck(patientPid: string) { return this.eligibilityCheck(patientPid); }
   async sendRequestAndWaitForResponse() { await this.click(this.onlineEligibilityButton, 30000); await expect(this.eligibilitySuccessMessage).toBeVisible({ timeout: 300000 }); await this.click(this.proceedRegistrationButton, 300000); await this.click(this.createVisitButton, 30000); await this.click(this.doneButton, 30000); }
   async sendRequestAndWaitForResponseNoneligible() { await this.click(this.onlineEligibilityButton, 30000); }
