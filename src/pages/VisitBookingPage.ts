@@ -104,9 +104,7 @@ export class VisitBookingPage {
   }
 
   private async click(locator: Locator, timeout = 20000) {
-    await locator.waitFor({ state: 'visible', timeout });
-    await locator.scrollIntoViewIfNeeded();
-    await locator.click();
+    await locator.click({ timeout });
   }
 
   private async fill(locator: Locator, value: string, timeout = 20000) {
