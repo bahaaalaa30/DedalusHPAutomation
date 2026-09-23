@@ -11,20 +11,18 @@ test('eligible patient', async ({ page, loginPage }) => {
   await page.goto(config.payerVisitBookingUrl);
 
   const p = new VisitBookingPage(page);
-
   await p.selectPayerFacility();
   await p.selectPayerClinic();
   await p.selectPayerDoctor();
   await p.bookNextAvailableTimeSlot();
-
   const id = getRandomPatientId(
     path.resolve('src/test-data/BMS.csv')
   );
 
   PatientBMS.setPatientId(id);
-
+    await p.selectVisitType2();
   await p.EligibilityCheck(id);
-  await p.selectVisitType2();
+
   await p.sendRequestAndWaitForResponse();
 });
 
