@@ -54,8 +54,8 @@ export class VisitBookingPage {
     this.practitionerSelection = page.getByText('El Nasr Doctor', { exact: true });
     this.patientSearchInput = page.locator("input[placeholder*='Search Patient'], .appt-component input").first();
     this.searchButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > span > img');
-    this.visitTypeOHC = page.locator('#visit_OH');
-    this.visitTypeHO = page.locator('#visit_HO');
+    this.visitTypeOHC = page.getByRole('radio', { name: 'Annual Check Up' });
+    this.visitTypeHO = page.getByRole('radio', { name: 'New' });
     this.searchResult = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div.find-patient.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div:nth-child(1) > div > div.col-3.primary-text > p');
     this.confirmAppointmentAndCreateVisit = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button:nth-child(2)');
     this.continueToVisit = page.locator("//button[contains(text(),'Continue')]");
