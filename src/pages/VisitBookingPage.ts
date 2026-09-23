@@ -85,16 +85,16 @@ export class VisitBookingPage {
     this.proceedRegistrationButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-create-visit > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > div > button');
     this.patientList = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > div.find-patient.ng-tns-c29-4.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div');
     this.actionsButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-header.border-bottom > div.diary-header-content > div > div.btn-actn.cursor-pointer');
-    this.manageBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-crm-forms-list > div > div.component > div.container.content.ng-star-inserted > div:nth-child(1) > div:nth-child(2)');
-    this.searchBillPatient = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > input');
-    this.findBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > span');
-    this.searchPatientList = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div.find-patient.ng-star-inserted > app-find-patient-detail > div > div > app-flash-card > div > div > div.front > div > div > div.find-patient-content > div.patients-list.border-left > div.list-content > div:nth-child(1)');
-    this.chooseVisitForBill = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.view-unsettled-bills.ng-star-inserted > div.list-content > table > tbody > tr:nth-child(6) > td:nth-child(2)');
-    this.printBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-charges > div.visit-charges > div.charge-content > div.unsettled-bills-list.ng-star-inserted > table > tbody > tr:nth-child(2) > td:nth-child(7) > div > img:nth-child(2)');
+    this.manageBillButton = page.locator('body > app-root > app-crm > app-crm-forms-list').first();
+    this.searchBillPatient = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills input').first();
+    this.findBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills span').first();
+    this.searchPatientList = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills .patients-list .list-content > div').first();
+    this.chooseVisitForBill = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills table tbody tr:nth-child(6) td:nth-child(2)');
+    this.printBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills table tbody tr:nth-child(2) td:nth-child(7) img:nth-child(2)');
     this.printButton = page.locator('cr-button.action-button');
-    this.closeButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-header > div');
-    this.paymentBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.ex-book-appointment > div > div.book-appt-footer.border-top > div:nth-child(2) > button');
-    this.payBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-visit-charges > div.visit-charges > div.charge-content > div.unsettled-bills-list.ng-star-inserted > table > tbody > tr:nth-child(1) > td:nth-child(7) > div > img:nth-child(1)');
+    this.closeButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills .book-appt-header > div');
+    this.paymentBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills .book-appt-footer button').last();
+    this.payBillButton = page.locator('body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills table tbody tr:nth-child(1) td:nth-child(7) img:nth-child(1)');
   }
 
   private async click(locator: Locator, timeout = 20000) {
@@ -111,8 +111,19 @@ export class VisitBookingPage {
   async selectClinic() { await this.click(this.clinicButton); await this.click(this.clinicSelection); return this; }
   async selectPractitioner() { await this.click(this.practitionerSelection); return this; }
   async isNoResultsMessageDisplayed() { try { await this.noResults.waitFor({ state: 'visible', timeout: 10000 }); return true; } catch { return false; } }
-  async bookTimeSlot(timeText: string) { const slot = this.page.locator("//p[contains(text(),'" + timeText + "')]/parent::div"); await this.click(slot); return this; }
-  async bookNextAvailableTimeSlot() { const slots = this.page.locator('p').filter({ hasText: /^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/i }); await slots.first().waitFor({ state: 'visible', timeout: 20000 }); await slots.first().scrollIntoViewIfNeeded(); await slots.first().click(); return this; }
+  async bookTimeSlot(timeText: string) { const slot = this.page.getByText(timeText, { exact: true }).first(); await this.click(slot); return this; }
+  async bookNextAvailableTimeSlot() {
+    const availableSlot = this.page
+      .locator('p')
+      .filter({ hasText: /^(0?[1-9]|1[0-2])\s?(am|pm)$/i })
+      .filter({ has: this.page.locator('xpath=..').locator('[style*="cursor: pointer"], [role="button"], button') })
+      .first();
+
+    await expect(availableSlot).toBeVisible({ timeout: 20000 });
+    await availableSlot.scrollIntoViewIfNeeded();
+    await availableSlot.click();
+    return this;
+  }
   async selectVisitType() { await this.click(this.visitTypeOHC); return this; }
   async selectVisitType2() { await this.click(this.visitTypeHO); return this; }
   async createVisitWorkflow(patientName: string, fees: string) { await this.click(this.visitTypeOHC); await this.fill(this.patientSearchInput, patientName); await this.click(this.searchButton); await this.click(this.searchResult); await this.click(this.confirmAppointmentAndCreateVisit); await this.click(this.visitTypeHO); await this.click(this.continueToVisit); await this.click(this.paymentButton); await this.fill(this.cashField, fees); await this.click(this.createVisitButton); await this.click(this.doneButton); return this; }
