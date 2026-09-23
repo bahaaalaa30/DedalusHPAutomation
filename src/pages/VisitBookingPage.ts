@@ -139,8 +139,9 @@ export class VisitBookingPage {
     );
     this.male = page.locator("//label[contains(., 'Male')]");
     this.female = page.locator("//label[contains(.,'Female')]");
-    this.eligibilitySuccessMessage = page.locator(
-      "//div[normalize-space()='Member is eligible for the selected coverage.']"
+    this.eligibilitySuccessMessage = page.getByText(
+      'Member is eligible for the selected coverage.',
+      { exact: true }
     );
     this.proceedRegistrationButton = page.getByRole('button', {
       name: 'Continue',
