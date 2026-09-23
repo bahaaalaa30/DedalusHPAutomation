@@ -197,8 +197,8 @@ export class VisitBookingPage {
     return this;
   }
 
-  async selectVisitType() { await this.click(this.visitTypeOHC); return this; }
-  async selectVisitType2() { await this.click(this.visitTypeHO); return this; }
+  async selectVisitType() { await this.visitTypeOHC.check(); return this; }
+  async selectVisitType2() { await this.visitTypeHO.check(); return this; }
   async createVisitWorkflow(patientName: string, fees: string) { await this.click(this.visitTypeOHC); await this.fill(this.patientSearchInput, patientName); await this.click(this.searchButton); await this.click(this.searchResult); await this.click(this.confirmAppointmentAndCreateVisit); await this.click(this.visitTypeHO); await this.click(this.continueToVisit); await this.click(this.paymentButton); await this.fill(this.cashField, fees); await this.click(this.createVisitButton); await this.click(this.doneButton); return this; }
   async cancelAppointment() { await this.click(this.clinicButton, 10000); await this.click(this.clinicSelection, 10000); await this.click(this.practitionerSelection, 10000); await this.click(this.previewAppointment, 10000); await this.click(this.cancelAppointment, 10000); await this.click(this.appointmentCancelReason, 10000); await this.click(this.continueAppointmentCancellation, 10000); }
   async cancelBookedVisit() { await this.click(this.clinicButton, 10000); await this.click(this.clinicSelection, 10000); await this.click(this.practitionerSelection, 10000); await this.click(this.previewAppointment, 10000); await this.click(this.cancelVisitPatient, 10000); await this.click(this.wrongEntryRadio, 10000); await this.click(this.continueVisitCancellation, 10000); }
