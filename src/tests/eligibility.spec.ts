@@ -1,34 +1,4 @@
-import { test, expect, config } from '../fixtures/baseTest';
-import { VisitBookingPage } from '../pages/VisitBookingPage';
-
-test(
-  'Verify Check Eligibility with Eligible Patient',
-  async ({ page, loginPage }) => {
-    console.log('🚀 Started: Valid Credentials Login Test');
-
-    await page.goto(config.payerUrl);
-    await loginPage.login(config.cmoB6, config.cmoPassword);
-
-    console.log('⏳ Verifying redirection to Clinical Diary...');
-    await expect(page).toHaveURL(/clinicaldiary|user\/dairy/, {
-      timeout: 5000
-    });
-
-    console.log('📍 Navigating to the Visit Booking page...');
-    await page.goto(config.payerVisitBookingUrl);
-
-    const bookingPage = new VisitBookingPage(page);
-
-    await bookingPage.selectPayerFacility();
-    await bookingPage.selectPayerClinic();
-    await bookingPage.selectPayerDoctor();
-
-    // Same flow as Selenium: book the 09:00 pm appointment slot.
-    await bookingPage.bookTimeSlot('09:00 pm');
-
-    await bookingPage.EligibilityCheck('A100057372');
-    await bookingPage.sendRequestAndWaitForResponse();
-
-    console.log('✅ Appointment booked and visit created successfully!');
-  }
-);
+import path from 'node:path'; import {test,expect,config} from '../fixtures/baseTest'; import {VisitBookingPage} from '../pages/VisitBookingPage'; import {PatientBMS} from '../utils/patientBms'; import {getRandomPatientId} from '../utils/csvDataReader';
+test('eligible patient',async({page,loginPage})=>{await page.goto(config.payerUrl);await loginPage.login(config.cmoB6,config.cmoPassword);await expect(page).toHaveURL(/clinicaldiary/);await page.goto(config.payerVisitBookingUrl);const p=new VisitBookingPage(page);await p.selectPayerFacility();await p.selectPayerClinic();await p.selectPayerDoctor();await p.bookNextAvailableTimeSlot();const id=getRandomPatientId(path.resolve('src/test-data/BMS.csv'));PatientBMS.setPatientId(id);await p.EligibilityCheck(id);await p.selectVisitType2();await p.sendRequestAndWaitForResponse();});
+test('non eligible patient',async({page,loginPage})=>{await page.goto(config.payerUrl);await loginPage.login(config.cmoB6,config.cmoPassword);await page.goto(config.payerVisitBookingUrl);const p=new VisitBookingPage(page);await p.selectPayerFacility();await p.selectPayerClinic();await p.selectPayerDoctor();await p.bookNextAvailableTimeSlot();const id=getRandomPatientId(path.resolve('src/test-data/NonValidBMS.csv'));PatientBMS.setPatientId(id);await p.NonEligibilityCheck(id);await p.selectVisitType2();await p.sendRequestAndWaitForResponseNoneligible();});
+test('eligibility queue approval',async({page,loginPage})=>{await page.goto(config.payerUrl);await loginPage.login(config.cmoB6,config.cmoPassword);await page.goto(config.payerVisitBookingUrl);const p=new VisitBookingPage(page);const id=getRandomPatientId(path.resolve('src/test-data/BMS.csv'));await p.SearchBMS(id);const captured=await p.selectPatientIDByBMS();await p.ValidateEligiblePatient(captured);await p.verifyStatusIsApproved();});
