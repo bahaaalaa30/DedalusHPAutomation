@@ -239,10 +239,10 @@ export class VisitBookingPage {
   }
 
   async bookTimeSlot(timeText: string) {
-    console.log(\`⏰ Selecting time slot: \${timeText}\`);
+    console.log(`⏰ Selecting time slot: ${timeText}`);
 
     const slot = this.page.locator(
-      \`//p[contains(text(),'\${timeText}')]/parent::div\`
+      `//p[contains(text(),'${timeText}')]/parent::div`
     );
 
     await slot.waitFor({
