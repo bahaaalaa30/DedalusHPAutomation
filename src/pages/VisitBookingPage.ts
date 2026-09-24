@@ -59,7 +59,7 @@ export class VisitBookingPage {
     this.clinicSelection = page.locator(
       '#clinic-list > div.clinic-list > div:nth-child(25)'
     );
-    this.practitionerSelection = page.getByText('El Nasr Doctor', {
+    this.practitionerSelection = page.getByText('GENB6', {
       exact: true
     });
     this.patientSearchInput = page
