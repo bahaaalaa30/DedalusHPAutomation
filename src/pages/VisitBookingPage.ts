@@ -250,7 +250,12 @@ export class VisitBookingPage {
       timeout: 20000
     });
 
-    await slot.scrollIntoViewIfNeeded();
+    await slot.evaluate((element) => {
+      (element as HTMLElement).scrollIntoView({
+        block: 'center',
+        inline: 'nearest'
+      });
+    });
 
     await slot.evaluate((element) => {
       (element as HTMLElement).click();
