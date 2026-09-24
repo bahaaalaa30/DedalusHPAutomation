@@ -239,10 +239,24 @@ export class VisitBookingPage {
   }
 
   async bookTimeSlot(timeText: string) {
-    const slot = this.page.getByText(timeText, {
-      exact: true
-    }).first();
-    await this.click(slot);
+    console.log(`⏰ Selecting time slot: ${timeText}`);
+
+    const slot = this.page
+      .getByText(timeText, { exact: true })
+      .first()
+      .locator('xpath=..');
+
+    await slot.waitFor({
+      state: 'attached',
+      timeout: 20000
+    });
+
+    await slot.scrollIntoViewIfNeeded();
+
+    await slot.evaluate((element) => {
+      (element as HTMLElement).click();
+    });
+
     return this;
   }
 
