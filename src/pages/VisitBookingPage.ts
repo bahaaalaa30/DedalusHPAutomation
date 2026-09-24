@@ -83,9 +83,9 @@ export class VisitBookingPage {
     this.confirmAppointmentAndCreateVisit = page
       .locator('app-ex-book-appointment .book-appt-footer button')
       .last();
-    this.continueToVisit = page.getByText('Continue', {
-      exact: true
-    }).last();
+    this.continueToVisit = page.locator(
+      'app-ex-identify-patient .patientWarning .continue-button'
+    );
     this.paymentButton = page.locator(
       "//button[contains(text(),'Payment')]"
     );
@@ -536,7 +536,44 @@ export class VisitBookingPage {
 
     await this.click(this.searchResult);
 
-    await this.click(this.continueToVisit);
+    await this.confirmAppointmentAndCreateVisit.waitFor({
+      state: 'visible',
+      timeout: 20000
+    });
+
+    await expect(
+      this.confirmAppointmentAndCreateVisit
+    ).toBeEnabled();
+
+    await this.confirmAppointmentAndCreateVisit.click();
+
+    return this;
+  }
+
+  async nonEligibilityCheck(patientPid: string) {
+    await this.click(this.visitTypeHO);
+
+    await this.fill(
+      this.patientSearchInput,
+      patientPid
+    );
+
+    await this.click(this.searchButton);
+
+    await this.searchResult.waitFor({
+      state: 'visible',
+      timeout: 20000
+    });
+
+    await this.click(this.searchResult);
+
+    await this.continueToVisit.waitFor({
+      state: 'visible',
+      timeout: 20000
+    });
+
+    await expect(this.continueToVisit).toBeEnabled();
+    await this.continueToVisit.click();
 
     await this.confirmAppointmentAndCreateVisit.waitFor({
       state: 'visible',
@@ -549,13 +586,7 @@ export class VisitBookingPage {
 
     await this.confirmAppointmentAndCreateVisit.click();
 
-    await this.selectVisitType2();
-
     return this;
-  }
-
-  async nonEligibilityCheck(patientPid: string) {
-    return this.eligibilityCheck(patientPid);
   }
 
   async sendRequestAndWaitForResponse() {
