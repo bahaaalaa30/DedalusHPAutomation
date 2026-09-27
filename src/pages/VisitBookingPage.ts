@@ -171,9 +171,9 @@ export class VisitBookingPage {
     this.actionsButton = page.locator(
       'body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-header.border-bottom > div.diary-header-content > div > div.btn-actn.cursor-pointer'
     );
-    this.manageBillButton = page
-      .locator('body > app-root > app-crm > app-crm-forms-list')
-      .first();
+    this.manageBillButton = page.getByText('Manage Bills', {
+      exact: true
+    });
     this.searchBillPatient = page
       .locator(
         'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-manage-bills input'
