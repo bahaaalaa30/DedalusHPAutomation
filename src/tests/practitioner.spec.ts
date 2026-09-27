@@ -42,7 +42,7 @@ test('create lab order', async ({ page, loginPage }) => {
   );
 
   const p = new PractitionerPage(page);
-
+await p.selectClinic()
   await p.selectPatient();
   await p.startConsultation();
   await p.createOrder();

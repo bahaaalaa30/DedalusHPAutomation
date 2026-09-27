@@ -54,6 +54,7 @@ export class VisitBookingPage {
   private readonly closeButton: Locator;
   private readonly paymentBillButton: Locator;
   private readonly payBillButton: Locator;
+  private readonly PayerpractitionerSelection: Locator;
 
   constructor(private readonly page: Page) {
     this.clinicButton = page.locator('#clinic-btn');
@@ -61,6 +62,9 @@ export class VisitBookingPage {
       '#clinic-list > div.clinic-list > div:nth-child(25)'
     );
     this.practitionerSelection = page.getByText('GENB6', {
+      exact: true
+    });
+    this.PayerpractitionerSelection = page.getByText(' El Nasr Doctor ', {
       exact: true
     });
     this.patientSearchInput = page
@@ -612,7 +616,7 @@ export class VisitBookingPage {
   }
 
   async selectPayerDoctor() {
-    await this.click(this.practitionerSelection);
+    await this.click(this.PayerpractitionerSelection);
     return this;
   }
 
