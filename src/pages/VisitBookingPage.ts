@@ -420,15 +420,40 @@ export class VisitBookingPage {
   }
 
   async cancelAppointment() {
+    console.log('🏥 Step 1: Opening Clinic list...');
     await this.click(this.clinicButton, 10000);
-    await this.click(this.clinicSelection, 10000);
-    await this.click(this.practitionerSelection, 10000);
-    await this.click(this.previewAppointment, 10000);
-    await this.click(this.cancelAppointment, 10000);
-    await this.click(this.appointmentCancelReason, 10000);
-    await this.click(this.continueAppointmentCancellation, 10000);
-  }
 
+    console.log('🏥 Step 2: Selecting the specific Clinic...');
+    await this.click(this.clinicSelection, 10000);
+
+    console.log('👨‍⚕️ Step 3: Selecting Practitioner (GENB6)...');
+    await this.click(this.practitionerSelection, 10000);
+
+    console.log('🔍 Step 4: Clicking on the appointment slot to preview...');
+    await this.previewAppointment.waitFor({
+      state: 'attached',
+      timeout: 10000
+    });
+    await this.previewAppointment.evaluate((element) => {
+      (element as HTMLElement).scrollIntoView({
+        block: 'center',
+        inline: 'nearest'
+      });
+      (element as HTMLElement).click();
+    });
+
+    console.log("🚫 Step 5: Clicking on 'Cancel' option...");
+    await this.click(this.cancelAppointment, 10000);
+
+    console.log("📝 Step 6: Selecting reason: 'Mistake in entry'...");
+    await this.click(this.appointmentCancelReason, 10000);
+
+    console.log("📤 Step 7: Clicking 'Continue' to finalize cancellation...");
+    await this.click(this.continueAppointmentCancellation, 10000);
+
+    console.log('✅ Success: Appointment has been canceled and cleaned up.');
+    return this;
+  }
   async cancelBookedVisit() {
     await this.click(this.clinicButton, 10000);
     await this.click(this.clinicSelection, 10000);
