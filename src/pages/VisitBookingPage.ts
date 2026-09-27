@@ -792,15 +792,16 @@ export class VisitBookingPage {
         );
       }
 
+      // Use a non-flat CDP target session because Target.sendMessageToTarget
+      // is incompatible with flat protocol sessions.
       const attached = await cdpSession.send('Target.attachToTarget', {
         targetId: printTarget.targetId,
-        flatten: true
+        flatten: false
       });
 
-      const sessionId = attached.sessionId;
-
       await cdpSession.send('Target.sendMessageToTarget', {
-        sessionId,
+        targetId: printTarget.targetId,
+        sessionId: attached.sessionId,
         message: JSON.stringify({
           id: 1,
           method: 'Runtime.evaluate',
