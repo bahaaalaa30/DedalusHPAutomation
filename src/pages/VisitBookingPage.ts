@@ -455,15 +455,60 @@ export class VisitBookingPage {
     return this;
   }
   async cancelBookedVisit() {
+    console.log('🏥 Step 1: Opening Clinic list...');
     await this.click(this.clinicButton, 10000);
-    await this.click(this.clinicSelection, 10000);
-    await this.click(this.practitionerSelection, 10000);
-    await this.click(this.previewAppointment, 10000);
-    await this.click(this.cancelVisitPatient, 10000);
-    await this.click(this.wrongEntryRadio, 10000);
-    await this.click(this.continueVisitCancellation, 10000);
-  }
 
+    console.log('🏥 Step 2: Selecting the specific Clinic...');
+    await this.click(this.clinicSelection, 10000);
+
+    console.log('👨‍⚕️ Step 3: Selecting Practitioner (GENB6)...');
+    await this.click(this.practitionerSelection, 10000);
+
+    console.log('🔍 Step 4: Clicking on the appointment slot to preview...');
+    await this.previewAppointment.waitFor({
+      state: 'attached',
+      timeout: 10000
+    });
+    await this.previewAppointment.evaluate((element) => {
+      (element as HTMLElement).scrollIntoView({
+        block: 'center',
+        inline: 'nearest'
+      });
+      (element as HTMLElement).click();
+    });
+
+    console.log("🚫 Step 5: Clicking on 'Cancel Visit' option...");
+    await this.cancelVisitPatient.waitFor({
+      state: 'attached',
+      timeout: 10000
+    });
+    await this.cancelVisitPatient.evaluate((element) => {
+      (element as HTMLElement).scrollIntoView({
+        block: 'center',
+        inline: 'nearest'
+      });
+      (element as HTMLElement).click();
+    });
+
+    console.log("📝 Step 6: Selecting reason: 'Wrong Entry'...");
+    await this.wrongEntryRadio.waitFor({
+      state: 'attached',
+      timeout: 10000
+    });
+    await this.wrongEntryRadio.evaluate((element) => {
+      (element as HTMLElement).scrollIntoView({
+        block: 'center',
+        inline: 'nearest'
+      });
+      (element as HTMLElement).click();
+    });
+
+    console.log("📤 Step 7: Clicking 'Continue' to finalize cancellation...");
+    await this.click(this.continueVisitCancellation, 10000);
+
+    console.log('✅ Success: Visit has been canceled and cleaned up.');
+    return this;
+  }
   async switchToArabicLanguage() {
     await this.click(this.languageMenu, 10000);
     await this.click(this.arabicLanguage, 10000);
