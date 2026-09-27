@@ -799,28 +799,32 @@ export class VisitBookingPage {
 
       const sessionId = attached.sessionId;
 
-      await cdpSession.send(
-        'Runtime.evaluate',
-        {
-          expression: `
-            (() => {
-              const app = document.querySelector('print-preview-app');
-              const sidebar = app?.shadowRoot?.querySelector('print-preview-sidebar');
-              const buttonStrip = sidebar?.shadowRoot?.querySelector('print-preview-button-strip');
-              const printButton = buttonStrip?.shadowRoot?.querySelector('cr-button.action-button');
+      await cdpSession.send('Target.sendMessageToTarget', {
+        sessionId,
+        message: JSON.stringify({
+          id: 1,
+          method: 'Runtime.evaluate',
+          params: {
+            expression: `
+              (() => {
+                const app = document.querySelector('print-preview-app');
+                const sidebar = app?.shadowRoot?.querySelector('print-preview-sidebar');
+                const buttonStrip = sidebar?.shadowRoot?.querySelector('print-preview-button-strip');
+                const printButton = buttonStrip?.shadowRoot?.querySelector('cr-button.action-button');
 
-              if (!printButton) {
-                throw new Error('Chrome print preview Print button was not found.');
-              }
+                if (!printButton) {
+                  throw new Error('Chrome print preview Print button was not found.');
+                }
 
-              printButton.click();
-              return true;
-            })()
-          `,
-          returnByValue: true,
-          awaitPromise: true
-        }
-      , sessionId);
+                printButton.click();
+                return true;
+              })()
+            `,
+            returnByValue: true,
+            awaitPromise: true
+          }
+        })
+      });
 
       console.log('✅ Chrome Print Preview Print button clicked.');
     } finally {
