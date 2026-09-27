@@ -28,7 +28,7 @@ export class PractitionerPage {
       'body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-container > div.quick-filters > app-crm-quick-filters > div > div > div.quick-filter-list.ng-star-inserted > div:nth-child(2) > div.filter-name.has-count.no-icon'
     );
     this.patient = page.locator(
-      'div.col-patient div.patient-name p.secondary-text'
+      'div.col-patient div.patient-name > p.no-margin'
     );
     this.newDocument = page.locator('div.new-actions.pointer');
     this.startConsultationButton = page.locator(
