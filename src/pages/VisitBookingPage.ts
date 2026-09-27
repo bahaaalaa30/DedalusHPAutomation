@@ -124,9 +124,9 @@ export class VisitBookingPage {
       "//button[contains(@class, 'primary-button') and normalize-space()='Continue']"
     );
     this.languageMenu = page.locator('#language-menu');
-    this.arabicLanguage = page
-      .locator('div.facility-menu-item')
-      .filter({ hasText: 'عربى' });
+    this.arabicLanguage = page.locator(
+      'div.col-12.facility-menu-item'
+    ).filter({ hasText: 'عربى' });
     this.onlineEligibilityButton = page.getByRole('button', {
       name: 'Online eligibility',
       exact: true
