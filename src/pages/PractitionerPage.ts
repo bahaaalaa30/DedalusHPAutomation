@@ -13,7 +13,7 @@ export class PractitionerPage {
 
   constructor(private readonly page: Page) {
     this.patientsCount = page.locator(
-      '/html/body/app-root/app-crm/div/div/app-crm-leads/div[2]/div/div[1]/app-crm-quick-filters/div/div/div[2]/div[2]/div[3]/div'
+      'xpath=/html/body/app-root/app-crm/div/div/app-crm-leads/div[2]/div/div[1]/app-crm-quick-filters/div/div/div[2]/div[2]/div[3]/div'
     );
     this.facilityMenu = page.locator('#facility-menu');
     this.clinicianRole = page.locator('#role_clinic');
