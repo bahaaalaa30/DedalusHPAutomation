@@ -8,6 +8,10 @@ export class PractitionerPage {
   private readonly patient: Locator;
   private readonly newDocument: Locator;
   private readonly startConsultationButton: Locator;
+private readonly SelectClinicianRole: Locator;
+
+
+  this.SelectClinicianRole = page.locator('#role_clinic');
 
   constructor(private readonly page: Page) {
     this.patientsCount = page.locator(
@@ -27,6 +31,20 @@ export class PractitionerPage {
     this.startConsultationButton = page.locator(
       'div.start-consult-dialog button.primary-button'
     );
+  }
+  this.continueRoleButton = page.getByRole('button', {
+    name: 'Continue',
+    exact: true
+  });
+
+  async continueRole() {
+    await expect(this.continueRoleButton).toBeEnabled();
+    await this.continueRoleButton.click();
+  }
+  async selectRole() {
+    await this.SelectClinicianRole.waitFor({ state: 'visible', timeout: 15000 });
+    await this.SelectClinicianRole.click();
+    return this;
   }
 
   async selectClinic() {
