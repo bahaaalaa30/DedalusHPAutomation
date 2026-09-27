@@ -515,7 +515,6 @@ export class VisitBookingPage {
   }
 
   async searchPatientID(id: string) {
-    await this.fill(this.globalSearch, id);
     await this.fill(this.patientIdInput, id);
     await this.click(this.findButton);
     await this.patientList.waitFor({
@@ -525,7 +524,6 @@ export class VisitBookingPage {
   }
 
   async searchPatientName(name: string) {
-    await this.fill(this.globalSearch, name);
     await this.fill(this.firstName, name);
     await this.click(this.findButton);
     await this.patientList.waitFor({
@@ -535,7 +533,6 @@ export class VisitBookingPage {
   }
 
   async searchNationalID(id: string) {
-    await this.fill(this.globalSearch, id);
     await this.fill(this.nationalId, id);
     await this.click(this.findButton);
     await this.patientList.waitFor({
@@ -545,7 +542,6 @@ export class VisitBookingPage {
   }
 
   async searchPatientGenderMale(name: string) {
-    await this.fill(this.globalSearch, name);
     await this.fill(this.firstName, name);
     await this.click(this.male);
     await this.click(this.findButton);
@@ -556,7 +552,6 @@ export class VisitBookingPage {
   }
 
   async searchPatientGenderFemale(name: string) {
-    await this.fill(this.globalSearch, name);
     await this.fill(this.firstName, name);
     await this.click(this.female);
     await this.click(this.findButton);
@@ -567,7 +562,6 @@ export class VisitBookingPage {
   }
 
   async searchBMS(id: string) {
-    await this.fill(this.globalSearch, id);
     await this.click(this.findButton);
     await this.patientList.waitFor({
       state: 'visible',
