@@ -39,12 +39,14 @@ private readonly SelectClinicianRole: Locator;
 
 
   async continueRole() {
-    await expect(this.continueRoleButton).toBeEnabled();
+    await expect(this.continueRoleButton).toBeEnabled({
+      timeout: 10000
+    });
     await this.continueRoleButton.click();
   }
   async selectRole() {
     await this.SelectClinicianRole.waitFor({ state: 'visible', timeout: 15000 });
-    await this.SelectClinicianRole.click();
+    await this.SelectClinicianRole.check();
     return this;
   }
 
