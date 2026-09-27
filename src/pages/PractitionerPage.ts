@@ -8,16 +8,15 @@ export class PractitionerPage {
   private readonly patient: Locator;
   private readonly newDocument: Locator;
   private readonly startConsultationButton: Locator;
-private readonly SelectClinicianRole: Locator;
-
-
+  private readonly clinicianRole: Locator;
+  private readonly continueRoleButton: Locator;
 
   constructor(private readonly page: Page) {
     this.patientsCount = page.locator(
       'app-crm-leads div:nth-child(2) > div > div:nth-child(1) app-crm-quick-filters div > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div'
     );
     this.facilityMenu = page.locator('#facility-menu');
-    this.SelectClinicianRole = page.locator('#role_clinic');
+    this.clinicianRole = page.locator('#role_clinic');
     this.continueRoleButton = page.getByRole('button', {
       name: 'Continue',
       exact: true
@@ -37,16 +36,21 @@ private readonly SelectClinicianRole: Locator;
     );
   }
 
-
   async continueRole() {
     await expect(this.continueRoleButton).toBeEnabled({
       timeout: 10000
     });
     await this.continueRoleButton.click();
+    return this;
   }
+
   async selectRole() {
-    await this.SelectClinicianRole.waitFor({ state: 'visible', timeout: 15000 });
-    await this.SelectClinicianRole.check();
+    await this.clinicianRole.waitFor({
+      state: 'visible',
+      timeout: 15000
+    });
+    await this.clinicianRole.check();
+    await expect(this.clinicianRole).toBeChecked();
     return this;
   }
 
@@ -59,7 +63,10 @@ private readonly SelectClinicianRole: Locator;
   }
 
   async selectPractitioner() {
-    await this.practitionerSelection.waitFor({ state: 'visible', timeout: 15000 });
+    await this.practitionerSelection.waitFor({
+      state: 'visible',
+      timeout: 15000
+    });
     await this.practitionerSelection.scrollIntoViewIfNeeded();
     await this.practitionerSelection.click();
     return this;
@@ -72,7 +79,10 @@ private readonly SelectClinicianRole: Locator;
   }
 
   async startConsultation() {
-    await this.startConsultationButton.waitFor({ state: 'visible', timeout: 15000 });
+    await this.startConsultationButton.waitFor({
+      state: 'visible',
+      timeout: 15000
+    });
     await this.startConsultationButton.click();
     return this;
   }
