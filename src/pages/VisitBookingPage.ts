@@ -125,8 +125,8 @@ export class VisitBookingPage {
     );
     this.languageMenu = page.locator('#language-menu');
     this.arabicLanguage = page
-      .locator('#language-menu')
-      .getByText('عربى', { exact: true });
+      .locator('div.facility-menu-item')
+      .filter({ hasText: 'عربى' });
     this.onlineEligibilityButton = page.getByRole('button', {
       name: 'Online eligibility',
       exact: true
