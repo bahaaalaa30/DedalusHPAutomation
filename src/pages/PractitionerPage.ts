@@ -27,9 +27,9 @@ export class PractitionerPage {
     this.practitionerSelection = page.locator(
       'body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-container > div.quick-filters > app-crm-quick-filters > div > div > div.quick-filter-list.ng-star-inserted > div:nth-child(2) > div.filter-name.has-count.no-icon'
     );
-    this.patient = page.locator(
-      'div.col-patient div.patient-name > p.no-margin'
-    );
+    this.patient = page
+      .locator('div.col-patient div.patient-name > p.no-margin')
+      .first();
     this.newDocument = page.locator('div.new-actions.pointer');
     this.startConsultationButton = page.locator(
       'div.start-consult-dialog button.primary-button'
@@ -74,6 +74,7 @@ export class PractitionerPage {
 
   async selectPatient() {
     await this.patient.waitFor({ state: 'visible', timeout: 15000 });
+    await this.patient.scrollIntoViewIfNeeded();
     await this.patient.click();
     return this;
   }
