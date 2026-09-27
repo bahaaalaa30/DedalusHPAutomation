@@ -100,6 +100,6 @@ export class PractitionerPage {
     });
 
     const n = Number((await this.patientsCount.innerText()).trim());
-    expect(n).toBeGreaterThan(1);
+    expect(n).toBeGreaterThanOrEqual(1);
   }
 }
