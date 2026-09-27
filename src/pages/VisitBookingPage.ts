@@ -22,7 +22,7 @@ export class VisitBookingPage {
   private readonly previewAppointment: Locator;
   private readonly cancelVisitPatient: Locator;
   private readonly appointmentCancelReason: Locator;
-  private readonly cancelAppointment: Locator;
+  private readonly cancelAppointmentButton: Locator;
   private readonly wrongEntryRadio: Locator;
   private readonly continueAppointmentCancellation: Locator;
   private readonly continueVisitCancellation: Locator;
@@ -111,7 +111,7 @@ export class VisitBookingPage {
     this.appointmentCancelReason = page.locator(
       "//label[contains(text(), 'Mistake in entry')]"
     );
-    this.cancelAppointment = page.locator(
+    this.cancelAppointmentButton = page.locator(
       "//div[normalize-space()='Cancel Appointment']"
     );
     this.wrongEntryRadio = page.locator(
@@ -443,7 +443,7 @@ export class VisitBookingPage {
     });
 
     console.log("🚫 Step 5: Clicking on 'Cancel' option...");
-    await this.click(this.cancelAppointment, 10000);
+    await this.click(this.cancelAppointmentButton, 10000);
 
     console.log("📝 Step 6: Selecting reason: 'Mistake in entry'...");
     await this.click(this.appointmentCancelReason, 10000);
