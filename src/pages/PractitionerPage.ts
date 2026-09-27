@@ -13,7 +13,7 @@ export class PractitionerPage {
 
   constructor(private readonly page: Page) {
     this.patientsCount = page.locator(
-      'app-crm-leads div:nth-child(2) > div > div:nth-child(1) app-crm-quick-filters div > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div'
+      '/html/body/app-root/app-crm/div/div/app-crm-leads/div[2]/div/div[1]/app-crm-quick-filters/div/div/div[2]/div[2]/div[3]/div'
     );
     this.facilityMenu = page.locator('#facility-menu');
     this.clinicianRole = page.locator('#role_clinic');
@@ -94,7 +94,11 @@ export class PractitionerPage {
   }
 
   async verifyLeadsCountIsGreaterThanOne() {
-    await this.patientsCount.waitFor({ state: 'visible', timeout: 15000 });
+    await this.patientsCount.waitFor({
+      state: 'visible',
+      timeout: 15000
+    });
+
     const n = Number((await this.patientsCount.innerText()).trim());
     expect(n).toBeGreaterThan(1);
   }
