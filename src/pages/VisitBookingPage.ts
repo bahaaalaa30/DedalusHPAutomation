@@ -747,22 +747,21 @@ export class VisitBookingPage {
     console.log('Navigating to the bill details page...');
 
     // Match Selenium: click Print, wait for Chrome print preview, then
-    // click the final Print button inside the nested Shadow DOM.
+    // switch to the print-preview page and click the final Print button
+    // inside the nested Shadow DOM.
+    const popupPromise = this.page
+      .waitForEvent('popup', { timeout: 10000 })
+      .catch(() => null);
+
     await this.click(this.printBillButton, 10000);
     await this.page.waitForTimeout(5000);
 
-    const pagesBeforePrint = this.page.context().pages();
-    let printPreviewPage = pagesBeforePrint[pagesBeforePrint.length - 1];
-
-    if (printPreviewPage === this.page) {
-      try {
-        printPreviewPage = await this.page.waitForEvent('popup', {
-          timeout: 5000
-        });
-      } catch {
-        // Chrome may expose print preview as the current/new context page.
-      }
-    }
+    const popupPage = await popupPromise;
+    const contextPages = this.page.context().pages();
+    const printPreviewPage =
+      popupPage ??
+      contextPages[contextPages.length - 1] ??
+      this.page;
 
     await printPreviewPage.waitForTimeout(1000);
 
@@ -774,11 +773,6 @@ export class VisitBookingPage {
 
     await printButton.waitFor({ state: 'visible', timeout: 15000 });
     await printButton.click({ timeout: 15000 });
-
-    // Keep the same final state as Selenium after clicking Print.
-    if (this.closeButton.page() === this.page) {
-      await this.click(this.closeButton, 10000);
-    }
   }
 
   async payBill(patientName: string) {
