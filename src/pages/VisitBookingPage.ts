@@ -746,33 +746,86 @@ export class VisitBookingPage {
     );
     console.log('Navigating to the bill details page...');
 
-    // Match Selenium: click Print, wait for Chrome print preview, then
-    // switch to the print-preview page and click the final Print button
-    // inside the nested Shadow DOM.
-    const popupPromise = this.page
-      .waitForEvent('popup', { timeout: 10000 })
-      .catch(() => null);
+    // Chrome print preview is a browser-internal page. Playwright's Page
+    // events do not reliably expose it as a normal popup, so attach to the
+    // Chromium browser context through CDP and wait for the print-preview
+    // target before clicking its nested Shadow DOM button.
+    const browser = this.page.context().browser();
 
-    await this.click(this.printBillButton, 10000);
-    await this.page.waitForTimeout(5000);
+    if (!browser) {
+      throw new Error(
+        'Chrome print preview automation requires a Chromium browser context.'
+      );
+    }
 
-    const popupPage = await popupPromise;
-    const contextPages = this.page.context().pages();
-    const printPreviewPage =
-      popupPage ??
-      contextPages[contextPages.length - 1] ??
-      this.page;
+    const cdpSession = await this.page.context().newCDPSession(this.page);
 
-    await printPreviewPage.waitForTimeout(1000);
+    try {
+      const targets = await cdpSession.send('Target.getTargets');
+      const existingPrintPreview = targets.targetInfos.find(
+        (target) =>
+          target.type === 'page' &&
+          target.url.startsWith('chrome://print/')
+      );
 
-    const printButton = printPreviewPage
-      .locator('print-preview-app')
-      .locator('print-preview-sidebar')
-      .locator('print-preview-button-strip')
-      .locator('cr-button.action-button');
+      await this.click(this.printBillButton, 10000);
 
-    await printButton.waitFor({ state: 'visible', timeout: 15000 });
-    await printButton.click({ timeout: 15000 });
+      const deadline = Date.now() + 15000;
+      let printTarget;
+
+      while (Date.now() < deadline) {
+        const currentTargets = await cdpSession.send('Target.getTargets');
+        printTarget = currentTargets.targetInfos.find(
+          (target) =>
+            target.type === 'page' &&
+            target.url.startsWith('chrome://print/') &&
+            target.targetId !== existingPrintPreview?.targetId
+        );
+
+        if (printTarget) break;
+        await new Promise((resolve) => setTimeout(resolve, 250));
+      }
+
+      if (!printTarget) {
+        throw new Error(
+          'Chrome print preview target was not detected within 15 seconds.'
+        );
+      }
+
+      const attached = await cdpSession.send('Target.attachToTarget', {
+        targetId: printTarget.targetId,
+        flatten: true
+      });
+
+      const sessionId = attached.sessionId;
+
+      await cdpSession.send(
+        'Runtime.evaluate',
+        {
+          expression: `
+            (() => {
+              const app = document.querySelector('print-preview-app');
+              const sidebar = app?.shadowRoot?.querySelector('print-preview-sidebar');
+              const buttonStrip = sidebar?.shadowRoot?.querySelector('print-preview-button-strip');
+              const printButton = buttonStrip?.shadowRoot?.querySelector('cr-button.action-button');
+
+              if (!printButton) {
+                throw new Error('Chrome print preview Print button was not found.');
+              }
+
+              printButton.click();
+              return true;
+            })()
+          `,
+          returnByValue: true,
+          awaitPromise: true
+        }
+      , sessionId);
+
+      console.log('✅ Chrome Print Preview Print button clicked.');
+    } finally {
+      await cdpSession.detach().catch(() => undefined);
+    }
   }
 
   async payBill(patientName: string) {
