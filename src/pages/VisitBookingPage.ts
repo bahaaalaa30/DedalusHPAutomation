@@ -14,6 +14,7 @@ export class VisitBookingPage {
   private readonly searchResult: Locator;
   private readonly confirmAppointmentAndCreateVisit: Locator;
   private readonly continueToVisit: Locator;
+  private readonly continueAndCreatVisit: Locator;
   private readonly paymentButton: Locator;
   private readonly cashField: Locator;
   private readonly createVisitButton: Locator;
@@ -69,11 +70,13 @@ export class VisitBookingPage {
       'body > app-root > app-crm > div > div > app-clinical-diary > app-ex-book-appointment > div.ex-book-appointment-container > div.ex-book-appointment > div > div.book-appt-container > div.appt-container.border-left > div.appt-component > div > app-ex-identify-patient > div > div.content > div > div > span > img'
     );
     this.visitTypeOHC = page.getByRole('radio', {
-      name: 'Annual Check Up'
+      name: 'New Visit'
     });
-    this.visitTypeHO = page.getByRole('radio', {
-      name: 'New'
+    this.continueAndCreatVisit = page.getByRole('button', {
+      name: 'Continue',
+      exact: true
     });
+    this.visitTypeHO = page.locator('#visit_N');
     this.payerVisitType2 = page.locator('#visit_N');
     this.studentVisitType = page.locator('#visit_SC');
     this.annualCheckVisitType = page.locator('#visit_GC');
@@ -408,7 +411,7 @@ export class VisitBookingPage {
     await this.click(this.searchResult);
     await this.click(this.confirmAppointmentAndCreateVisit);
     await this.click(this.visitTypeHO);
-    await this.click(this.continueToVisit);
+    await this.click(this.continueAndCreatVisit);
     await this.click(this.paymentButton);
     await this.fill(this.cashField, fees);
     await this.click(this.createVisitButton);
