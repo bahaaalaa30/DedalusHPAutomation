@@ -11,13 +11,17 @@ export class PractitionerPage {
 private readonly SelectClinicianRole: Locator;
 
 
-  this.SelectClinicianRole = page.locator('#role_clinic');
 
   constructor(private readonly page: Page) {
     this.patientsCount = page.locator(
       'app-crm-leads div:nth-child(2) > div > div:nth-child(1) app-crm-quick-filters div > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div'
     );
     this.facilityMenu = page.locator('#facility-menu');
+    this.SelectClinicianRole = page.locator('#role_clinic');
+    this.continueRoleButton = page.getByRole('button', {
+      name: 'Continue',
+      exact: true
+    });
     this.facilityOption = page.locator(
       '#facility-menu-actions > div > div > div > div > div:nth-child(3)'
     );
@@ -32,10 +36,7 @@ private readonly SelectClinicianRole: Locator;
       'div.start-consult-dialog button.primary-button'
     );
   }
-  this.continueRoleButton = page.getByRole('button', {
-    name: 'Continue',
-    exact: true
-  });
+
 
   async continueRole() {
     await expect(this.continueRoleButton).toBeEnabled();
