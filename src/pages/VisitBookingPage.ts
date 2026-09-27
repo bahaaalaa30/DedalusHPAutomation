@@ -727,22 +727,82 @@ export class VisitBookingPage {
   async billPage(patientName: string) {
     await this.click(this.actionsButton, 10000);
     await this.click(this.manageBillButton, 10000);
-    await this.fill(this.searchBillPatient, patientName, 10000);
+
+    const searchpatientField = this.searchBillPatient;
+    await searchpatientField.waitFor({ state: 'visible', timeout: 10000 });
+    await searchpatientField.fill(patientName);
+    await searchpatientField.click();
+
     await this.click(this.findBillButton, 10000);
+
+    // Selenium waits 5 seconds for the patient list to load.
+    await this.page.waitForTimeout(5000);
+
     await this.click(this.searchPatientList, 10000);
     await this.click(this.chooseVisitForBill, 10000);
+
+    console.log(
+      `✅ Successfully navigated to the bill details for patient: ${patientName}`
+    );
+    console.log('Navigating to the bill details page...');
+
+    // Match Selenium: click Print, wait for Chrome print preview, then
+    // click the final Print button inside the nested Shadow DOM.
     await this.click(this.printBillButton, 10000);
-    await this.click(this.printButton, 10000);
-    await this.click(this.closeButton, 10000);
+    await this.page.waitForTimeout(5000);
+
+    const pagesBeforePrint = this.page.context().pages();
+    let printPreviewPage = pagesBeforePrint[pagesBeforePrint.length - 1];
+
+    if (printPreviewPage === this.page) {
+      try {
+        printPreviewPage = await this.page.waitForEvent('popup', {
+          timeout: 5000
+        });
+      } catch {
+        // Chrome may expose print preview as the current/new context page.
+      }
+    }
+
+    await printPreviewPage.waitForTimeout(1000);
+
+    const printButton = printPreviewPage
+      .locator('print-preview-app')
+      .locator('print-preview-sidebar')
+      .locator('print-preview-button-strip')
+      .locator('cr-button.action-button');
+
+    await printButton.waitFor({ state: 'visible', timeout: 15000 });
+    await printButton.click({ timeout: 15000 });
+
+    // Keep the same final state as Selenium after clicking Print.
+    if (this.closeButton.page() === this.page) {
+      await this.click(this.closeButton, 10000);
+    }
   }
 
   async payBill(patientName: string) {
     await this.click(this.actionsButton, 10000);
     await this.click(this.manageBillButton, 10000);
-    await this.fill(this.searchBillPatient, patientName, 10000);
+
+    const searchpatientField = this.searchBillPatient;
+    await searchpatientField.waitFor({ state: 'visible', timeout: 10000 });
+    await searchpatientField.fill(patientName);
+    await searchpatientField.click();
+
     await this.click(this.findBillButton, 10000);
+
+    // Selenium waits 5 seconds for the patient list to load.
+    await this.page.waitForTimeout(5000);
+
     await this.click(this.searchPatientList, 10000);
     await this.click(this.chooseVisitForBill, 10000);
+
+    console.log(
+      `✅ Successfully navigated to the bill details for patient: ${patientName}`
+    );
+    console.log('Navigating to the bill details page...');
+
     await this.click(this.payBillButton, 10000);
     await this.click(this.paymentBillButton, 10000);
     await this.click(this.closeButton, 10000);
