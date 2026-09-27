@@ -418,7 +418,15 @@ export class VisitBookingPage {
     await this.click(this.continueAndCreatVisit);
     await this.click(this.paymentButton);
     await this.fill(this.cashField, fees);
-    await this.click(this.createVisitButton);
+    await expect(this.cashField).toHaveValue(fees);
+    await this.cashField.press('Tab');
+    await expect(this.cashField).toHaveValue(fees);
+    await this.createVisitButton.waitFor({
+      state: 'visible',
+      timeout: 20000
+    });
+    await expect(this.createVisitButton).toBeEnabled();
+    await this.createVisitButton.click();
     await this.click(this.doneButton);
     return this;
   }
