@@ -2,10 +2,14 @@ import { test, expect, config } from '../../../fixtures/baseTest';
 import { PractitionerPage } from '../../../pages/PractitionerPage';
 
 test('general practitioner login', async ({ page, loginPage }) => {
-  await page.goto(config.url);
+  await page.goto(config.url, { waitUntil: 'commit' });
+  await page.waitForURL(/login/, { timeout: 30000 });
+  await expect(page.locator('#user-id')).toBeVisible({ timeout: 30000 });
+
   await loginPage.login(config.genUser, config.genPass);
+
   const p = new PractitionerPage(page);
   await p.selectRole();
   await p.continueRole();
-  await expect(page).toHaveURL(/user/);
+  await expect(page).toHaveURL(/user/, { timeout: 5000 });
 });
