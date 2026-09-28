@@ -2,7 +2,7 @@ import { test, expect, config } from '../../../fixtures/baseTest';
 
 test.describe('CMO normal cases', () => {
   test.beforeEach(async ({ page, loginPage }) => {
-    await page.goto(config.url);
+    await page.goto(config.url, { waitUntil: 'commit' });
     await loginPage.login(config.username, config.password);
     await expect(page).toHaveURL(/clinicaldiary/, { timeout: 5000 });
   });
