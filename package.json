@@ -8,6 +8,9 @@
     "typecheck": "tsc --noEmit",
     "report": "allure generate allure-results --clean -o allure-report"
   },
+  "dependencies": {
+    "dotenv": "^17.2.2"
+  },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
     "allure-playwright": "^3.4.1",
