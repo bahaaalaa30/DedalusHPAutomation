@@ -5,10 +5,13 @@ import { PatientBMS } from '../../../utils/patientBms';
 import { getRandomPatientId } from '../../../utils/csvDataReader';
 
 test('eligible patient', async ({ page, loginPage }) => {
-  await page.goto(config.payerUrl);
+  await page.goto(config.payerUrl, { waitUntil: 'commit' });
+  await page.waitForURL(/login/, { timeout: 30000 });
+  await expect(page.locator('#user-id')).toBeVisible({ timeout: 30000 });
   await loginPage.login(config.cmoB6, config.cmoPassword);
-  await expect(page).toHaveURL(/clinicaldiary/);
-  await page.goto(config.payerVisitBookingUrl);
+  await expect(page).toHaveURL(/clinicaldiary/, { timeout: 5000 });
+  await page.goto(config.payerVisitBookingUrl, { waitUntil: 'commit' });
+  await expect(page.locator('#clinic-btn')).toBeVisible({ timeout: 30000 });
   const p = new VisitBookingPage(page);
   await p.selectPayerFacility();
   await p.selectPayerClinic();
@@ -24,7 +27,8 @@ test('eligible patient', async ({ page, loginPage }) => {
 test('non eligible patient', async ({ page, loginPage }) => {
   await page.goto(config.payerUrl);
   await loginPage.login(config.cmoB6, config.cmoPassword);
-  await page.goto(config.payerVisitBookingUrl);
+  await page.goto(config.payerVisitBookingUrl, { waitUntil: 'commit' });
+  await expect(page.locator('#clinic-btn')).toBeVisible({ timeout: 30000 });
   const p = new VisitBookingPage(page);
   await p.selectPayerFacility();
   await p.selectPayerClinic();
