@@ -34,10 +34,11 @@ test.describe('Login API performance', () => {
         );
 
         const latencyMs = Date.now() - started;
+        const responseBody = await response.text();
 
         expect(
           response.status(),
-          `${item.loginType} login should return HTTP 200`
+          `${item.loginType} login failed. Status: ${response.status()}, Body: ${responseBody}`
         ).toBe(200);
 
         expect(
