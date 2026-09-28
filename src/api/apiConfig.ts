@@ -7,7 +7,7 @@ export function apiBaseUrl(): string {
 
 export function apiHeaders(): Record<string, string> {
   const base = apiBaseUrl();
-  const token = process.env.HP_APP_TOKEN;
+  const token = process.env.HP_APP_TOKEN?.trim();
 
   if (!token) {
     throw new Error(
