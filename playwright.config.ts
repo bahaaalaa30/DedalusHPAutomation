@@ -27,7 +27,14 @@ export default defineConfig({
       use: {
         viewport: null,
         launchOptions: {
-          args: ['--start-maximized'],
+          args: [
+            '--start-maximized',
+            '--kiosk-printing',
+            '--no-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--remote-allow-origins=*',
+          ],
         },
       },
     },
