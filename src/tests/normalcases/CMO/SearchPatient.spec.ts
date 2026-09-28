@@ -3,9 +3,9 @@ import { VisitBookingPage } from '../../../pages/VisitBookingPage';
 
 test.describe('CMO patient search', () => {
   test.beforeEach(async ({ page, loginPage }) => {
-    await page.goto(config.url);
+    await page.goto(config.url, { waitUntil: 'domcontentloaded' });
     await loginPage.login(config.username, config.password);
-    await page.goto(config.visitBookingUrl);
+    await page.goto(config.visitBookingUrl, { waitUntil: 'domcontentloaded' });
   });
 
   test('search patient by ID', async ({ page }) => await new VisitBookingPage(page).SearchPatientID('B600007148'));
