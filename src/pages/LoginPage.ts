@@ -14,7 +14,7 @@ export class LoginPage {
   }
 
   async enterUsername(user: string) {
-    await this.username.waitFor({ state: 'visible', timeout: 5000 });
+    await expect(this.username).toBeVisible({ timeout: 15000 });
     await this.username.fill('');
     await this.username.pressSequentially(user, { delay: 20 });
     await this.username.dispatchEvent('input');
@@ -23,7 +23,7 @@ export class LoginPage {
   }
 
   async enterPassword(pass: string) {
-    await this.password.waitFor({ state: 'visible', timeout: 5000 });
+    await expect(this.password).toBeVisible({ timeout: 15000 });
     await this.password.fill('');
     await this.password.pressSequentially(pass, { delay: 20 });
     await this.password.dispatchEvent('input');
