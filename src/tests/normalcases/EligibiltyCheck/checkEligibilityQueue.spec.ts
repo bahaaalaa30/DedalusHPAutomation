@@ -4,9 +4,9 @@ import { VisitBookingPage } from '../../../pages/VisitBookingPage';
 import { getRandomPatientId } from '../../../utils/csvDataReader';
 
 test('eligibility queue approval', async ({ page, loginPage }) => {
-  await page.goto(config.payerUrl);
+  await page.goto(config.payerUrl, { waitUntil: 'domcontentloaded' });
   await loginPage.login(config.cmoB6, config.cmoPassword);
-  await page.goto(config.payerVisitBookingUrl);
+  await page.goto(config.payerVisitBookingUrl, { waitUntil: 'domcontentloaded' });
   const p = new VisitBookingPage(page);
   const id = getRandomPatientId(path.resolve('src/test-data/BMS.csv'));
   await p.SearchBMS(id);
