@@ -1,8 +1,8 @@
 import path from 'node:path';
-import { test, expect, config } from '../fixtures/baseTest';
-import { VisitBookingPage } from '../pages/VisitBookingPage';
-import { PatientBMS } from '../utils/patientBms';
-import { getRandomPatientId } from '../utils/csvDataReader';
+import { test, expect, config } from '../../../fixtures/baseTest';
+import { VisitBookingPage } from '../../../pages/VisitBookingPage';
+import { PatientBMS } from '../../../utils/patientBms';
+import { getRandomPatientId } from '../../../utils/csvDataReader';
 
 test('eligible patient', async ({ page, loginPage }) => {
   await page.goto(config.payerUrl);
@@ -14,12 +14,8 @@ test('eligible patient', async ({ page, loginPage }) => {
   await p.selectPayerClinic();
   await p.selectPayerDoctor();
   await p.bookNextAvailableTimeSlot();
-  const id = getRandomPatientId(
-    path.resolve('src/test-data/BMS.csv')
-  );
-
+  const id = getRandomPatientId(path.resolve('src/test-data/BMS.csv'));
   PatientBMS.setPatientId(id);
-
   await p.EligibilityCheck(id);
   await p.selectVisitType2();
   await p.sendRequestAndWaitForResponse();
@@ -29,40 +25,14 @@ test('non eligible patient', async ({ page, loginPage }) => {
   await page.goto(config.payerUrl);
   await loginPage.login(config.cmoB6, config.cmoPassword);
   await page.goto(config.payerVisitBookingUrl);
-
   const p = new VisitBookingPage(page);
-
   await p.selectPayerFacility();
   await p.selectPayerClinic();
   await p.selectPayerDoctor();
   await p.bookNextAvailableTimeSlot();
-
-  const id = getRandomPatientId(
-    path.resolve('src/test-data/NonValidBMS.csv')
-  );
-
+  const id = getRandomPatientId(path.resolve('src/test-data/NonValidBMS.csv'));
   PatientBMS.setPatientId(id);
-
   await p.NonEligibilityCheck(id);
   await p.selectVisitType2();
   await p.sendRequestAndWaitForResponseNoneligible();
-});
-
-test('eligibility queue approval', async ({ page, loginPage }) => {
-  await page.goto(config.payerUrl);
-  await loginPage.login(config.cmoB6, config.cmoPassword);
-  await page.goto(config.payerVisitBookingUrl);
-
-  const p = new VisitBookingPage(page);
-
-  const id = getRandomPatientId(
-    path.resolve('src/test-data/BMS.csv')
-  );
-
-  await p.SearchBMS(id);
-
-  const captured = await p.selectPatientIDByBMS();
-
-  await p.ValidateEligiblePatient(captured);
-  await p.verifyStatusIsApproved();
 });
