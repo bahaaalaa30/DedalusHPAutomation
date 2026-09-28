@@ -2,9 +2,9 @@ import { test, config } from '../../../fixtures/baseTest';
 import { VisitBookingPage } from '../../../pages/VisitBookingPage';
 
 test('visit booking and visit creation', async ({ page, loginPage }) => {
-  await page.goto(config.url);
+  await page.goto(config.url, { waitUntil: 'domcontentloaded' });
   await loginPage.login(config.username, config.password);
-  await page.goto(config.visitBookingUrl);
+  await page.goto(config.visitBookingUrl, { waitUntil: 'domcontentloaded' });
   const booking = new VisitBookingPage(page);
   await booking.selectClinic();
   await booking.selectPractitioner();
