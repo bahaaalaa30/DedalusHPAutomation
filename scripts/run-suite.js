@@ -2,7 +2,8 @@ const { spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const suitePath = path.resolve(__dirname, '..', 'playwright-suite.json');
+const rootDir = path.resolve(__dirname, '..');
+const suitePath = path.join(rootDir, 'playwright-suite.json');
 const suite = JSON.parse(fs.readFileSync(suitePath, 'utf8'));
 const config = suite.test;
 
@@ -11,7 +12,14 @@ if (!config.preserveOrder) {
 }
 
 const extraArgs = process.argv.slice(2).filter(arg => !arg.startsWith('--workers='));
-const playwrightCli = require.resolve('playwright/cli');
+const playwrightCli = path.join(rootDir, 'node_modules', 'playwright', 'cli.js');
+
+if (!fs.existsSync(playwrightCli)) {
+  throw new Error(
+    'Playwright CLI was not found at: ' + playwrightCli +
+    '. Run npm install first.'
+  );
+}
 
 let failed = false;
 
@@ -27,9 +35,6 @@ for (let index = 0; index < config.specs.length; index++) {
   console.log('[' + (index + 1) + '/' + config.specs.length + '] Running: ' + spec);
   console.log('-'.repeat(70));
 
-  // Run Playwright through Node directly.
-  // This avoids Windows .cmd spawning issues and keeps the process alive
-  // until the Playwright test process actually finishes.
   const result = spawnSync(
     process.execPath,
     [playwrightCli, 'test', spec, '--workers=1', ...extraArgs],
@@ -68,4 +73,5 @@ for (let index = 0; index < config.specs.length; index++) {
 console.log('='.repeat(70));
 console.log(failed ? 'SUITE FINISHED WITH FAILURES' : 'SUITE PASSED');
 console.log('='.repeat(70));
+
 process.exit(failed ? 1 : 0);
