@@ -11,9 +11,7 @@ if (!config.preserveOrder) {
 }
 
 const extraArgs = process.argv.slice(2).filter(arg => !arg.startsWith('--workers='));
-const playwrightBin = process.platform === 'win32'
-  ? path.resolve(__dirname, '..', 'node_modules', '.bin', 'playwright.cmd')
-  : path.resolve(__dirname, '..', 'node_modules', '.bin', 'playwright');
+const playwrightCli = require.resolve('playwright/cli');
 
 let failed = false;
 
@@ -23,19 +21,39 @@ console.log(config.name);
 console.log('='.repeat(70));
 console.log('');
 
-config.specs.forEach((spec, index) => {
+for (let index = 0; index < config.specs.length; index++) {
+  const spec = config.specs[index];
+
   console.log('[' + (index + 1) + '/' + config.specs.length + '] Running: ' + spec);
   console.log('-'.repeat(70));
 
+  // Run Playwright through Node directly.
+  // This avoids Windows .cmd spawning issues and keeps the process alive
+  // until the Playwright test process actually finishes.
   const result = spawnSync(
-    playwrightBin,
-    ['test', spec, '--workers=1', ...extraArgs],
-    { stdio: 'inherit', shell: false, env: process.env }
+    process.execPath,
+    [playwrightCli, 'test', spec, '--workers=1', ...extraArgs],
+    {
+      stdio: 'inherit',
+      env: process.env
+    }
   );
+
+  if (result.error) {
+    failed = true;
+    console.error('FAILED TO START PLAYWRIGHT: ' + result.error.message);
+
+    if (config.continueOnFailure === false) {
+      process.exit(1);
+    }
+
+    continue;
+  }
 
   if (result.status !== 0) {
     failed = true;
     console.error('FAILED: ' + spec);
+
     if (config.continueOnFailure === false) {
       console.error('Stopping suite because continueOnFailure=false');
       process.exit(result.status || 1);
@@ -43,8 +61,9 @@ config.specs.forEach((spec, index) => {
   } else {
     console.log('PASSED: ' + spec);
   }
+
   console.log('');
-});
+}
 
 console.log('='.repeat(70));
 console.log(failed ? 'SUITE FINISHED WITH FAILURES' : 'SUITE PASSED');
