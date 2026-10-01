@@ -1,0 +1,22 @@
+{
+  "name": "HP Automation Test",
+  "test": {
+    "name": "NormalCases Test",
+    "preserveOrder": true,
+    "continueOnFailure": true,
+    "specs": [
+      "src/tests/normalcases/CMO/LoginTest.spec.ts",
+      "src/tests/normalcases/CMO/VisitBooking.spec.ts",
+      "src/tests/normalcases/CMO/Cancelvisit.spec.ts",
+      "src/tests/normalcases/CMO/Cancelappointment.spec.ts",
+      "src/tests/normalcases/CMO/ChangeLanguage.spec.ts",
+      "src/tests/normalcases/CMO/SearchPatient.spec.ts",
+      "src/tests/normalcases/CMO/BillPage.spec.ts",
+      "src/tests/normalcases/Practitioner/PractitionerLogin.spec.ts",
+      "src/tests/normalcases/Practitioner/practitionerPatientsCount.spec.ts",
+      "src/tests/normalcases/EligibiltyCheck/Eligibility.spec.ts",
+      "src/tests/normalcases/EligibiltyCheck/Predetermination.spec.ts",
+      "src/tests/normalcases/EligibiltyCheck/checkEligibilityQueue.spec.ts"
+    ]
+  }
+}
