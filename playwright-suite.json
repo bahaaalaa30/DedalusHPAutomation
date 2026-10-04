@@ -4,6 +4,7 @@
     "name": "NormalCases Test",
     "preserveOrder": true,
     "continueOnFailure": true,
+    "workers": 5,
     "specs": [
       "src/tests/normalcases/CMO/LoginTest.spec.ts",
       "src/tests/normalcases/CMO/VisitBooking.spec.ts",
