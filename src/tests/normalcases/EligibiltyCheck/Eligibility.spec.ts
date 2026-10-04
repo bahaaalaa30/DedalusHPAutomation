@@ -38,5 +38,5 @@ test('non eligible patient', async ({ page, loginPage }) => {
   PatientBMS.setPatientId(id);
   await p.NonEligibilityCheck(id);
   await p.selectVisitType2();
-  await p.sendRequestAndWaitForResponseNoneligible();
+  await p.sendRequestAndWaitForResponseNoneligible('115');
 });

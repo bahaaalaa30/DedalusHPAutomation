@@ -707,7 +707,7 @@ export class VisitBookingPage {
     await this.click(this.doneButton, 30000);
   }
 
-  async sendRequestAndWaitForResponseNoneligible() {
+  async sendRequestAndWaitForResponseNoneligible(fees: string) {
     await this.click(this.onlineEligibilityButton, 30000);
 
     await expect(this.eligibilityFailureModal).toBeVisible({
@@ -716,6 +716,11 @@ export class VisitBookingPage {
 
     await this.click(this.eligibilityFailureProceedButton, 30000);
     await this.click(this.proceedWithCashButton, 30000);
+    await this.click(this.createVisitButton, 30000);
+    //await this.click(this.paymentButton);
+    await this.fill(this.cashField, fees);
+    await expect(this.cashField).toHaveValue(fees);
+    await this.cashField.press('Enter')
     await this.click(this.createVisitButton, 30000);
     await this.click(this.doneButton, 30000);
   }
