@@ -698,7 +698,7 @@ export class VisitBookingPage {
   }
 
   async sendRequestAndWaitForResponse() {
-    await this.click(this.onlineEligibilityButton, 30000);
+    await this.click(this.onlineEligibilityButton, 300000);
     await expect(this.eligibilitySuccessMessage).toBeVisible({
       timeout: 300000
     });

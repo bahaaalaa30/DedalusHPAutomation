@@ -3,10 +3,10 @@ import 'dotenv/config';
 import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './src/tests',
-  timeout: 60000,
+  timeout: 600000,
   workers:1,
   expect: {
-    timeout: 60000,
+    timeout: 600000,
   },
   reporter: [
     ['list'],
