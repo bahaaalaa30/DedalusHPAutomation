@@ -100,15 +100,30 @@ console.log('='.repeat(70));
 console.log('Generating Allure report...');
 console.log('='.repeat(70));
 
-const reportResult = spawnSync(
-  allureBin,
-  ['generate', allureResultsDir, '--clean', '-o', allureReportDir],
-  {
-    stdio: 'inherit',
-    shell: process.platform === 'win32',
-    env: process.env
-  }
-);
+const reportResult = process.platform === 'win32'
+  ? spawnSync(
+      process.env.ComSpec || 'cmd.exe',
+      [
+        '/d',
+        '/s',
+        '/c',
+        `"${allureBin}" generate "${allureResultsDir}" --clean -o "${allureReportDir}"`
+      ],
+      {
+        stdio: 'inherit',
+        shell: false,
+        env: process.env
+      }
+    )
+  : spawnSync(
+      allureBin,
+      ['generate', allureResultsDir, '--clean', '-o', allureReportDir],
+      {
+        stdio: 'inherit',
+        shell: false,
+        env: process.env
+      }
+    );
 
 if (reportResult.error || reportResult.status !== 0) {
   console.error(
