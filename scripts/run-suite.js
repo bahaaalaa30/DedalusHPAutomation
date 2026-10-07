@@ -105,9 +105,14 @@ const reportResult = process.platform === 'win32'
       process.env.ComSpec || 'cmd.exe',
       [
         '/d',
-        '/s',
         '/c',
-        `""${allureBin}" generate "${allureResultsDir}" --clean -o "${allureReportDir}""`
+        'call',
+        `"${allureBin}"`,
+        'generate',
+        allureResultsDir,
+        '--clean',
+        '-o',
+        allureReportDir
       ],
       {
         stdio: 'inherit',
