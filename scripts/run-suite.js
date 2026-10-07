@@ -107,7 +107,7 @@ const reportResult = process.platform === 'win32'
         '/d',
         '/s',
         '/c',
-        `"${allureBin}" generate "${allureResultsDir}" --clean -o "${allureReportDir}"`
+        `""${allureBin}" generate "${allureResultsDir}" --clean -o "${allureReportDir}""`
       ],
       {
         stdio: 'inherit',
