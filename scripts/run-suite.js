@@ -105,7 +105,7 @@ const reportResult = spawnSync(
   ['generate', allureResultsDir, '--clean', '-o', allureReportDir],
   {
     stdio: 'inherit',
-    shell: false,
+    shell: process.platform === 'win32',
     env: process.env
   }
 );
