@@ -159,4 +159,29 @@ export class PractitionerPage {
     const n = Number((await this.patientsCount.innerText()).trim());
     expect(n).toBeGreaterThanOrEqual(1);
   }
+
+  async chooseDiagnoseMethod() {
+    const icd11Diagnosis = this.page.locator(
+        'div.directive-linked-title'
+    ).filter({
+      hasText: 'ICD11 Diagnosis'
+    });
+    await expect(icd11Diagnosis).toBeVisible({ timeout: 30000 });
+    await icd11Diagnosis.click();
+    const diagnosisSearch = this.page.locator('#icd11search');
+    await expect(diagnosisSearch).toBeVisible({ timeout: 30000 });
+    await diagnosisSearch.fill('Acute headache');
+    await diagnosisSearch.press('Enter');
+    const diagnosisResult = this.page.locator('div.content')
+        .filter({
+          hasText: 'Acute headache, not elsewhere classified'
+        })
+        .filter({
+          hasText: 'MG31.1'
+        });
+    await expect(diagnosisResult).toBeVisible({ timeout: 30000 });
+    await diagnosisResult.click();
+    console.log('Successfully selected: Acute headache (MG31.1)');
+    return this;
+  }
 }
