@@ -1,13 +1,18 @@
 import { test, expect, config } from '../../../fixtures/baseTest';
 import { PractitionerPage } from '../../../pages/PractitionerPage';
+import { PatientBMS } from '../../../utils/patientBms';
 
 test('predetermination orders', async ({ page, loginPage }) => {
-  await page.goto(config.payerVisitBookingUrl);
+  const patient = PatientBMS.getCapturedPatient();
+  console.log(
+    `🔎 Predetermination patient: ${patient.patientName} | ${patient.patientId} | BMS: ${patient.bms}`
+  );
+
+  await page.goto(config.payerVisitBookingUrl, { waitUntil: 'commit' });
   await loginPage.login(config.elNasrDoctorUser, config.elNasrDoctorPassword);
   await expect(page).toHaveURL(/user/);
   const practitioner = new PractitionerPage(page);
-  //select eligbale patient from the choosen patient at the log that printed after the patient is created from the BMS.csv file
-  await practitioner.selectPatient();
+  await practitioner.selectPatient(patient.patientName, patient.patientId);
   await practitioner.startConsultation();
   await practitioner.createOrder();
 });
