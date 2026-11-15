@@ -25,7 +25,7 @@ export const PatientBMS = {
     return patientId;
   },
 
-  setCapturedPatient(patient: Omit<CapturedPatient, 'capturedAt'>) {
+  setCapturedPatient(patient: Omit<CapturedPatient, 'capturedAt' | 'eligibilityCompleted'>) {
     const directory = path.dirname(capturedPatientPath);
     fs.mkdirSync(directory, { recursive: true });
 
