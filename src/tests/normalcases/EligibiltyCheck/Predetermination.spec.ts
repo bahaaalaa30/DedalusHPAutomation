@@ -16,4 +16,5 @@ test('predetermination orders', async ({ page, loginPage }) => {
   await practitioner.createOrder();
   await practitioner.chooseDiagnoseMethod();
   await practitioner.completeDiagnosisDetails();
+  await practitioner.recordDiagnosis();
 });

@@ -228,4 +228,17 @@ export class PractitionerPage {
 
     return this;
   }
+
+  async recordDiagnosis() {
+    const acceptButton = this.page.locator(
+        'img[src="assets/new/accept.svg"]'
+    );
+
+    await expect(acceptButton).toBeVisible({ timeout: 15000 });
+    await acceptButton.click();
+
+    console.log('Diagnosis recorded successfully');
+
+    return this;
+  }
 }
