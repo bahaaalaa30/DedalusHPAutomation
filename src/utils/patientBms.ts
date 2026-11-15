@@ -10,7 +10,9 @@ export interface CapturedPatient {
 
 const capturedPatientPath = path.resolve(
   process.cwd(),
-  'test-results',
+  'src',
+  'test-data',
+  'runtime',
   'captured-patient.json'
 );
 
