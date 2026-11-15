@@ -72,10 +72,44 @@ export class PractitionerPage {
     return this;
   }
 
-  async selectPatient() {
-    await this.patient.waitFor({ state: 'visible', timeout: 15000 });
-    await this.patient.scrollIntoViewIfNeeded();
-    await this.patient.click();
+  async selectPatient(patientName: string, patientId: string) {
+    const patientRows = this.page.locator('.patients-list-item');
+
+    await patientRows.first().waitFor({
+      state: 'visible',
+      timeout: 20000
+    });
+
+    const matchingRows: Locator[] = [];
+    const rowCount = await patientRows.count();
+
+    for (let i = 0; i < rowCount; i++) {
+      const row = patientRows.nth(i);
+      const name = (
+        await row.locator('.patient-name p.no-margin').textContent() ?? ''
+      ).trim();
+      const secondaryText = (
+        await row.locator('.patient-name p.secondary-text').textContent() ?? ''
+      ).trim();
+      const rowPatientId = secondaryText.split(/[，,]/)[0].trim();
+
+      if (name === patientName.trim() && rowPatientId === patientId.trim()) {
+        matchingRows.push(row);
+      }
+    }
+
+    expect(
+      matchingRows,
+      `Expected exactly one patient matching name "${patientName}" and ID "${patientId}". Found ${matchingRows.length}.`
+    ).toHaveLength(1);
+
+    await matchingRows[0].scrollIntoViewIfNeeded();
+    await matchingRows[0].click();
+
+    console.log(
+      `✅ Selected patient in practitioner page: ${patientName} | ${patientId}`
+    );
+
     return this;
   }
 
