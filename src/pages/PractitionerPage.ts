@@ -125,9 +125,31 @@ export class PractitionerPage {
   async createOrder() {
     await this.newDocument.waitFor({ state: 'visible', timeout: 15000 });
     await this.newDocument.click();
+
+    const contentContainer = this.page.locator('.container.content');
+    const searchInput = contentContainer.locator('input[placeholder="Search"]');
+
+    await searchInput.waitFor({ state: 'visible', timeout: 15000 });
+    await searchInput.fill('Physician order form UHI');
+
+    // Locate the exact concept after filtering
+    const physicianOrderForm = contentContainer
+        .locator('div.concept')
+        .filter({
+          has: this.page.locator('img[src="assets/icon/note.svg"]')
+        })
+        .filter({
+          hasText: 'Physician order form UHI'
+        });
+    await expect(physicianOrderForm).toHaveCount(1, { timeout: 15000 });
+    await expect(physicianOrderForm).toBeVisible();
+    await physicianOrderForm.scrollIntoViewIfNeeded();
+    await physicianOrderForm.click();
+
+    console.log('Clicked Physician order form UHI successfully');
+
     return this;
   }
-
   async verifyLeadsCountIsGreaterThanOne() {
     await this.patientsCount.waitFor({
       state: 'visible',
