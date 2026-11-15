@@ -184,4 +184,48 @@ export class PractitionerPage {
     console.log('Successfully selected: Acute headache (MG31.1)');
     return this;
   }
+  async completeDiagnosisDetails() {
+
+    // 1. Select Primary
+    const primaryOption = this.page
+        .locator('.ui.checkbox')
+        .filter({ hasText: /^Primary$/ });
+
+    await expect(primaryOption).toBeVisible({ timeout: 15000 });
+    await primaryOption.locator('input[type="radio"]').check();
+
+    // 2. Select Actual
+    const actualOption = this.page
+        .locator('.ui.checkbox')
+        .filter({ hasText: /^Actual$/ });
+
+    await expect(actualOption).toBeVisible();
+    await actualOption.locator('input[type="radio"]').check();
+
+    // 3. Select Certain
+    const certainOption = this.page
+        .locator('.ui.checkbox')
+        .filter({ hasText: /^Certain$/ });
+
+    await expect(certainOption).toBeVisible();
+    await certainOption.locator('input[type="radio"]').check();
+
+    // 4. Enter duration value
+    const durationInput = this.page.locator(
+        'input.input-field[type="number"][min="1"][max="100"]'
+    );
+
+    await expect(durationInput).toBeVisible();
+    await durationInput.fill('4');
+
+    // 5. Select Weeks
+    const durationUnit = this.page.locator('select.select-time');
+
+    await expect(durationUnit).toBeVisible();
+    await durationUnit.selectOption('Weeks');
+
+    console.log('Diagnosis details completed successfully');
+
+    return this;
+  }
 }
