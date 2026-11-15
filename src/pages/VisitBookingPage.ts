@@ -64,7 +64,7 @@ export class VisitBookingPage {
     this.practitionerSelection = page.getByText('GENB6', {
       exact: true
     });
-    this.PayerpractitionerSelection = page.getByText(' El Nasr Doctor ', {
+    this.PayerpractitionerSelection = page.getByText(' Family Doctor ', {
       exact: true
     });
     this.patientSearchInput = page

@@ -5,12 +5,19 @@ export class LoginPage {
   private readonly password: Locator;
   private readonly loginButton: Locator;
   private readonly inlineError: Locator;
+  private readonly SelectFDRole: Locator;
+  private readonly continueRoleButton: Locator;
 
   constructor(private readonly page: Page) {
     this.username = page.locator('#user-id');
     this.password = page.locator('#his-password');
     this.loginButton = page.locator("//div[@id='common-login']//button");
     this.inlineError = page.locator("//*[contains(text(), 'Unauthorized use of this system')]");
+    this.SelectFDRole = page.locator('#role_fdesh');
+    this.continueRoleButton = page.getByRole('button', {
+      name: 'Continue',
+      exact: true
+    });
   }
 
   async enterUsername(user: string) {
@@ -70,4 +77,21 @@ export class LoginPage {
   async expectClinicalDiary() {
     await expect(this.page).toHaveURL(/clinicaldiary/, { timeout: 5000 });
   }
+  async selectFDRole() {
+    await this.SelectFDRole.waitFor({
+      state: 'visible',
+      timeout: 15000
+    });
+    await this.SelectFDRole.check();
+    await expect(this.SelectFDRole).toBeChecked();
+    return this;
+  }
+  async continueRole() {
+    await expect(this.continueRoleButton).toBeEnabled({
+      timeout: 10000
+    });
+    await this.continueRoleButton.click();
+    return this;
+  }
 }
+

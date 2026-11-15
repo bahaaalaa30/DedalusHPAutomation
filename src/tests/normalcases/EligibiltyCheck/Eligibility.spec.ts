@@ -9,6 +9,8 @@ test('eligible patient', async ({ page, loginPage }) => {
   await page.waitForURL(/login/, { timeout: 30000 });
   await expect(page.locator('#user-id')).toBeVisible({ timeout: 30000 });
   await loginPage.login(config.cmoB6, config.cmoPassword);
+  await loginPage.selectFDRole();
+  await loginPage.continueRole();
   await expect(page).toHaveURL(/clinicaldiary/, { timeout: 5000 });
   await page.goto(config.payerVisitBookingUrl, { waitUntil: 'commit' });
   await expect(page.locator('#clinic-btn')).toBeVisible({ timeout: 30000 });
@@ -28,6 +30,8 @@ test('non eligible patient', async ({ page, loginPage }) => {
   await page.goto(config.payerUrl);
   await loginPage.login(config.cmoB6, config.cmoPassword);
   await page.goto(config.payerVisitBookingUrl, { waitUntil: 'commit' });
+  await loginPage.selectFDRole();
+  await loginPage.continueRole();
   await expect(page.locator('#clinic-btn')).toBeVisible({ timeout: 30000 });
   const p = new VisitBookingPage(page);
   await p.selectPayerFacility();
