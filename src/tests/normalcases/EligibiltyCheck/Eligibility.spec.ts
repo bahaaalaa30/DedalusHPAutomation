@@ -5,6 +5,7 @@ import { PatientBMS } from '../../../utils/patientBms';
 import { getRandomPatientId } from '../../../utils/csvDataReader';
 
 test('eligible patient', async ({ page, loginPage }) => {
+  PatientBMS.clearCapturedPatient();
   await page.goto(config.payerUrl, { waitUntil: 'commit' });
   await page.waitForURL(/login/, { timeout: 30000 });
   await expect(page.locator('#user-id')).toBeVisible({ timeout: 30000 });
