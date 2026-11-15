@@ -23,13 +23,14 @@ test('eligible patient', async ({ page, loginPage }) => {
   const id = getRandomPatientId(path.resolve('src/test-data/BMS.csv'));
   PatientBMS.setPatientId(id);
   await p.EligibilityCheck(id);
+  await p.selectVisitType2();
+  await p.sendRequestAndWaitForResponse();
+  PatientBMS.markEligibilityCompleted();
+
   const capturedPatient = PatientBMS.getCapturedPatient();
   console.log(
     `✅ Eligibility patient saved for Predetermination: ${capturedPatient.patientName} | ${capturedPatient.patientId}`
   );
-  await p.selectVisitType2();
-  await p.sendRequestAndWaitForResponse();
-  PatientBMS.markEligibilityCompleted();
 });
 
 test('non eligible patient', async ({ page, loginPage }) => {
