@@ -29,6 +29,7 @@ test('eligible patient', async ({ page, loginPage }) => {
   );
   await p.selectVisitType2();
   await p.sendRequestAndWaitForResponse();
+  PatientBMS.markEligibilityCompleted();
 });
 
 test('non eligible patient', async ({ page, loginPage }) => {
