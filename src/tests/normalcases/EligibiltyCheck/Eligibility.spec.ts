@@ -23,6 +23,8 @@ test('eligible patient', async ({ page, loginPage }) => {
   const id = getRandomPatientId(path.resolve('src/test-data/BMS.csv'));
   PatientBMS.setPatientId(id);
   await p.EligibilityCheck(id);
+  const patientName = PatientBMS.getPatientName();
+  const patientId = PatientBMS.getCapturedPatientId();
   await p.selectVisitType2();
   await p.sendRequestAndWaitForResponse();
 });
