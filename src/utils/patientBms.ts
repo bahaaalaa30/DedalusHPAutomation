@@ -8,6 +8,7 @@ export interface CapturedPatient {
   patientName: string;
   patientId: string;
   capturedAt: string;
+  eligibilityCompleted: boolean;
 }
 
 const capturedPatientPath = path.resolve(
@@ -30,7 +31,8 @@ export const PatientBMS = {
 
     const data: CapturedPatient = {
       ...patient,
-      capturedAt: new Date().toISOString()
+      capturedAt: new Date().toISOString(),
+      eligibilityCompleted: false
     };
 
     fs.writeFileSync(
@@ -41,6 +43,26 @@ export const PatientBMS = {
 
     console.log(
       `💾 Captured eligible patient: ${data.patientName} | ${data.patientId} | BMS: ${data.bms}`
+    );
+  },
+
+  markEligibilityCompleted() {
+    if (!fs.existsSync(capturedPatientPath)) {
+      throw new Error('Cannot mark Eligibility complete: captured patient file was not found.');
+    }
+
+    const patient = JSON.parse(
+      fs.readFileSync(capturedPatientPath, 'utf-8')
+    ) as CapturedPatient;
+    const completedPatient: CapturedPatient = {
+      ...patient,
+      eligibilityCompleted: true
+    };
+
+    fs.writeFileSync(
+      capturedPatientPath,
+      JSON.stringify(completedPatient, null, 2),
+      'utf-8'
     );
   },
 
@@ -66,6 +88,12 @@ export const PatientBMS = {
     if (!patient.bms || !patient.patientName || !patient.patientId) {
       throw new Error(
         'Captured patient data is incomplete. Re-run the eligible patient test.'
+      );
+    }
+
+    if (!patient.eligibilityCompleted) {
+      throw new Error(
+        'Eligibility patient was captured, but the Eligibility test did not complete successfully. Re-run the eligible patient test before Predetermination.'
       );
     }
 
