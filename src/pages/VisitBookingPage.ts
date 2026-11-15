@@ -1,4 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test';
+import { PatientBMS } from '../utils/patientBms';
 
 export class VisitBookingPage {
   private readonly clinicButton: Locator;
@@ -641,6 +642,36 @@ export class VisitBookingPage {
       state: 'visible',
       timeout: 20000
     });
+
+    const patientName = (
+      await this.searchResult
+        .locator('.col-3 p.no-margin')
+        .innerText()
+    ).trim();
+    const patientId = (
+      await this.searchResult
+        .locator('.col-2')
+        .nth(2)
+        .innerText()
+    ).trim();
+
+    if (!patientName || !patientId) {
+      throw new Error(
+        `Could not capture patient details from eligibility search result. Name: "${patientName}", Patient ID: "${patientId}".`
+      );
+    }
+
+    PatientBMS.setCapturedPatient({
+      bms: patientPid,
+      patientName,
+      patientId
+    });
+
+    console.log('========== PATIENT DATA CAPTURED ==========');
+    console.log(`BMS: ${patientPid}`);
+    console.log(`Patient Name: ${patientName}`);
+    console.log(`Patient ID: ${patientId}`);
+    console.log('===========================================');
 
     await this.click(this.searchResult);
 
