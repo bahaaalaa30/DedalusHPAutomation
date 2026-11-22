@@ -19,5 +19,6 @@ test('predetermination acute headache CBC and CT of larynx orders', async ({ pag
   await practitioner.recordAcuteHeadacheDiagnosis();
   await practitioner.selectCBCLabOrder();
   await practitioner.selectCTOfLarynxRadiologyOrder();
+  await practitioner.selectCLOPAM2mgPrescriptionOrder();
   await practitioner.submitPredeterminationOrdersToPayer();
 });
