@@ -302,11 +302,12 @@ export class PractitionerPage {
     await expect(facilityInput).toBeVisible({ timeout: 15000 });
     await facilityInput.click();
 
-    const facility = this.page
-      .locator('.order-facility-li')
-      .filter({ hasText: /^\\s*El Nasr Spl\\.HospitalForChildren-UAT\\s*$/ });
+    const facilityList = this.page.locator('.order-facility-list');
+    await expect(facilityList).toBeVisible({ timeout: 15000 });
 
-    await expect(facility).toBeVisible({ timeout: 15000 });
+    // El Nasr Spl.HospitalForChildren-UAT is the second item in this list.
+    const facility = facilityList.locator('.order-facility-li').nth(1);
+    await expect(facility).toHaveText('El Nasr Spl.HospitalForChildren-UAT', { timeout: 15000 });
     await facility.click();
 
     console.log('Radiology facility selected: El Nasr Spl.HospitalForChildren-UAT');
