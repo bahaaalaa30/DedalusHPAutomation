@@ -19,4 +19,5 @@ test('predetermination orders', async ({ page, loginPage }) => {
   await practitioner.recordDiagnosis();
   await practitioner.selectLabOrder();
   await practitioner.selectRadiologyOrder();
+  await practitioner.SendPredOrderstoPayer();
 });
