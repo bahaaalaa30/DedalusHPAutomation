@@ -376,11 +376,28 @@ export class PractitionerPage {
     await expect(clopam2mgInstructionInput).toBeVisible({ timeout: 15000 });
     await clopam2mgInstructionInput.fill('test');
 
-    // Scroll the prescription form down to reveal the remaining medication details.
+    // Scroll the page and its scrollable prescription containers to the bottom.
+    await this.page.evaluate(() => {
+      window.scrollTo(0, document.documentElement.scrollHeight);
+
+      const scrollableElements = Array.from(
+        document.querySelectorAll<HTMLElement>('*')
+      ).filter((element) => {
+        const styles = window.getComputedStyle(element);
+        return (
+          element.scrollHeight > element.clientHeight &&
+          ['auto', 'scroll'].includes(styles.overflowY)
+        );
+      });
+
+      for (const element of scrollableElements) {
+        element.scrollTop = element.scrollHeight;
+      }
+    });
+
     const clopam2mgDurationOption = this.page
       .locator('span.check')
       .filter({ hasText: /^1 W$/ });
-    await clopam2mgDurationOption.scrollIntoViewIfNeeded();
 
     // Select duration: 1 W.
     await expect(clopam2mgDurationOption).toBeVisible({ timeout: 15000 });
