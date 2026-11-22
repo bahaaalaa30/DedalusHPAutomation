@@ -2,7 +2,7 @@ import { test, expect, config } from '../../../fixtures/baseTest';
 import { PractitionerPage } from '../../../pages/PractitionerPage';
 import { PatientBMS } from '../../../utils/patientBms';
 
-test('predetermination orders', async ({ page, loginPage }) => {
+test('predetermination acute headache CBC and CT of larynx orders', async ({ page, loginPage }) => {
   const patient = PatientBMS.getCapturedPatient();
   console.log(
     `🔎 Predetermination patient: ${patient.patientName} | ${patient.patientId} | BMS: ${patient.bms}`
@@ -13,11 +13,11 @@ test('predetermination orders', async ({ page, loginPage }) => {
   const practitioner = new PractitionerPage(page);
   await practitioner.selectPatient(patient.patientName, patient.patientId);
   //await practitioner.startConsultation();
-  await practitioner.createOrder();
-  await practitioner.chooseDiagnoseMethod();
-  await practitioner.completeDiagnosisDetails();
-  await practitioner.recordDiagnosis();
-  await practitioner.selectLabOrder();
-  await practitioner.selectRadiologyOrder();
-  await practitioner.SendPredOrderstoPayer();
+  await practitioner.selectPhysicianOrderFormUHI();
+  await practitioner.selectAcuteHeadacheDiagnosis();
+  await practitioner.completeAcuteHeadacheDiagnosisDetails();
+  await practitioner.recordAcuteHeadacheDiagnosis();
+  await practitioner.selectCBCLabOrder();
+  await practitioner.selectCTOfLarynxRadiologyOrder();
+  await practitioner.submitPredeterminationOrdersToPayer();
 });
