@@ -241,4 +241,41 @@ export class PractitionerPage {
 
     return this;
   }
+
+  async selectLabOrder() {
+    // Open the Lab Orders section without leaving the consultation screen.
+    const labOrdersTab = this.page
+      .locator('div.consultation-note-icon')
+      .filter({ has: this.page.locator('span.long-name', { hasText: /^Lab Orders$/ }) });
+
+    await expect(labOrdersTab).toBeVisible({ timeout: 15000 });
+    await labOrdersTab.click();
+
+    // Search for CBC in the Lab Orders panel.
+    const searchInput = this.page.locator('input[placeholder="Search"]:visible').last();
+    await expect(searchInput).toBeVisible({ timeout: 15000 });
+    await searchInput.fill('CBC');
+
+    // Wait for the exact CBC result and select it.
+    const cbcResult = this.page
+      .locator('div.content')
+      .filter({ hasText: /^CBC$/ });
+
+    await expect(cbcResult).toBeVisible({ timeout: 30000 });
+    await cbcResult.click();
+
+    console.log('CBC lab order selected successfully');
+
+    // Confirm the selected lab order using its accept icon.
+    const completeButton = this.page
+      .locator('div.save-icn')
+      .locator('img[src="assets/new/accept.svg"]');
+
+    await expect(completeButton).toBeVisible({ timeout: 15000 });
+    await completeButton.click();
+
+    console.log('CBC lab order completed successfully');
+
+    return this;
+  }
 }
