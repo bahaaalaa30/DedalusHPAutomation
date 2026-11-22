@@ -323,6 +323,78 @@ export class PractitionerPage {
     return this;
   }
 
+  async selectCLOPAM2mgPrescriptionOrder() {
+    // Open Prescription Orders in the current consultation screen.
+    const clopamPrescriptionOrdersTabLocator = this.page
+      .locator('div.consultation-note-icon')
+      .filter({
+        has: this.page.locator('span.long-name', {
+          hasText: /^Prescription Orders$/
+        })
+      });
+
+    await expect(clopamPrescriptionOrdersTabLocator).toBeVisible({ timeout: 15000 });
+    await clopamPrescriptionOrdersTabLocator.click();
+
+    // Search for the exact CLOPAM medication.
+    const clopam2mgSearchInput = this.page.locator('input[placeholder="Search"]:visible').last();
+    await expect(clopam2mgSearchInput).toBeVisible({ timeout: 15000 });
+    await clopam2mgSearchInput.fill('CLOPAM 2mg Box 30 Tablets ( CLONAZEPAM )');
+    await clopam2mgSearchInput.press('Enter');
+
+    const clopam2mgPrescriptionResult = this.page
+      .locator('div.content.cursor-pointer')
+      .filter({
+        hasText: /^CLOPAM 2mg Box 30 Tablets \( CLONAZEPAM \)$/
+      });
+    await expect(clopam2mgPrescriptionResult).toHaveCount(1, { timeout: 30000 });
+    await expect(clopam2mgPrescriptionResult).toBeVisible();
+    await clopam2mgPrescriptionResult.click();
+
+    console.log('CLOPAM 2mg prescription selected');
+
+    // Select route: BY MOUTH.
+    const clopam2mgByMouthOption = this.page
+      .locator('.ui.checkbox')
+      .filter({ has: this.page.locator('label.check-opt', { hasText: /^BY MOUTH$/ }) });
+    await expect(clopam2mgByMouthOption).toBeVisible({ timeout: 15000 });
+    await clopam2mgByMouthOption.locator('input[type="radio"]').check();
+
+    // Select frequency: BID - Two Times a Day After Meals.
+    const clopam2mgBIDFrequencyOption = this.page
+      .locator('.ui.checkbox')
+      .filter({
+        has: this.page.locator('label.check-opt', {
+          hasText: /^BID- Two Times a Day After Meals$/
+        })
+      });
+    await expect(clopam2mgBIDFrequencyOption).toBeVisible({ timeout: 15000 });
+    await clopam2mgBIDFrequencyOption.locator('input[type="radio"]').check();
+
+    // Enter the prescription instruction.
+    const clopam2mgInstructionInput = this.page.locator('input[placeholder="Enter"]:visible').last();
+    await expect(clopam2mgInstructionInput).toBeVisible({ timeout: 15000 });
+    await clopam2mgInstructionInput.fill('test');
+
+    // Select duration: 1 W.
+    const clopam2mgDurationOption = this.page
+      .locator('span.check')
+      .filter({ hasText: /^1 W$/ });
+    await expect(clopam2mgDurationOption).toBeVisible({ timeout: 15000 });
+    await clopam2mgDurationOption.locator('input[type="radio"]').check();
+
+    // Save the CLOPAM prescription.
+    const clopam2mgPrescriptionAcceptButton = this.page
+      .locator('img[src="assets/new/accept.svg"]:visible')
+      .last();
+    await expect(clopam2mgPrescriptionAcceptButton).toBeVisible({ timeout: 15000 });
+    await clopam2mgPrescriptionAcceptButton.click();
+
+    console.log('CLOPAM 2mg prescription details saved successfully');
+
+    return this;
+  }
+
   async submitPredeterminationOrdersToPayer() {
     // Close the completed orders screen.
     const predeterminationOrdersCloseButton = this.page.getByRole('button', {
