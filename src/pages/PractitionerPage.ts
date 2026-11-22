@@ -403,6 +403,25 @@ export class PractitionerPage {
     await expect(clopam2mgDurationOption).toBeVisible({ timeout: 15000 });
     await clopam2mgDurationOption.locator('input[type="radio"]').check();
 
+    // Return the page and its scrollable prescription containers to the top.
+    await this.page.evaluate(() => {
+      window.scrollTo(0, 0);
+
+      const scrollableElements = Array.from(
+        document.querySelectorAll<HTMLElement>('*')
+      ).filter((element) => {
+        const styles = window.getComputedStyle(element);
+        return (
+          element.scrollHeight > element.clientHeight &&
+          ['auto', 'scroll'].includes(styles.overflowY)
+        );
+      });
+
+      for (const element of scrollableElements) {
+        element.scrollTop = 0;
+      }
+    });
+
     // Save the CLOPAM prescription.
     const clopam2mgPrescriptionAcceptButton = this.page
       .locator('img[src="assets/new/accept.svg"]:visible')
