@@ -254,7 +254,11 @@ export class PractitionerPage {
     // Search for CBC in the Lab Orders panel.
     const searchInput = this.page.locator('input[placeholder="Search"]:visible').last();
     await expect(searchInput).toBeVisible({ timeout: 15000 });
+    await searchInput.click();
+    await searchInput.clear();
+    await expect(searchInput).toHaveValue('');
     await searchInput.fill('CBC');
+    await expect(searchInput).toHaveValue('CBC');
 
     // Wait for the exact CBC result and select it.
     const cbcResult = this.page
