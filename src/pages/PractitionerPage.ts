@@ -7,7 +7,7 @@ export class PractitionerPage {
   private readonly practitionerFilterLocator: Locator;
   private readonly firstPatientLocator: Locator;
   private readonly newDocumentButtonLocator: Locator;
-  private readonly startConsultationButton: Locator;
+  private readonly startConsultationButtonLocator: Locator;
   private readonly clinicianRoleRadioLocator: Locator;
   private readonly continueRoleButtonLocator: Locator;
 
@@ -31,7 +31,7 @@ export class PractitionerPage {
       .locator('div.col-patient div.patient-name > p.no-margin')
       .first();
     this.newDocumentButtonLocator = page.locator('div.new-actions.pointer');
-    this.startConsultationButton = page.locator(
+    this.startConsultationButtonLocator = page.locator(
       'div.start-consult-dialog button.primary-button'
     );
   }
@@ -114,11 +114,11 @@ export class PractitionerPage {
   }
 
   async startConsultation() {
-    await this.startConsultationButton.waitFor({
+    await this.startConsultationButtonLocator.waitFor({
       state: 'visible',
       timeout: 15000
     });
-    await this.startConsultationButton.click();
+    await this.startConsultationButtonLocator.click();
     return this;
   }
 
