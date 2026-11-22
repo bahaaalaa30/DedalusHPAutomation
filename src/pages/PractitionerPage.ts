@@ -339,7 +339,7 @@ export class PractitionerPage {
     // Search for the exact CLOPAM medication.
     const clopam2mgPrescriptionSearchInput = this.page.locator('#cns-pres-search');
     await expect(clopam2mgPrescriptionSearchInput).toBeVisible({ timeout: 15000 });
-    await clopam2mgPrescriptionSearchInput.fill('CLOPAM 2mg Box 30 Tablets ( CLONAZEPAM )');
+    await clopam2mgPrescriptionSearchInput.fill('CLOPAM');
     await clopam2mgPrescriptionSearchInput.press('Enter');
 
     const clopam2mgPrescriptionResult = this.page
