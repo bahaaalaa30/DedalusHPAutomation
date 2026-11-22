@@ -2,7 +2,7 @@ import { test, expect, config } from '../../../fixtures/baseTest';
 import { PractitionerPage } from '../../../pages/PractitionerPage';
 import { PatientBMS } from '../../../utils/patientBms';
 
-test('predetermination acute headache CBC and CT of larynx orders', async ({ page, loginPage }) => {
+test('predetermination orders', async ({ page, loginPage }) => {
   const patient = PatientBMS.getCapturedPatient();
   console.log(
     `🔎 Predetermination patient: ${patient.patientName} | ${patient.patientId} | BMS: ${patient.bms}`
