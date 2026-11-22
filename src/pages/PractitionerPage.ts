@@ -1,74 +1,74 @@
 import { expect, Locator, Page } from '@playwright/test';
 
 export class PractitionerPage {
-  private readonly patientsCount: Locator;
-  private readonly facilityMenu: Locator;
-  private readonly facilityOption: Locator;
-  private readonly practitionerSelection: Locator;
+  private readonly patientsCountLocator: Locator;
+  private readonly clinicFacilityMenuLocator: Locator;
+  private readonly clinicFacilityOptionLocator: Locator;
+  private readonly practitionerFilterLocator: Locator;
   private readonly patient: Locator;
-  private readonly newDocument: Locator;
+  private readonly newDocumentButtonLocator: Locator;
   private readonly startConsultationButton: Locator;
-  private readonly clinicianRole: Locator;
-  private readonly continueRoleButton: Locator;
+  private readonly clinicianRoleRadioLocator: Locator;
+  private readonly continueRoleButtonLocator: Locator;
 
   constructor(private readonly page: Page) {
-    this.patientsCount = page.locator(
+    this.firstPatientLocatorsCountLocator = page.locator(
       'xpath=/html/body/app-root/app-crm/div/div/app-crm-leads/div[2]/div/div[1]/app-crm-quick-filters/div/div/div[2]/div[2]/div[3]/div'
     );
-    this.facilityMenu = page.locator('#facility-menu');
-    this.clinicianRole = page.locator('#role_clinic');
-    this.continueRoleButton = page.getByRole('button', {
+    this.clinicFacilityMenuLocator = page.locator('#facility-menu');
+    this.clinicianRoleRadioLocator = page.locator('#role_clinic');
+    this.continueRoleButtonLocator = page.getByRole('button', {
       name: 'Continue',
       exact: true
     });
-    this.facilityOption = page.locator(
+    this.clinicFacilityOptionLocator = page.locator(
       '#facility-menu-actions > div > div > div > div > div:nth-child(3)'
     );
-    this.practitionerSelection = page.locator(
+    this.practitionerFilterLocator = page.locator(
       'body > app-root > app-crm > div > div > app-clinical-diary > div > div.diary-container > div.quick-filters > app-crm-quick-filters > div > div > div.quick-filter-list.ng-star-inserted > div:nth-child(2) > div.filter-name.has-count.no-icon'
     );
-    this.patient = page
+    this.firstPatientLocator = page
       .locator('div.col-patient div.patient-name > p.no-margin')
       .first();
-    this.newDocument = page.locator('div.new-actions.pointer');
+    this.newDocumentButtonLocator = page.locator('div.new-actions.pointer');
     this.startConsultationButton = page.locator(
       'div.start-consult-dialog button.primary-button'
     );
   }
 
   async continueRole() {
-    await expect(this.continueRoleButton).toBeEnabled({
+    await expect(this.continueRoleButtonLocator).toBeEnabled({
       timeout: 10000
     });
-    await this.continueRoleButton.click();
+    await this.continueRoleButtonLocator.click();
     return this;
   }
 
   async selectRole() {
-    await this.clinicianRole.waitFor({
+    await this.clinicianRoleRadioLocator.waitFor({
       state: 'visible',
       timeout: 15000
     });
-    await this.clinicianRole.check();
-    await expect(this.clinicianRole).toBeChecked();
+    await this.clinicianRoleRadioLocator.check();
+    await expect(this.clinicianRoleRadioLocator).toBeChecked();
     return this;
   }
 
   async selectClinic() {
-    await this.facilityMenu.waitFor({ state: 'visible', timeout: 15000 });
-    await this.facilityMenu.click();
-    await this.facilityOption.waitFor({ state: 'visible', timeout: 15000 });
-    await this.facilityOption.click();
+    await this.clinicFacilityMenuLocator.waitFor({ state: 'visible', timeout: 15000 });
+    await this.clinicFacilityMenuLocator.click();
+    await this.clinicFacilityOptionLocator.waitFor({ state: 'visible', timeout: 15000 });
+    await this.clinicFacilityOptionLocator.click();
     return this;
   }
 
   async selectPractitioner() {
-    await this.practitionerSelection.waitFor({
+    await this.practitionerFilterLocator.waitFor({
       state: 'visible',
       timeout: 15000
     });
-    await this.practitionerSelection.scrollIntoViewIfNeeded();
-    await this.practitionerSelection.click();
+    await this.practitionerFilterLocator.scrollIntoViewIfNeeded();
+    await this.practitionerFilterLocator.click();
     return this;
   }
 
@@ -122,18 +122,18 @@ export class PractitionerPage {
     return this;
   }
 
-  async createOrder() {
-    await this.newDocument.waitFor({ state: 'visible', timeout: 15000 });
-    await this.newDocument.click();
+  async selectPhysicianOrderFormUHI() {
+    await this.newDocumentButtonLocator.waitFor({ state: 'visible', timeout: 15000 });
+    await this.newDocumentButtonLocator.click();
 
-    const contentContainer = this.page.locator('.container.content');
-    const searchInput = contentContainer.locator('input[placeholder="Search"]');
+    const physicianOrderFormContentContainer = this.page.locator('.container.content');
+    const physicianOrderFormSearchInput = physicianOrderFormContentContainer.locator('input[placeholder="Search"]');
 
-    await searchInput.waitFor({ state: 'visible', timeout: 15000 });
-    await searchInput.fill('Physician order form UHI');
+    await physicianOrderFormSearchInput.waitFor({ state: 'visible', timeout: 15000 });
+    await physicianOrderFormSearchInput.fill('Physician order form UHI');
 
     // Locate the exact concept after filtering
-    const physicianOrderForm = contentContainer
+    const physicianOrderFormResult = physicianOrderFormContentContainer
         .locator('div.concept')
         .filter({
           has: this.page.locator('img[src="assets/icon/note.svg"]')
@@ -141,206 +141,206 @@ export class PractitionerPage {
         .filter({
           hasText: 'Physician order form UHI'
         });
-    await expect(physicianOrderForm).toHaveCount(1, { timeout: 15000 });
-    await expect(physicianOrderForm).toBeVisible();
-    await physicianOrderForm.scrollIntoViewIfNeeded();
-    await physicianOrderForm.click();
+    await expect(physicianOrderFormResult).toHaveCount(1, { timeout: 15000 });
+    await expect(physicianOrderFormResult).toBeVisible();
+    await physicianOrderFormResult.scrollIntoViewIfNeeded();
+    await physicianOrderFormResult.click();
 
     console.log('Clicked Physician order form UHI successfully');
 
     return this;
   }
   async verifyLeadsCountIsGreaterThanOne() {
-    await this.patientsCount.waitFor({
+    await this.firstPatientLocatorsCountLocator.waitFor({
       state: 'visible',
       timeout: 15000
     });
 
-    const n = Number((await this.patientsCount.innerText()).trim());
+    const n = Number((await this.firstPatientLocatorsCountLocator.innerText()).trim());
     expect(n).toBeGreaterThanOrEqual(1);
   }
 
-  async chooseDiagnoseMethod() {
-    const icd11Diagnosis = this.page.locator(
+  async selectAcuteHeadacheDiagnosis() {
+    const icd11DiagnosisCategoryLocator = this.page.locator(
         'div.directive-linked-title'
     ).filter({
       hasText: 'ICD11 Diagnosis'
     });
-    await expect(icd11Diagnosis).toBeVisible({ timeout: 30000 });
-    await icd11Diagnosis.click();
-    const diagnosisSearch = this.page.locator('#icd11search');
-    await expect(diagnosisSearch).toBeVisible({ timeout: 30000 });
-    await diagnosisSearch.fill('Acute headache');
-    await diagnosisSearch.press('Enter');
-    const diagnosisResult = this.page.locator('div.content')
+    await expect(icd11DiagnosisCategoryLocator).toBeVisible({ timeout: 30000 });
+    await icd11DiagnosisCategoryLocator.click();
+    const acuteHeadacheDiagnosisSearchInput = this.page.locator('#icd11search');
+    await expect(acuteHeadacheDiagnosisSearchInput).toBeVisible({ timeout: 30000 });
+    await acuteHeadacheDiagnosisSearchInput.fill('Acute headache');
+    await acuteHeadacheDiagnosisSearchInput.press('Enter');
+    const acuteHeadacheDiagnosisResult = this.page.locator('div.content')
         .filter({
           hasText: 'Acute headache, not elsewhere classified'
         })
         .filter({
           hasText: 'MG31.1'
         });
-    await expect(diagnosisResult).toBeVisible({ timeout: 30000 });
-    await diagnosisResult.click();
+    await expect(acuteHeadacheDiagnosisResult).toBeVisible({ timeout: 30000 });
+    await acuteHeadacheDiagnosisResult.click();
     console.log('Successfully selected: Acute headache (MG31.1)');
     return this;
   }
-  async completeDiagnosisDetails() {
+  async completeAcuteHeadacheDiagnosisDetails() {
 
     // 1. Select Primary
-    const primaryOption = this.page
+    const primaryDiagnosisOption = this.page
         .locator('.ui.checkbox')
         .filter({ hasText: /^Primary$/ });
 
-    await expect(primaryOption).toBeVisible({ timeout: 15000 });
-    await primaryOption.locator('input[type="radio"]').check();
+    await expect(primaryDiagnosisOption).toBeVisible({ timeout: 15000 });
+    await primaryDiagnosisOption.locator('input[type="radio"]').check();
 
     // 2. Select Actual
-    const actualOption = this.page
+    const actualDiagnosisOption = this.page
         .locator('.ui.checkbox')
         .filter({ hasText: /^Actual$/ });
 
-    await expect(actualOption).toBeVisible();
-    await actualOption.locator('input[type="radio"]').check();
+    await expect(actualDiagnosisOption).toBeVisible();
+    await actualDiagnosisOption.locator('input[type="radio"]').check();
 
     // 3. Select Certain
-    const certainOption = this.page
+    const certainDiagnosisOption = this.page
         .locator('.ui.checkbox')
         .filter({ hasText: /^Certain$/ });
 
-    await expect(certainOption).toBeVisible();
-    await certainOption.locator('input[type="radio"]').check();
+    await expect(certainDiagnosisOption).toBeVisible();
+    await certainDiagnosisOption.locator('input[type="radio"]').check();
 
     // 4. Enter duration value
-    const durationInput = this.page.locator(
+    const acuteHeadacheDurationInput = this.page.locator(
         'input.input-field[type="number"][min="1"][max="100"]'
     );
 
-    await expect(durationInput).toBeVisible();
-    await durationInput.fill('4');
+    await expect(acuteHeadacheDurationInput).toBeVisible();
+    await acuteHeadacheDurationInput.fill('4');
 
     // 5. Select Weeks
-    const durationUnit = this.page.locator('select.select-time');
+    const acuteHeadacheDurationUnitSelect = this.page.locator('select.select-time');
 
-    await expect(durationUnit).toBeVisible();
-    await durationUnit.selectOption('Weeks');
+    await expect(acuteHeadacheDurationUnitSelect).toBeVisible();
+    await acuteHeadacheDurationUnitSelect.selectOption('Weeks');
 
     console.log('Diagnosis details completed successfully');
 
     return this;
   }
 
-  async recordDiagnosis() {
-    const acceptButton = this.page.locator(
+  async recordAcuteHeadacheDiagnosis() {
+    const diagnosisAcceptButton = this.page.locator(
         'img[src="assets/new/accept.svg"]'
     );
 
-    await expect(acceptButton).toBeVisible({ timeout: 15000 });
-    await acceptButton.click();
+    await expect(diagnosisAcceptButton).toBeVisible({ timeout: 15000 });
+    await diagnosisAcceptButton.click();
 
     console.log('Diagnosis recorded successfully');
 
     return this;
   }
 
-  async selectLabOrder() {
+  async selectCBCLabOrder() {
     // Open the Lab Orders section without leaving the consultation screen.
-    const labOrdersTab = this.page
+    const labOrdersTabLocator = this.page
       .locator('div.consultation-note-icon')
       .filter({ has: this.page.locator('span.long-name', { hasText: /^Lab Orders$/ }) });
 
-    await expect(labOrdersTab).toBeVisible({ timeout: 15000 });
-    await labOrdersTab.click();
+    await expect(labOrdersTabLocator).toBeVisible({ timeout: 15000 });
+    await labOrdersTabLocator.click();
 
     // Search for CBC using the same flow as diagnosis search.
-    const searchInput = this.page.locator('input[placeholder="Search"]:visible').last();
+    const cbcLabOrderSearchInput = this.page.locator('input[placeholder="Search"]:visible').last();
     await expect(searchInput).toBeVisible({ timeout: 15000 });
-    await searchInput.fill('CBC');
-    await searchInput.press('Enter');
+    await cbcLabOrderSearchInput.fill('CBC');
+    await cbcLabOrderSearchInput.press('Enter');
 
     // getByText exact matching normalizes leading/trailing whitespace.
-    const cbcResult = this.page.getByText('CBC', { exact: true }).last();
-    await expect(cbcResult).toBeVisible({ timeout: 30000 });
-    await cbcResult.click();
+    const cbcLabOrderResult = this.page.getByText('CBC', { exact: true }).last();
+    await expect(cbcLabOrderResult).toBeVisible({ timeout: 30000 });
+    await cbcLabOrderResult.click();
 
     console.log('CBC lab order selected successfully');
 
     // Confirm the selected lab order using its accept icon.
-    const completeButton = this.page
+    const cbcLabOrderAcceptButton = this.page
       .locator('div.save-icn')
       .locator('img[src="assets/new/accept.svg"]');
 
-    await expect(completeButton).toBeVisible({ timeout: 15000 });
-    await completeButton.click();
+    await expect(cbcLabOrderAcceptButton).toBeVisible({ timeout: 15000 });
+    await cbcLabOrderAcceptButton.click();
 
     console.log('CBC lab order completed successfully');
 
     return this;
   }
-  async selectRadiologyOrder() {
+  async selectCTOfLarynxRadiologyOrder() {
     // Open Radiology Orders in the current consultation screen.
-    const radiologyOrdersTab = this.page
+    const radiologyOrdersTabLocator = this.page
       .locator('div.consultation-note-icon')
       .filter({ has: this.page.locator('span.long-name', { hasText: /^Radiology Orders$/ }) });
 
-    await expect(radiologyOrdersTab).toBeVisible({ timeout: 15000 });
-    await radiologyOrdersTab.click();
+    await expect(radiologyOrdersTabLocator).toBeVisible({ timeout: 15000 });
+    await radiologyOrdersTabLocator.click();
 
     // Search for CT of larynx using the same flow as Lab Orders.
-    const searchInput = this.page.locator('input[placeholder="Search"]:visible').last();
+    const cbcLabOrderSearchInput = this.page.locator('input[placeholder="Search"]:visible').last();
     await expect(searchInput).toBeVisible({ timeout: 15000 });
-    await searchInput.fill('CT of larynx');
-    await searchInput.press('Enter');
+    await ctOfLarynxSearchInput.fill('CT of larynx');
+    await cbcLabOrderSearchInput.press('Enter');
 
-    const radiologyResult = this.page.getByText('CT of larynx', { exact: true }).last();
-    await expect(radiologyResult).toBeVisible({ timeout: 30000 });
-    await radiologyResult.click();
+    const ctOfLarynxRadiologyResult = this.page.getByText('CT of larynx', { exact: true }).last();
+    await expect(ctOfLarynxRadiologyResult).toBeVisible({ timeout: 30000 });
+    await ctOfLarynxRadiologyResult.click();
 
     console.log('CT of larynx radiology order selected');
 
     // Open the facility list and choose El Nasr Spl.HospitalForChildren-UAT.
-    const facilityInput = this.page.locator('.order-form-facility-input input');
-    await expect(facilityInput).toBeVisible({ timeout: 15000 });
-    await facilityInput.click();
+    const radiologyFacilitySearchInput = this.page.locator('.order-form-facility-input input');
+    await expect(radiologyFacilitySearchInput).toBeVisible({ timeout: 15000 });
+    await radiologyFacilitySearchInput.click();
 
-    const facilityList = this.page.locator('.order-facility-list');
-    await expect(facilityList).toBeVisible({ timeout: 15000 });
+    const radiologyFacilityList = this.page.locator('.order-facility-list');
+    await expect(radiologyFacilityList).toBeVisible({ timeout: 15000 });
 
     // Select the facility by its exact visible name, regardless of its position.
-    const facility = facilityList.getByText('El Nasr Spl.HospitalForChildren-UAT', { exact: true });
-    await expect(facility).toBeVisible({ timeout: 15000 });
-    await expect(facility).toHaveCount(1);
-    await facility.click();
+    const elNasrRadiologyFacilityOption = radiologyFacilityList.getByText('El Nasr Spl.HospitalForChildren-UAT', { exact: true });
+    await expect(elNasrRadiologyFacilityOption).toBeVisible({ timeout: 15000 });
+    await expect(elNasrRadiologyFacilityOption).toHaveCount(1);
+    await elNasrRadiologyFacilityOption.click();
 
     console.log('Radiology facility selected: El Nasr Spl.HospitalForChildren-UAT');
 
     // Confirm the radiology order using its accept icon.
-    const acceptButton = this.page.locator('img[src="assets/new/accept.svg"]:visible').last();
-    await expect(acceptButton).toBeVisible({ timeout: 15000 });
-    await acceptButton.click();
+    const diagnosisAcceptButton = this.page.locator('img[src="assets/new/accept.svg"]:visible').last();
+    await expect(diagnosisAcceptButton).toBeVisible({ timeout: 15000 });
+    await diagnosisAcceptButton.click();
 
     console.log('CT of larynx radiology order completed successfully');
 
     return this;
   }
 
-  async SendPredOrderstoPayer() {
+  async submitPredeterminationOrdersToPayer() {
     // Close the completed orders screen.
-    const closeButton = this.page.getByRole('button', {
+    const predeterminationOrdersCloseButton = this.page.getByRole('button', {
       name: 'Close',
       exact: true
     });
-    await expect(closeButton).toBeVisible({ timeout: 15000 });
-    await closeButton.click();
+    await expect(predeterminationOrdersCloseButton).toBeVisible({ timeout: 15000 });
+    await predeterminationOrdersCloseButton.click();
 
     console.log('Predetermination orders screen closed');
 
     // Submit the predetermination order to the payer.
-    const submitButton = this.page.getByRole('button', {
+    const submitPredeterminationToPayerButton = this.page.getByRole('button', {
       name: 'Submit',
       exact: true
     });
-    await expect(submitButton).toBeVisible({ timeout: 15000 });
-    await submitButton.click();
+    await expect(submitPredeterminationToPayerButton).toBeVisible({ timeout: 15000 });
+    await submitPredeterminationToPayerButton.click();
 
     console.log('Predetermination order submitted to payer');
 
