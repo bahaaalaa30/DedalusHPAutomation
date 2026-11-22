@@ -406,7 +406,7 @@ export class PractitionerPage {
     // Match the duration label while tolerating whitespace around "1 W".
     const clopam2mgDurationOption = this.page
       .locator('span.check')
-      .filter({ hasText: /^\\s*1\\s+W\\s*$/ });
+      .filter({ hasText: /^\s*1\s+W\s*$/ });
 
     // Wait for the duration option to be rendered after scrolling.
     await expect(clopam2mgDurationOption).toHaveCount(1, { timeout: 30000 });
