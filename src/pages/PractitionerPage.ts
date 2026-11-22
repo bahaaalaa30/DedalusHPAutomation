@@ -251,20 +251,14 @@ export class PractitionerPage {
     await expect(labOrdersTab).toBeVisible({ timeout: 15000 });
     await labOrdersTab.click();
 
-    // Search for CBC in the Lab Orders panel.
+    // Search for CBC using the same flow as diagnosis search.
     const searchInput = this.page.locator('input[placeholder="Search"]:visible').last();
     await expect(searchInput).toBeVisible({ timeout: 15000 });
-    await searchInput.click();
-    await searchInput.clear();
-    await expect(searchInput).toHaveValue('');
     await searchInput.fill('CBC');
-    await expect(searchInput).toHaveValue('CBC');
+    await searchInput.press('Enter');
 
-    // Wait for the exact CBC result and select it.
-    const cbcResult = this.page
-      .locator('div.content')
-      .filter({ hasText: /^CBC$/ });
-
+    // getByText exact matching normalizes leading/trailing whitespace.
+    const cbcResult = this.page.getByText('CBC', { exact: true }).last();
     await expect(cbcResult).toBeVisible({ timeout: 30000 });
     await cbcResult.click();
 
