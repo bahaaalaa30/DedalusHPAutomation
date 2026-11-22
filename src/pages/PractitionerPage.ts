@@ -305,9 +305,10 @@ export class PractitionerPage {
     const facilityList = this.page.locator('.order-facility-list');
     await expect(facilityList).toBeVisible({ timeout: 15000 });
 
-    // El Nasr Spl.HospitalForChildren-UAT is the second item in this list.
-    const facility = facilityList.locator('.order-facility-li').nth(1);
-    await expect(facility).toHaveText('El Nasr Spl.HospitalForChildren-UAT', { timeout: 15000 });
+    // Select the facility by its exact visible name, regardless of its position.
+    const facility = facilityList.getByText('El Nasr Spl.HospitalForChildren-UAT', { exact: true });
+    await expect(facility).toBeVisible({ timeout: 15000 });
+    await expect(facility).toHaveCount(1);
     await facility.click();
 
     console.log('Radiology facility selected: El Nasr Spl.HospitalForChildren-UAT');
