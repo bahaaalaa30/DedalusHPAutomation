@@ -5,14 +5,14 @@ export class PractitionerPage {
   private readonly clinicFacilityMenuLocator: Locator;
   private readonly clinicFacilityOptionLocator: Locator;
   private readonly practitionerFilterLocator: Locator;
-  private readonly patient: Locator;
+  private readonly firstPatientLocator: Locator;
   private readonly newDocumentButtonLocator: Locator;
   private readonly startConsultationButton: Locator;
   private readonly clinicianRoleRadioLocator: Locator;
   private readonly continueRoleButtonLocator: Locator;
 
   constructor(private readonly page: Page) {
-    this.firstPatientLocatorsCountLocator = page.locator(
+    this.patientsCountLocator = page.locator(
       'xpath=/html/body/app-root/app-crm/div/div/app-crm-leads/div[2]/div/div[1]/app-crm-quick-filters/div/div/div[2]/div[2]/div[3]/div'
     );
     this.clinicFacilityMenuLocator = page.locator('#facility-menu');
@@ -151,12 +151,12 @@ export class PractitionerPage {
     return this;
   }
   async verifyLeadsCountIsGreaterThanOne() {
-    await this.firstPatientLocatorsCountLocator.waitFor({
+    await this.patientsCountLocator.waitFor({
       state: 'visible',
       timeout: 15000
     });
 
-    const n = Number((await this.firstPatientLocatorsCountLocator.innerText()).trim());
+    const n = Number((await this.patientsCountLocator.innerText()).trim());
     expect(n).toBeGreaterThanOrEqual(1);
   }
 
@@ -253,7 +253,7 @@ export class PractitionerPage {
 
     // Search for CBC using the same flow as diagnosis search.
     const cbcLabOrderSearchInput = this.page.locator('input[placeholder="Search"]:visible').last();
-    await expect(searchInput).toBeVisible({ timeout: 15000 });
+    await expect(cbcLabOrderSearchInput).toBeVisible({ timeout: 15000 });
     await cbcLabOrderSearchInput.fill('CBC');
     await cbcLabOrderSearchInput.press('Enter');
 
@@ -286,10 +286,10 @@ export class PractitionerPage {
     await radiologyOrdersTabLocator.click();
 
     // Search for CT of larynx using the same flow as Lab Orders.
-    const cbcLabOrderSearchInput = this.page.locator('input[placeholder="Search"]:visible').last();
-    await expect(searchInput).toBeVisible({ timeout: 15000 });
+    const ctOfLarynxSearchInput = this.page.locator('input[placeholder="Search"]:visible').last();
+    await expect(ctOfLarynxSearchInput).toBeVisible({ timeout: 15000 });
     await ctOfLarynxSearchInput.fill('CT of larynx');
-    await cbcLabOrderSearchInput.press('Enter');
+    await ctOfLarynxSearchInput.press('Enter');
 
     const ctOfLarynxRadiologyResult = this.page.getByText('CT of larynx', { exact: true }).last();
     await expect(ctOfLarynxRadiologyResult).toBeVisible({ timeout: 30000 });
@@ -314,9 +314,9 @@ export class PractitionerPage {
     console.log('Radiology facility selected: El Nasr Spl.HospitalForChildren-UAT');
 
     // Confirm the radiology order using its accept icon.
-    const diagnosisAcceptButton = this.page.locator('img[src="assets/new/accept.svg"]:visible').last();
-    await expect(diagnosisAcceptButton).toBeVisible({ timeout: 15000 });
-    await diagnosisAcceptButton.click();
+    const ctOfLarynxRadiologyAcceptButton = this.page.locator('img[src="assets/new/accept.svg"]:visible').last();
+    await expect(ctOfLarynxRadiologyAcceptButton).toBeVisible({ timeout: 15000 });
+    await ctOfLarynxRadiologyAcceptButton.click();
 
     console.log('CT of larynx radiology order completed successfully');
 
