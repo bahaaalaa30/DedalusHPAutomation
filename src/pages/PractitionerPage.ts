@@ -323,4 +323,28 @@ export class PractitionerPage {
     return this;
   }
 
+  async SendPredOrderstoPayer() {
+    // Close the completed orders screen.
+    const closeButton = this.page.getByRole('button', {
+      name: 'Close',
+      exact: true
+    });
+    await expect(closeButton).toBeVisible({ timeout: 15000 });
+    await closeButton.click();
+
+    console.log('Predetermination orders screen closed');
+
+    // Submit the predetermination order to the payer.
+    const submitButton = this.page.getByRole('button', {
+      name: 'Submit',
+      exact: true
+    });
+    await expect(submitButton).toBeVisible({ timeout: 15000 });
+    await submitButton.click();
+
+    console.log('Predetermination order submitted to payer');
+
+    return this;
+  }
+
 }
