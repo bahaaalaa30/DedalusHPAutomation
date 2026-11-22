@@ -276,4 +276,49 @@ export class PractitionerPage {
 
     return this;
   }
+  async selectRadiologyOrder() {
+    // Open Radiology Orders in the current consultation screen.
+    const radiologyOrdersTab = this.page
+      .locator('div.consultation-note-icon')
+      .filter({ has: this.page.locator('span.long-name', { hasText: /^Radiology Orders$/ }) });
+
+    await expect(radiologyOrdersTab).toBeVisible({ timeout: 15000 });
+    await radiologyOrdersTab.click();
+
+    // Search for CT of larynx using the same flow as Lab Orders.
+    const searchInput = this.page.locator('input[placeholder="Search"]:visible').last();
+    await expect(searchInput).toBeVisible({ timeout: 15000 });
+    await searchInput.fill('CT of larynx');
+    await searchInput.press('Enter');
+
+    const radiologyResult = this.page.getByText('CT of larynx', { exact: true }).last();
+    await expect(radiologyResult).toBeVisible({ timeout: 30000 });
+    await radiologyResult.click();
+
+    console.log('CT of larynx radiology order selected');
+
+    // Open the facility list and choose El Nasr Spl.HospitalForChildren-UAT.
+    const facilityInput = this.page.locator('.order-form-facility-input input');
+    await expect(facilityInput).toBeVisible({ timeout: 15000 });
+    await facilityInput.click();
+
+    const facility = this.page
+      .locator('.order-facility-li')
+      .filter({ hasText: /^\\s*El Nasr Spl\\.HospitalForChildren-UAT\\s*$/ });
+
+    await expect(facility).toBeVisible({ timeout: 15000 });
+    await facility.click();
+
+    console.log('Radiology facility selected: El Nasr Spl.HospitalForChildren-UAT');
+
+    // Confirm the radiology order using its accept icon.
+    const acceptButton = this.page.locator('img[src="assets/new/accept.svg"]:visible').last();
+    await expect(acceptButton).toBeVisible({ timeout: 15000 });
+    await acceptButton.click();
+
+    console.log('CT of larynx radiology order completed successfully');
+
+    return this;
+  }
+
 }
