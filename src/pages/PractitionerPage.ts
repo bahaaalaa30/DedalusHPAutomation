@@ -376,16 +376,8 @@ export class PractitionerPage {
     await expect(clopam2mgInstructionInput).toBeVisible({ timeout: 15000 });
     await clopam2mgInstructionInput.fill('test');
 
-    // Scroll the document and every vertically scrollable prescription panel to the bottom.
+    // Scroll the page and its scrollable prescription containers to the bottom.
     await this.page.evaluate(() => {
-      const scrollToBottom = (element: HTMLElement) => {
-        element.scrollTop = element.scrollHeight;
-      };
-
-      const documentScroller = document.scrollingElement as HTMLElement | null;
-      if (documentScroller) {
-        scrollToBottom(documentScroller);
-      }
       window.scrollTo(0, document.documentElement.scrollHeight);
 
       const scrollableElements = Array.from(
@@ -394,22 +386,20 @@ export class PractitionerPage {
         const styles = window.getComputedStyle(element);
         return (
           element.scrollHeight > element.clientHeight &&
-          ['auto', 'scroll', 'overlay', 'hidden'].includes(styles.overflowY)
+          ['auto', 'scroll'].includes(styles.overflowY)
         );
       });
 
       for (const element of scrollableElements) {
-        scrollToBottom(element);
+        element.scrollTop = element.scrollHeight;
       }
     });
 
-    // Match the duration label while tolerating whitespace around "1 W".
     const clopam2mgDurationOption = this.page
       .locator('span.check')
-      .filter({ hasText: /^\\s*1\\s+W\\s*$/ });
+      .filter({ hasText: /^1 W$/ });
 
-    // Wait for the duration option to be rendered after scrolling.
-    await expect(clopam2mgDurationOption).toHaveCount(1, { timeout: 30000 });
+    // Select duration: 1 W.
     await expect(clopam2mgDurationOption).toBeVisible({ timeout: 15000 });
     await clopam2mgDurationOption.locator('input[type="radio"]').check();
 
