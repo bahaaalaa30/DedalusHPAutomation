@@ -64,5 +64,9 @@ test('PredetermenationMultiOrders', async ({ page, loginPage }) => {
   await practitioner.selectCTOfLarynxRadiologyOrder();
   await practitioner.selectChestXrayOneViewRadiologyOrder();
   await practitioner.selectCTOfKidneyRadiologyOrder();
+
+  // Prescription orders: CLOPAM 2mg, followed by PARACETAMOL 500mg.
+  await practitioner.selectCLOPAM2mgPrescriptionOrder();
+  await practitioner.selectParacetamol500mgPrescriptionOrder();
 });
 
