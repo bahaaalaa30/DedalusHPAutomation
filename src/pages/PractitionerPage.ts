@@ -476,7 +476,7 @@ export class PractitionerPage {
   }
 
   private async selectAdditionalRadiologyOrder(searchText: string, facilityName: string) {
-    // The Radiology Orders section is already open after CT of larynx is selected.
+    // Radiology Orders remains open after the previous radiology order is recorded.
     const radiologySearchInput = this.page.locator('input[placeholder="Search"]:visible').last();
     await expect(radiologySearchInput).toBeVisible({ timeout: 15000 });
     await radiologySearchInput.fill(searchText);
@@ -485,7 +485,59 @@ export class PractitionerPage {
     const radiologyOrderResult = this.page
       .locator('div.concept-item')
       .filter({
-        has: this.page.locator('div.content').filter({ hasText: new RegExp('^' + searchText.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\  async selectCLOPAM2mgPrescriptionOrder() {') + '
+        has: this.page.locator('div.content').getByText(searchText, { exact: true })
+      });
+
+    await expect(radiologyOrderResult).toHaveCount(1, { timeout: 30000 });
+    await expect(radiologyOrderResult).toBeVisible();
+    await radiologyOrderResult.click();
+
+    console.log(`${searchText} radiology order selected`);
+
+    // Select the requested Performing facility.
+    const facilityInput = this.page.locator('.order-form-facility-input input');
+    await expect(facilityInput).toBeVisible({ timeout: 15000 });
+    await facilityInput.click();
+
+    const facilityList = this.page.locator('.order-facility-list');
+    await expect(facilityList).toBeVisible({ timeout: 15000 });
+
+    const facilityOption = facilityList
+      .locator('div.order-facility-li')
+      .getByText(facilityName, { exact: true });
+
+    await expect(facilityOption).toHaveCount(1, { timeout: 15000 });
+    await expect(facilityOption).toBeVisible();
+    await facilityOption.click();
+
+    console.log(`Radiology facility selected: ${facilityName}`);
+
+    // Record the selected radiology order using the final accept/record button.
+    const radiologyRecordButton = this.page.locator('img[src="assets/new/accept.svg"]:visible').last();
+    await expect(radiologyRecordButton).toBeVisible({ timeout: 15000 });
+    await radiologyRecordButton.click();
+
+    console.log(`${searchText} radiology order recorded successfully`);
+    return this;
+  }
+
+  async selectChestXrayOneViewRadiologyOrder() {
+    await this.selectAdditionalRadiologyOrder(
+      'Chest x-ray. One view',
+      'El Arab Center - UAT'
+    );
+    return this;
+  }
+
+  async selectCTOfKidneyRadiologyOrder() {
+    await this.selectAdditionalRadiologyOrder(
+      'CT Of Kidney',
+      'El Nasr Spl.HospitalForChildren-UAT'
+    );
+    return this;
+  }
+
+  async selectCLOPAM2mgPrescriptionOrder() {') + '
     // Open Prescription Orders in the current consultation screen.
     const clopamPrescriptionOrdersTabLocator = this.page
       .locator('div.consultation-note-icon')
