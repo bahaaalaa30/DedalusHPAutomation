@@ -688,6 +688,94 @@ export class PractitionerPage {
       'PARACETAMOL 500MG',
       'PARACETAMOL 500MG TABLET ( PARACETAMOL )'
     );
+
+    // Select route: BY MOUTH.
+    const paracetamol500mgByMouthOption = this.page
+      .locator('.ui.checkbox')
+      .filter({ has: this.page.locator('label.check-opt', { hasText: /^BY MOUTH$/ }) });
+    await expect(paracetamol500mgByMouthOption).toBeVisible({ timeout: 15000 });
+    await paracetamol500mgByMouthOption.locator('input[type="radio"]').check();
+
+    // Select frequency: BID - Two Times a Day After Meals.
+    const paracetamol500mgBIDFrequencyOption = this.page
+      .locator('.ui.checkbox')
+      .filter({
+        has: this.page.locator('label.check-opt', {
+          hasText: /^BID- Two Times a Day After Meals$/
+        })
+      });
+    await expect(paracetamol500mgBIDFrequencyOption).toBeVisible({ timeout: 15000 });
+    await paracetamol500mgBIDFrequencyOption.locator('input[type="radio"]').check();
+
+    // Enter Remarks using the same value as the first medication.
+    const paracetamol500mgRemarksInput = this.page.locator('input[placeholder="Enter"]:visible').last();
+    await expect(paracetamol500mgRemarksInput).toBeVisible({ timeout: 15000 });
+    await paracetamol500mgRemarksInput.fill('test');
+
+    // Scroll the document and vertically scrollable prescription panels to the bottom
+    // so the Duration option becomes visible.
+    await this.page.evaluate(() => {
+      const scrollToBottom = (element: HTMLElement) => {
+        element.scrollTop = element.scrollHeight;
+      };
+
+      const documentScroller = document.scrollingElement as HTMLElement | null;
+      if (documentScroller) {
+        scrollToBottom(documentScroller);
+      }
+      window.scrollTo(0, document.documentElement.scrollHeight);
+
+      const scrollableElements = Array.from(
+        document.querySelectorAll<HTMLElement>('*')
+      ).filter((element) => {
+        const styles = window.getComputedStyle(element);
+        return (
+          element.scrollHeight > element.clientHeight &&
+          ['auto', 'scroll', 'overlay', 'hidden'].includes(styles.overflowY)
+        );
+      });
+
+      for (const element of scrollableElements) {
+        scrollToBottom(element);
+      }
+    });
+
+    // Select Duration: 1 W, matching the first medication.
+    const paracetamol500mgDurationOption = this.page
+      .locator('span.check')
+      .filter({ hasText: /^\\s*1\\s+W\\s*$/ });
+
+    await expect(paracetamol500mgDurationOption).toHaveCount(1, { timeout: 30000 });
+    await expect(paracetamol500mgDurationOption).toBeVisible({ timeout: 15000 });
+    await paracetamol500mgDurationOption.locator('input[type="radio"]').check();
+
+    // Scroll back to the top before recording the prescription.
+    await this.page.evaluate(() => {
+      window.scrollTo(0, 0);
+
+      const scrollableElements = Array.from(
+        document.querySelectorAll<HTMLElement>('*')
+      ).filter((element) => {
+        const styles = window.getComputedStyle(element);
+        return (
+          element.scrollHeight > element.clientHeight &&
+          ['auto', 'scroll'].includes(styles.overflowY)
+        );
+      });
+
+      for (const element of scrollableElements) {
+        element.scrollTop = 0;
+      }
+    });
+
+    // Record the completed Paracetamol prescription.
+    const paracetamol500mgPrescriptionAcceptButton = this.page
+      .locator('img[src="assets/new/accept.svg"]:visible')
+      .last();
+    await expect(paracetamol500mgPrescriptionAcceptButton).toBeVisible({ timeout: 15000 });
+    await paracetamol500mgPrescriptionAcceptButton.click();
+
+    console.log('PARACETAMOL 500MG prescription details saved successfully');
     return this;
   }
 
