@@ -59,5 +59,10 @@ test('PredetermenationMultiOrders', async ({ page, loginPage }) => {
   await practitioner.selectCBCLabOrder();
   await practitioner.selectSerumAlbuminLabOrder();
   await practitioner.selectSerumCreatinineLabOrder();
+
+  // Radiology orders: CT of larynx, Chest x-ray (one view), and CT of kidney.
+  await practitioner.selectCTOfLarynxRadiologyOrder();
+  await practitioner.selectChestXrayOneViewRadiologyOrder();
+  await practitioner.selectCTOfKidneyRadiologyOrder();
 });
 
