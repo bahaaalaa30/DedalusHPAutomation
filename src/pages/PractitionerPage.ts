@@ -691,49 +691,6 @@ export class PractitionerPage {
     return this;
   }
 
-  async submitPredeterminationOrdersToPayer() {') + '
-    // Close the completed orders screen.
-    const predeterminationOrdersCloseButton = this.page.getByRole('button', {
-      name: 'Close',
-      exact: true
-    });
-    await expect(predeterminationOrdersCloseButton).toBeVisible({ timeout: 15000 });
-    await predeterminationOrdersCloseButton.click();
-
-    console.log('Predetermination orders screen closed');
-
-    // Submit the predetermination order to the payer.
-    const submitPredeterminationToPayerButton = this.page.getByRole('button', {
-      name: 'Submit',
-      exact: true
-    });
-    await expect(submitPredeterminationToPayerButton).toBeVisible({ timeout: 15000 });
-    await submitPredeterminationToPayerButton.click();
-
-    console.log('Predetermination order submitted to payer');
-
-    return this;
-  }
-
-}
-) });
-
-    await expect(prescriptionResult).toHaveCount(1, { timeout: 30000 });
-    await expect(prescriptionResult).toBeVisible();
-    await prescriptionResult.click();
-
-    console.log(`${exactResultText} prescription selected successfully`);
-    return this;
-  }
-
-  async selectParacetamol500mgPrescriptionOrder() {
-    await this.selectAdditionalPrescriptionOrder(
-      'PARACETAMOL 500MG',
-      'PARACETAMOL 500MG TABLET ( PARACETAMOL )'
-    );
-    return this;
-  }
-
   async submitPredeterminationOrdersToPayer() {
     // Close the completed orders screen.
     const predeterminationOrdersCloseButton = this.page.getByRole('button', {
