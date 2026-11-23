@@ -12,6 +12,6 @@ export const config = {
   genPass: env('GEN_PASSWORD', 'egy123'),
   cmoB6: env('CMO_USERNAME', 'S00001'),
   cmoPassword: env('CMO_PASSWORD', 'egy123'),
-  elNasrDoctorUser: env('EL_NASR_DOCTOR_USER', 'P00250'),
-  elNasrDoctorPassword: env('EL_NASR_DOCTOR_PASSWORD', 'egy123')
+  AlArabDoctorUserName: env('AL_ARAB_DOCTOR_USER', 'P00250'),
+  AlArabDoctorPassword: env('AL_ARAB_DOCTOR_PASSWORD', 'egy123')
 };

@@ -9,7 +9,7 @@ test('predetermination orders', async ({ page, loginPage }) => {
   );
   await page.goto(config.payerUrl, { waitUntil: 'commit' });
   await expect(page.locator('#user-id')).toBeVisible({ timeout: 30000 });
-  await loginPage.login(config.elNasrDoctorUser, config.elNasrDoctorPassword);
+  await loginPage.login(config.AlArabDoctorUserName, config.AlArabDoctorPassword);
   const practitioner = new PractitionerPage(page);
   await practitioner.selectPatient(patient.patientName, patient.patientId);
   //await practitioner.startConsultation();
