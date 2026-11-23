@@ -19,5 +19,12 @@
       "src/tests/normalcases/EligibiltyCheck/Predetermination.spec.ts",
       "src/tests/normalcases/EligibiltyCheck/checkEligibilityQueue.spec.ts"
     ]
-  }
+  },
+  "name": "Payer Integration Test",
+  "preserveOrder": true,
+  "continueOnFailure": false,
+  "workers": 1,
+  "specs": [
+    "src/tests/normalcases/EligibiltyCheck/PayerIntegrationFullWorkFlow.spec.ts"
+  ]
 }

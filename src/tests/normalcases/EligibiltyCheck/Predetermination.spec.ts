@@ -69,5 +69,8 @@ test('PredetermenationMultiOrders', async ({ page, loginPage }) => {
   await practitioner.selectCLOPAM2mgPrescriptionOrder();
   await practitioner.selectParacetamol500mgPrescriptionOrder();
   await practitioner.selectCLOPRAM10mgPrescriptionOrder();
+
+  // Submit the predetermination orders to the payer.
+  await practitioner.submitPredeterminationOrdersToPayer();
 });
 
