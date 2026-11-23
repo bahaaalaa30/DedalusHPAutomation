@@ -8,8 +8,14 @@
     "test:suite": "node scripts/run-suite.js",
     "test:suite:headed": "node scripts/run-suite.js --headed",
     "typecheck": "tsc --noEmit",
-    "report": "allure generate allure-results --clean -o allure-report",
-    "report:open": "allure open allure-report"
+    "report": "allure generate allure-results/normal-cases --clean -o allure-report/normal-cases",
+    "report:open": "allure open allure-report/normal-cases",
+    "test:suite:normal": "node scripts/run-suite.js --suite=normal-cases",
+    "test:suite:normal:headed": "node scripts/run-suite.js --suite=normal-cases --headed",
+    "test:suite:payer": "node scripts/run-suite.js --suite=payer-integration",
+    "test:suite:payer:headed": "node scripts/run-suite.js --suite=payer-integration --headed",
+    "report:payer": "allure generate allure-results/payer-integration --clean -o allure-report/payer-integration",
+    "report:payer:open": "allure open allure-report/payer-integration"
   },
   "dependencies": {
     "dotenv": "^17.2.2"
