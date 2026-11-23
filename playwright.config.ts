@@ -11,7 +11,14 @@ export default defineConfig({
   reporter: [
     ['list'],
     ['html', { open: 'never' }],
-    ['allure-playwright'],
+    [
+      'allure-playwright',
+      {
+        // Use the suite-specific results directory provided by run-suite.js.
+        // Fall back to the default directory for direct Playwright runs.
+        resultsDir: process.env.ALLURE_RESULTS_DIR || 'allure-results',
+      },
+    ],
   ],
   use: {
     headless: process.env.HEADLESS !== 'false',
