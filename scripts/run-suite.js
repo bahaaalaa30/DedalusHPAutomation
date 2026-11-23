@@ -4,21 +4,61 @@ const path = require('path');
 
 const rootDir = path.resolve(__dirname, '..');
 const suitePath = path.join(rootDir, 'playwright-suite.json');
-const suite = JSON.parse(fs.readFileSync(suitePath, 'utf8'));
-const config = suite.test;
+const suiteFile = JSON.parse(fs.readFileSync(suitePath, 'utf8'));
+
+function readSuiteName(args) {
+  const suiteArgIndex = args.findIndex(arg => arg === '--suite' || arg.startsWith('--suite='));
+
+  if (suiteArgIndex === -1) {
+    return 'normal-cases';
+  }
+
+  const arg = args[suiteArgIndex];
+  const suiteName = arg === '--suite'
+    ? args[suiteArgIndex + 1]
+    : arg.slice('--suite='.length);
+
+  if (!suiteName) {
+    throw new Error('Missing suite name. Example: --suite=payer-integration');
+  }
+
+  return suiteName;
+}
+
+const inputArgs = process.argv.slice(2);
+const suiteName = readSuiteName(inputArgs);
+const config = suiteFile.suites && suiteFile.suites[suiteName];
+
+if (!config) {
+  const availableSuites = Object.keys(suiteFile.suites || {}).join(', ');
+  throw new Error(
+    'Unknown suite "' + suiteName + '". Available suites: ' + availableSuites
+  );
+}
 
 if (!config.preserveOrder) {
   throw new Error('Suite must have preserveOrder=true');
 }
 
-const extraArgs = process.argv.slice(2).filter(arg => !arg.startsWith('--workers='));
+const extraArgs = inputArgs.filter((arg, index) => {
+  if (arg === '--suite') return false;
+  if (index > 0 && inputArgs[index - 1] === '--suite') return false;
+  if (arg.startsWith('--suite=')) return false;
+  if (arg.startsWith('--workers=')) return false;
+  return true;
+});
+
+const workers = Number.isInteger(config.workers) && config.workers > 0
+  ? config.workers
+  : 1;
+
 const playwrightCli = path.join(rootDir, 'node_modules', 'playwright', 'cli.js');
 const allureBin = process.platform === 'win32'
   ? path.join(rootDir, 'node_modules', '.bin', 'allure.cmd')
   : path.join(rootDir, 'node_modules', '.bin', 'allure');
 
-const allureResultsDir = path.join(rootDir, 'allure-results');
-const allureReportDir = path.join(rootDir, 'allure-report');
+const allureResultsDir = path.join(rootDir, 'allure-results', suiteName);
+const allureReportDir = path.join(rootDir, 'allure-report', suiteName);
 
 if (!fs.existsSync(playwrightCli)) {
   throw new Error(
@@ -34,7 +74,7 @@ if (!fs.existsSync(allureBin)) {
   );
 }
 
-// Start every suite run with a clean Allure results directory.
+// Clean only this suite's Allure data. Other suites' results and reports are preserved.
 if (fs.existsSync(allureResultsDir)) {
   fs.rmSync(allureResultsDir, { recursive: true, force: true });
 }
@@ -45,8 +85,9 @@ let failed = false;
 
 console.log('');
 console.log('='.repeat(70));
-console.log(config.name);
+console.log(config.name + ' [' + suiteName + ']');
 console.log('='.repeat(70));
+console.log('Workers: ' + workers);
 console.log('Allure results: ' + allureResultsDir);
 console.log('');
 
@@ -58,7 +99,7 @@ for (let index = 0; index < config.specs.length; index++) {
 
   const result = spawnSync(
     process.execPath,
-    [playwrightCli, 'test', spec, '--workers=1', ...extraArgs],
+    [playwrightCli, 'test', spec, '--workers=' + workers, ...extraArgs],
     {
       stdio: 'inherit',
       env: {
@@ -94,26 +135,24 @@ for (let index = 0; index < config.specs.length; index++) {
   console.log('');
 }
 
-// Always generate the report, including when one or more tests failed.
+// Generate an isolated Allure report for the selected suite only.
 console.log('');
 console.log('='.repeat(70));
-console.log('Generating Allure report...');
+console.log('Generating Allure report for ' + config.name + '...');
 console.log('='.repeat(70));
+
+const reportArgs = [
+  'generate',
+  allureResultsDir,
+  '--clean',
+  '-o',
+  allureReportDir
+];
 
 const reportResult = process.platform === 'win32'
   ? spawnSync(
       process.env.ComSpec || 'cmd.exe',
-      [
-        '/d',
-        '/c',
-        'call',
-        `"${allureBin}"`,
-        'generate',
-        allureResultsDir,
-        '--clean',
-        '-o',
-        allureReportDir
-      ],
+      ['/d', '/c', 'call', '"' + allureBin + '"', ...reportArgs],
       {
         stdio: 'inherit',
         shell: false,
@@ -122,7 +161,7 @@ const reportResult = process.platform === 'win32'
     )
   : spawnSync(
       allureBin,
-      ['generate', allureResultsDir, '--clean', '-o', allureReportDir],
+      reportArgs,
       {
         stdio: 'inherit',
         shell: false,
