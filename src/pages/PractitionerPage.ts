@@ -779,6 +779,101 @@ export class PractitionerPage {
     return this;
   }
 
+  async selectCLOPRAM10mgPrescriptionOrder() {
+    await this.selectAdditionalPrescriptionOrder(
+      'CLOPRAM 10 MG TABLETS',
+      'CLOPRAM 10 MG TABLETS ( METOCLOPRAMIDE )'
+    );
+
+    // Select route: BY MOUTH.
+    const clopram10mgByMouthOption = this.page
+      .locator('.ui.checkbox')
+      .filter({ has: this.page.locator('label.check-opt', { hasText: /^BY MOUTH$/ }) });
+    await expect(clopram10mgByMouthOption).toBeVisible({ timeout: 15000 });
+    await clopram10mgByMouthOption.locator('input[type="radio"]').check();
+
+    // Select frequency: BID - Two Times a Day After Meals.
+    const clopram10mgBIDFrequencyOption = this.page
+      .locator('.ui.checkbox')
+      .filter({
+        has: this.page.locator('label.check-opt', {
+          hasText: /^BID- Two Times a Day After Meals$/
+        })
+      });
+    await expect(clopram10mgBIDFrequencyOption).toBeVisible({ timeout: 15000 });
+    await clopram10mgBIDFrequencyOption.locator('input[type="radio"]').check();
+
+    // Enter Remarks using the same value as the previous medications.
+    const clopram10mgRemarksInput = this.page.locator('input[placeholder="Enter"]:visible').last();
+    await expect(clopram10mgRemarksInput).toBeVisible({ timeout: 15000 });
+    await clopram10mgRemarksInput.fill('test');
+
+    // Scroll the document and vertically scrollable prescription panels to the bottom.
+    await this.page.evaluate(() => {
+      const scrollToBottom = (element: HTMLElement) => {
+        element.scrollTop = element.scrollHeight;
+      };
+
+      const documentScroller = document.scrollingElement as HTMLElement | null;
+      if (documentScroller) {
+        scrollToBottom(documentScroller);
+      }
+      window.scrollTo(0, document.documentElement.scrollHeight);
+
+      const scrollableElements = Array.from(
+        document.querySelectorAll<HTMLElement>('*')
+      ).filter((element) => {
+        const styles = window.getComputedStyle(element);
+        return (
+          element.scrollHeight > element.clientHeight &&
+          ['auto', 'scroll', 'overlay', 'hidden'].includes(styles.overflowY)
+        );
+      });
+
+      for (const element of scrollableElements) {
+        scrollToBottom(element);
+      }
+    });
+
+    // Select Duration: 1 W, matching the previous medications.
+    const clopram10mgDurationOption = this.page
+      .locator('span.check')
+      .filter({ hasText: /^\\s*1\\s+W\\s*$/ });
+
+    await expect(clopram10mgDurationOption).toHaveCount(1, { timeout: 30000 });
+    await expect(clopram10mgDurationOption).toBeVisible({ timeout: 15000 });
+    await clopram10mgDurationOption.locator('input[type="radio"]').check();
+
+    // Scroll back to the top before recording the prescription.
+    await this.page.evaluate(() => {
+      window.scrollTo(0, 0);
+
+      const scrollableElements = Array.from(
+        document.querySelectorAll<HTMLElement>('*')
+      ).filter((element) => {
+        const styles = window.getComputedStyle(element);
+        return (
+          element.scrollHeight > element.clientHeight &&
+          ['auto', 'scroll'].includes(styles.overflowY)
+        );
+      });
+
+      for (const element of scrollableElements) {
+        element.scrollTop = 0;
+      }
+    });
+
+    // Record the completed CLOPRAM prescription.
+    const clopram10mgPrescriptionAcceptButton = this.page
+      .locator('img[src="assets/new/accept.svg"]:visible')
+      .last();
+    await expect(clopram10mgPrescriptionAcceptButton).toBeVisible({ timeout: 15000 });
+    await clopram10mgPrescriptionAcceptButton.click();
+
+    console.log('CLOPRAM 10 MG TABLETS prescription details saved successfully');
+    return this;
+  }
+
   async submitPredeterminationOrdersToPayer() {
     // Close the completed orders screen.
     const predeterminationOrdersCloseButton = this.page.getByRole('button', {
