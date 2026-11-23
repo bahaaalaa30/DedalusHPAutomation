@@ -673,7 +673,25 @@ export class PractitionerPage {
 
     const prescriptionResult = this.page
       .locator('div.content.cursor-pointer')
-      .filter({ hasText: new RegExp('^' + exactResultText.replace(/[.*+?^${}()|[\]\\]/g, '\\  async submitPredeterminationOrdersToPayer() {') + '
+      .filter({ hasText: exactResultText });
+
+    await expect(prescriptionResult).toHaveCount(1, { timeout: 30000 });
+    await expect(prescriptionResult).toBeVisible();
+    await prescriptionResult.click();
+
+    console.log(`${exactResultText} prescription selected successfully`);
+    return this;
+  }
+
+  async selectParacetamol500mgPrescriptionOrder() {
+    await this.selectAdditionalPrescriptionOrder(
+      'PARACETAMOL 500MG',
+      'PARACETAMOL 500MG TABLET ( PARACETAMOL )'
+    );
+    return this;
+  }
+
+  async submitPredeterminationOrdersToPayer() {') + '
     // Close the completed orders screen.
     const predeterminationOrdersCloseButton = this.page.getByRole('button', {
       name: 'Close',
