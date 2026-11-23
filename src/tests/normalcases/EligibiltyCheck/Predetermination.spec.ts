@@ -56,6 +56,10 @@ test('PredetermenationMultiOrders', async ({ page, loginPage }) => {
   await practitioner.selectGastroparesisDiagnosis();
   await practitioner.completeGastroparesisDiagnosisDetails();
   await practitioner.recordGastroparesisDiagnosis();
+
+  // Lab orders: CBC, Serum Albumin, and Serum Creatinine.
   await practitioner.selectCBCLabOrder();
+  await practitioner.selectSerumAlbuminLabOrder();
+  await practitioner.selectSerumCreatinineLabOrder();
 });
 
