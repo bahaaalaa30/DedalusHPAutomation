@@ -24,7 +24,7 @@ test('predetermination orders', async ({ page, loginPage }) => {
   await practitioner.selectCBCLabOrder();
   await practitioner.selectCTOfLarynxRadiologyOrder();
   await practitioner.selectCLOPAM2mgPrescriptionOrder();
-  //await practitioner.submitPredeterminationOrdersToPayer();
+  await practitioner.submitPredeterminationOrdersToPayer();
 });
 
 
