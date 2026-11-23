@@ -398,8 +398,37 @@ export class PractitionerPage {
     const labOrderResult = this.page
       .locator('div.concept-item')
       .filter({
-        has: this.page.locator('div.content').filter({
-          hasText: new RegExp(`^\\s*${searchText.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\  async selectCTOfLarynxRadiologyOrder() {')}\\s*import { expect, Locator, Page } from '@playwright/test';
+        has: this.page.locator('div.content').filter({ hasText: searchText })
+      });
+
+    await expect(labOrderResult).toHaveCount(1, { timeout: 30000 });
+    await expect(labOrderResult).toBeVisible();
+    await labOrderResult.click();
+
+    console.log(`${searchText} lab order selected successfully`);
+
+    const labOrderAcceptButton = this.page
+      .locator('div.save-icn')
+      .locator('img[src="assets/new/accept.svg"]');
+
+    await expect(labOrderAcceptButton).toBeVisible({ timeout: 15000 });
+    await labOrderAcceptButton.click();
+
+    console.log(`${searchText} lab order completed successfully`);
+    return this;
+  }
+
+  async selectSerumAlbuminLabOrder() {
+    await this.selectAdditionalLabOrder('Serum Albumin');
+    return this;
+  }
+
+  async selectSerumCreatinineLabOrder() {
+    await this.selectAdditionalLabOrder('Serum Creatinine');
+    return this;
+  }
+
+  async selectCTOfLarynxRadiologyOrder() {')}\\s*import { expect, Locator, Page } from '@playwright/test';
 
 export class PractitionerPage {
   private readonly patientsCountLocator: Locator;
