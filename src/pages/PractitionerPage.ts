@@ -838,7 +838,7 @@ export class PractitionerPage {
     // Select Duration: 1 W, matching the previous medications.
     const clopram10mgDurationOption = this.page
       .locator('span.check')
-      .filter({ hasText: /^\\s*1\\s+W\\s*$/ });
+      .filter({ hasText: /^\s*1\s+W\s*$/ });
 
     await expect(clopram10mgDurationOption).toHaveCount(1, { timeout: 30000 });
     await expect(clopram10mgDurationOption).toBeVisible({ timeout: 15000 });
