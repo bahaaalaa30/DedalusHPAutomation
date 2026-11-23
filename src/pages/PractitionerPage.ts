@@ -743,7 +743,7 @@ export class PractitionerPage {
     // Select Duration: 1 W, matching the first medication.
     const paracetamol500mgDurationOption = this.page
       .locator('span.check')
-      .filter({ hasText: /^\\s*1\\s+W\\s*$/ });
+      .filter({ hasText: /^\s*1\s+W\s*$/ });
 
     await expect(paracetamol500mgDurationOption).toHaveCount(1, { timeout: 30000 });
     await expect(paracetamol500mgDurationOption).toBeVisible({ timeout: 15000 });
