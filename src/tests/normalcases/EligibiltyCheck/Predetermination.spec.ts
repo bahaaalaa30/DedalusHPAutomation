@@ -1,6 +1,10 @@
 import { test, expect, config } from '../../../fixtures/baseTest';
 import { PractitionerPage } from '../../../pages/PractitionerPage';
+import { VisitBookingPage } from '../../../pages/VisitBookingPage';
 import { PatientBMS } from '../../../utils/patientBms';
+import { getRandomPatientId } from '../../../utils/csvDataReader';
+import path from 'node:path';
+
 
 test('predetermination orders', async ({ page, loginPage }) => {
   const patient = PatientBMS.getCapturedPatient();
