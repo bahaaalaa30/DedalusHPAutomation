@@ -650,6 +650,72 @@ export class PractitionerPage {
     return this;
   }
 
+  private async selectAdditionalPrescriptionOrder(searchText: string, exactResultText: string) {
+    // Prescription Orders may remain open after recording the previous medication.
+    const prescriptionSearchInput = this.page.locator('#cns-pres-search');
+
+    if (!(await prescriptionSearchInput.isVisible().catch(() => false))) {
+      const prescriptionOrdersTabLocator = this.page
+        .locator('div.consultation-note-icon')
+        .filter({
+          has: this.page.locator('span.long-name', {
+            hasText: /^Prescription Orders$/
+          })
+        });
+
+      await expect(prescriptionOrdersTabLocator).toBeVisible({ timeout: 15000 });
+      await prescriptionOrdersTabLocator.click();
+    }
+
+    await expect(prescriptionSearchInput).toBeVisible({ timeout: 15000 });
+    await prescriptionSearchInput.fill(searchText);
+    await prescriptionSearchInput.press('Enter');
+
+    const prescriptionResult = this.page
+      .locator('div.content.cursor-pointer')
+      .filter({ hasText: new RegExp('^' + exactResultText.replace(/[.*+?^${}()|[\]\\]/g, '\\  async submitPredeterminationOrdersToPayer() {') + '
+    // Close the completed orders screen.
+    const predeterminationOrdersCloseButton = this.page.getByRole('button', {
+      name: 'Close',
+      exact: true
+    });
+    await expect(predeterminationOrdersCloseButton).toBeVisible({ timeout: 15000 });
+    await predeterminationOrdersCloseButton.click();
+
+    console.log('Predetermination orders screen closed');
+
+    // Submit the predetermination order to the payer.
+    const submitPredeterminationToPayerButton = this.page.getByRole('button', {
+      name: 'Submit',
+      exact: true
+    });
+    await expect(submitPredeterminationToPayerButton).toBeVisible({ timeout: 15000 });
+    await submitPredeterminationToPayerButton.click();
+
+    console.log('Predetermination order submitted to payer');
+
+    return this;
+  }
+
+}
+) });
+
+    await expect(prescriptionResult).toHaveCount(1, { timeout: 30000 });
+    await expect(prescriptionResult).toBeVisible();
+    await prescriptionResult.click();
+
+    console.log(`${exactResultText} prescription selected successfully`);
+    return this;
+  }
+
+  async selectParacetamol500mgPrescriptionOrder() {
+    await this.selectAdditionalPrescriptionOrder(
+      'PARACETAMOL 500MG',
+      'PARACETAMOL 500MG TABLET ( PARACETAMOL )'
+    );
+    return this;
+  }
+
   async submitPredeterminationOrdersToPayer() {
     // Close the completed orders screen.
     const predeterminationOrdersCloseButton = this.page.getByRole('button', {
