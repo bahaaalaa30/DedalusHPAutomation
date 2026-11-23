@@ -56,5 +56,6 @@ test('PredetermenationMultiOrders', async ({ page, loginPage }) => {
   await practitioner.selectGastroparesisDiagnosis();
   await practitioner.completeGastroparesisDiagnosisDetails();
   await practitioner.recordGastroparesisDiagnosis();
+  await practitioner.selectCBCLabOrder();
 });
 
