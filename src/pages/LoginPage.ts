@@ -47,11 +47,6 @@ export class LoginPage {
 
     console.log('[LOGIN] username:', usernameValue);
     console.log('[LOGIN] password length:', passwordLength);
-    console.log('[LOGIN] button disabled:', disabled);
-    console.log('[LOGIN] username outerHTML:', await this.username.evaluate(el => el.outerHTML));
-    console.log('[LOGIN] password outerHTML:', await this.password.evaluate(el => el.outerHTML));
-    console.log('[LOGIN] button outerHTML:', await this.loginButton.evaluate(el => el.outerHTML));
-
     if (disabled) {
       await this.password.press('Tab');
       await this.page.waitForTimeout(1000);
