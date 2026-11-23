@@ -1,30 +1,34 @@
 {
   "name": "HP Automation Test",
-  "test": {
-    "name": "NormalCases Test",
-    "preserveOrder": true,
-    "continueOnFailure": true,
-    "workers": 5,
-    "specs": [
-      "src/tests/normalcases/CMO/LoginTest.spec.ts",
-      "src/tests/normalcases/CMO/VisitBooking.spec.ts",
-      "src/tests/normalcases/CMO/Cancelvisit.spec.ts",
-      "src/tests/normalcases/CMO/Cancelappointment.spec.ts",
-      "src/tests/normalcases/CMO/ChangeLanguage.spec.ts",
-      "src/tests/normalcases/CMO/SearchPatient.spec.ts",
-      "src/tests/normalcases/CMO/BillPage.spec.ts",
-      "src/tests/normalcases/Practitioner/PractitionerLogin.spec.ts",
-      "src/tests/normalcases/Practitioner/practitionerPatientsCount.spec.ts",
-      "src/tests/normalcases/EligibiltyCheck/Eligibility.spec.ts",
-      "src/tests/normalcases/EligibiltyCheck/Predetermination.spec.ts",
-      "src/tests/normalcases/EligibiltyCheck/checkEligibilityQueue.spec.ts"
-    ]
-  },
-  "name": "Payer Integration Test",
-  "preserveOrder": true,
-  "continueOnFailure": false,
-  "workers": 1,
-  "specs": [
-    "src/tests/normalcases/EligibiltyCheck/PayerIntegrationFullWorkFlow.spec.ts"
-  ]
+  "suites": {
+    "normal-cases": {
+      "name": "NormalCases Test",
+      "preserveOrder": true,
+      "continueOnFailure": true,
+      "workers": 1,
+      "specs": [
+        "src/tests/normalcases/CMO/LoginTest.spec.ts",
+        "src/tests/normalcases/CMO/VisitBooking.spec.ts",
+        "src/tests/normalcases/CMO/Cancelvisit.spec.ts",
+        "src/tests/normalcases/CMO/Cancelappointment.spec.ts",
+        "src/tests/normalcases/CMO/ChangeLanguage.spec.ts",
+        "src/tests/normalcases/CMO/SearchPatient.spec.ts",
+        "src/tests/normalcases/CMO/BillPage.spec.ts",
+        "src/tests/normalcases/Practitioner/PractitionerLogin.spec.ts",
+        "src/tests/normalcases/Practitioner/practitionerPatientsCount.spec.ts",
+        "src/tests/normalcases/EligibiltyCheck/Eligibility.spec.ts",
+        "src/tests/normalcases/EligibiltyCheck/Predetermination.spec.ts",
+        "src/tests/normalcases/EligibiltyCheck/checkEligibilityQueue.spec.ts"
+      ]
+    },
+    "payer-integration": {
+      "name": "Payer Integration Test",
+      "preserveOrder": true,
+      "continueOnFailure": false,
+      "workers": 1,
+      "specs": [
+        "src/tests/normalcases/EligibiltyCheck/PayerIntegrationFullWorkFlow.spec.ts"
+      ]
+    }
+  }
 }
