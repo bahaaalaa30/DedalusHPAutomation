@@ -42,17 +42,15 @@ test('PredetermenationMultiOrders', async ({ page, loginPage }) => {
   await practitioner.selectPatient(patient.patientName, patient.patientId);
   await practitioner.selectPhysicianOrderFormUHI();
 
-  // First diagnosis: Acute headache.
+  // Diagnosis: Acute headache, Acute ST elevation myocardial infarction, and Gastroparesis.
   await practitioner.selectAcuteHeadacheDiagnosis();
   await practitioner.completeAcuteHeadacheDiagnosisDetails();
   await practitioner.recordAcuteHeadacheDiagnosis();
 
-  // Second diagnosis: Acute ST elevation myocardial infarction.
   await practitioner.selectAcuteSTElevationMyocardialInfarctionDiagnosis();
   await practitioner.completeAcuteSTElevationMyocardialInfarctionDiagnosisDetails();
   await practitioner.recordAcuteSTElevationMyocardialInfarctionDiagnosis();
 
-  // Third diagnosis: Gastroparesis.
   await practitioner.selectGastroparesisDiagnosis();
   await practitioner.completeGastroparesisDiagnosisDetails();
   await practitioner.recordGastroparesisDiagnosis();
