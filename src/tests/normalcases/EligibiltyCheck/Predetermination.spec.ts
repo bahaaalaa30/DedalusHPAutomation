@@ -54,7 +54,7 @@ test('FullPredOrder', async ({ page, loginPage }) => {
   await visitBooking.selectVisitType2();
   await visitBooking.sendRequestAndWaitForResponse();
   PatientBMS.markEligibilityCompleted();
-  await page.waitForTimeout(10_000);
+  await page.waitForTimeout(20_000);
   // Step 2: Continue with Predetermination Orders using the captured eligible patient.
   const patient = PatientBMS.getCapturedPatient();
   console.log(
@@ -68,7 +68,7 @@ test('FullPredOrder', async ({ page, loginPage }) => {
   const practitioner = new PractitionerPage(page);
   await practitioner.selectPatient(patient.patientName, patient.patientId);
   //await practitioner.startConsultation();
-  await page.waitForTimeout(5_000);
+
   await practitioner.selectPhysicianOrderFormUHI();
   await practitioner.selectAcuteHeadacheDiagnosis();
   await practitioner.completeAcuteHeadacheDiagnosisDetails();
