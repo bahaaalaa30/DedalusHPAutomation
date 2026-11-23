@@ -366,7 +366,15 @@ export class PractitionerPage {
     // Search for CBC using the same flow as diagnosis search.
     const cbcLabOrderSearchInput = this.page.locator('input[placeholder="Search"]:visible').last();
     await expect(cbcLabOrderSearchInput).toBeVisible({ timeout: 15000 });
-    await cbcLabOrderSearchInput.fill('CBC');
+    await cbcLabOrderSearchInput.click();
+    await cbcLabOrderSearchInput.fill('');
+    // Type character-by-character so the search component receives keyboard events.
+    await cbcLabOrderSearchInput.pressSequentially('CBC', { delay: 100 });
+
+    // Reproduce the Space + Backspace interaction that currently refreshes the search results manually.
+    await cbcLabOrderSearchInput.press('Space');
+    await cbcLabOrderSearchInput.press('Backspace');
+    await expect(cbcLabOrderSearchInput).toHaveValue('CBC', { timeout: 5000 });
     await cbcLabOrderSearchInput.press('Enter');
 
     // getByText exact matching normalizes leading/trailing whitespace.
