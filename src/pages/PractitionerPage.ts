@@ -242,6 +242,118 @@ export class PractitionerPage {
     return this;
   }
 
+
+  private async searchAdditionalIcd11Diagnosis(searchText: string) {
+    const diagnosisSearchInput = this.page.locator('#icd11search');
+    const icd11DiagnosisCategory = this.page
+      .locator('div.directive-linked-title')
+      .filter({ hasText: 'ICD11 Diagnosis' });
+
+    // The search panel may remain open after recording the previous diagnosis.
+    if (!(await diagnosisSearchInput.isVisible().catch(() => false))) {
+      await expect(icd11DiagnosisCategory).toBeVisible({ timeout: 15000 });
+      await icd11DiagnosisCategory.click();
+    }
+
+    await expect(diagnosisSearchInput).toBeVisible({ timeout: 15000 });
+    await diagnosisSearchInput.fill(searchText);
+    await diagnosisSearchInput.press('Enter');
+  }
+
+  private async completeAdditionalDiagnosisDetails() {
+    // Diagnosis Classification (Primary/Secondary) is intentionally not selected
+    // for the additional diagnoses. Keep the remaining diagnosis details the same.
+
+    const actualDiagnosisOption = this.page
+      .locator('.ui.checkbox')
+      .filter({ hasText: /^Actual$/ });
+    await expect(actualDiagnosisOption).toBeVisible({ timeout: 15000 });
+    await actualDiagnosisOption.locator('input[type="radio"]').check();
+
+    const certainDiagnosisOption = this.page
+      .locator('.ui.checkbox')
+      .filter({ hasText: /^Certain$/ });
+    await expect(certainDiagnosisOption).toBeVisible({ timeout: 15000 });
+    await certainDiagnosisOption.locator('input[type="radio"]').check();
+
+    const diagnosisDurationInput = this.page.locator(
+      'input.input-field[type="number"][min="1"][max="100"]'
+    );
+    await expect(diagnosisDurationInput).toBeVisible({ timeout: 15000 });
+    await diagnosisDurationInput.fill('4');
+
+    const diagnosisDurationUnit = this.page.locator('select.select-time');
+    await expect(diagnosisDurationUnit).toBeVisible({ timeout: 15000 });
+    await diagnosisDurationUnit.selectOption('Weeks');
+
+    console.log('Additional diagnosis details completed successfully');
+    return this;
+  }
+
+  async selectAcuteSTElevationMyocardialInfarctionDiagnosis() {
+    await this.searchAdditionalIcd11Diagnosis('Acute ST elevation myocardial infarction');
+
+    const diagnosisResult = this.page
+      .locator('div.content')
+      .filter({ hasText: 'Acute ST elevation myocardial infarction' })
+      .filter({ hasText: 'BA41.0' });
+
+    await expect(diagnosisResult).toHaveCount(1, { timeout: 30000 });
+    await expect(diagnosisResult).toBeVisible();
+    await diagnosisResult.click();
+
+    console.log('Successfully selected: Acute ST elevation myocardial infarction (BA41.0)');
+    return this;
+  }
+
+  async completeAcuteSTElevationMyocardialInfarctionDiagnosisDetails() {
+    await this.completeAdditionalDiagnosisDetails();
+    return this;
+  }
+
+  async recordAcuteSTElevationMyocardialInfarctionDiagnosis() {
+    const diagnosisAcceptButton = this.page.locator('img[src="assets/new/accept.svg"]');
+    await expect(diagnosisAcceptButton).toBeVisible({ timeout: 15000 });
+    await diagnosisAcceptButton.click();
+
+    console.log('Acute ST elevation myocardial infarction diagnosis recorded successfully');
+    return this;
+  }
+
+  async selectGastroparesisDiagnosis() {
+    await this.searchAdditionalIcd11Diagnosis('Gastroparesis');
+
+    const diagnosisResult = this.page
+      .locator('div.concept-item')
+      .filter({
+        has: this.page
+          .locator('div.content')
+          .filter({ hasText: 'Gastroparesis' })
+          .filter({ hasText: 'DA41.00' })
+      });
+
+    await expect(diagnosisResult).toHaveCount(1, { timeout: 30000 });
+    await expect(diagnosisResult).toBeVisible();
+    await diagnosisResult.click();
+
+    console.log('Successfully selected: Gastroparesis (DA41.00)');
+    return this;
+  }
+
+  async completeGastroparesisDiagnosisDetails() {
+    await this.completeAdditionalDiagnosisDetails();
+    return this;
+  }
+
+  async recordGastroparesisDiagnosis() {
+    const diagnosisAcceptButton = this.page.locator('img[src="assets/new/accept.svg"]');
+    await expect(diagnosisAcceptButton).toBeVisible({ timeout: 15000 });
+    await diagnosisAcceptButton.click();
+
+    console.log('Gastroparesis diagnosis recorded successfully');
+    return this;
+  }
+
   async selectCBCLabOrder() {
     // Open the Lab Orders section without leaving the consultation screen.
     const labOrdersTabLocator = this.page
