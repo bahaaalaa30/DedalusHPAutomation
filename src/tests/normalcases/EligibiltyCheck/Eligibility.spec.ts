@@ -33,7 +33,7 @@ test('eligible patient', async ({ page, loginPage }) => {
   );
 });
 
-test('nonEligible patient', async ({ page, loginPage }) => {
+test('NonEligiblePatient', async ({ page, loginPage }) => {
   await page.goto(config.payerUrl);
   await loginPage.login(config.cmoB6, config.cmoPassword);
   await page.goto(config.payerVisitBookingUrl, { waitUntil: 'commit' });
